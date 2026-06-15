@@ -1,25 +1,158 @@
-# Laravel + React Starter Kit
+# 📚 Interactive Learning Media — Digital Library System
 
-## Introduction
+Interactive web-based learning media designed to help students understand **Computational Thinking** concepts through a real-world case study of a **Digital Library Management System**.
 
-Our React starter kit provides a robust, modern starting point for building Laravel applications with a React frontend using [Inertia](https://inertiajs.com).
+Built using **Laravel**, **React**, **Inertia.js**, and **Tailwind CSS** with a modern interactive UI.
 
-Inertia allows you to build modern, single-page React applications using classic server-side routing and controllers. This lets you enjoy the frontend power of React combined with the incredible backend productivity of Laravel and lightning-fast Vite compilation.
+---
 
-This React starter kit utilizes React 19, TypeScript, Tailwind, and the [shadcn/ui](https://ui.shadcn.com) component library.
+# ✨ Features
 
-## Official Documentation
+* 🎥 Problem orientation video
+* 🧠 Interactive investigation slides
+* 📍 Clickable hotspot learning
+* ✅ Information gathering activity
+* 🔀 Drag & drop solution development
+* 📝 Interactive evaluation quiz
+* 📊 Automatic scoring system
+* 💡 Reflection activity
+* 👨‍💻 Developer profile page
+* 📱 Responsive modern interface
 
-Documentation for all Laravel starter kits can be found on the [Laravel website](https://laravel.com/docs/starter-kits).
+---
 
-## Contributing
+# 🛠️ Tech Stack
 
-Thank you for considering contributing to our starter kit! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Backend
 
-## Code of Conduct
+* Laravel
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Frontend
 
-## License
+* React
+* Inertia.js
+* Tailwind CSS
 
-The Laravel + React starter kit is open-sourced software licensed under the MIT license.
+## Libraries
+
+* Lucide React
+* DnD Kit
+
+---
+
+# 📂 Learning Flow
+
+1. Cover
+2. Instructions
+3. Learning Outcomes
+4. Problem Orientation
+5. Information Gathering
+6. Computational Thinking
+7. Algorithm
+8. Data Representation
+9. Data Processing
+10. Investigation Summary
+11. Solution Development
+12. Evaluation
+13. Evaluation Result
+14. Reflection
+15. Developer Profile
+
+---
+
+# 🚀 Installation
+
+## Clone Repository
+
+```bash id="7yyg7x"
+git clone https://github.com/your-username/project-name.git
+```
+
+## Go to Project Folder
+
+```bash id="r6lr89"
+cd project-name
+```
+
+## Install Dependencies
+
+```bash id="k6zt9n"
+composer install
+
+npm install
+```
+
+## Setup Environment
+
+```bash id="z44kfp"
+cp .env.example .env
+```
+
+## Generate Application Key
+
+```bash id="g9s6zw"
+php artisan key:generate
+```
+
+## Run Development Server
+
+```bash id="4m2n0i"
+php artisan serve
+
+npm run dev
+```
+
+---
+
+# 📸 Main Activities
+
+## 🎥 Problem Orientation
+
+Students observe problems in a manual school library system.
+
+## 🧠 Interactive Investigation
+
+Students explore problems through interactive hotspot-based slides.
+
+## 🔀 Solution Development
+
+Students arrange the correct solution steps using drag and drop interaction.
+
+## 📝 Evaluation
+
+Interactive quizzes with automatic feedback and scoring.
+
+---
+
+# 🎯 Learning Objectives
+
+Students are able to:
+
+* Identify problems
+* Gather relevant information
+* Apply computational thinking
+* Design algorithms
+* Understand data representation
+* Process and analyze data
+* Evaluate digital solutions
+
+---
+
+# 📁 Project Structure
+
+```bash id="k9v9rl"
+resources/
+├── js/
+│   ├── Components/
+│   ├── Layouts/
+│   ├── Pages/
+│   └── data/
+├── views/
+routes/
+```
+
+---
+
+# 📄 License
+
+This project is developed for educational and interactive learning purposes.
