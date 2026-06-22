@@ -3,61 +3,42 @@ import InvestigationSlide from '@/components/InvestigationSlide';
 export default function Algorithm() {
     return (
         <InvestigationSlide
+            storageKey="ip-addressing-completed"
             slideNumber={7}
-            title="Algoritma"
-            description="Peserta didik memahami bagaimana langkah-langkah terstruktur digunakan untuk menyelesaikan proses peminjaman buku."
-            image="/images/library.png"
-            note="Algoritma adalah urutan langkah yang sistematis untuk menyelesaikan suatu masalah."
+            title="IP Addressing"
+            description="Identifikasi masalah konfigurasi IP Address."
+            image="/images/ip-addressing-topology.png"
+            note="IP conflict menyebabkan koneksi jaringan terganggu."
             hotspots={[
                 {
-                    id: 'input',
-
-                    title: 'Input Data Buku',
-
+                    id: 'ip',
+                    title: 'IP Address',
+                    x: '12%',
+                    y: '22%',
                     icon: 'search',
-
-                    x: '18%',
-                    y: '68%',
-
-                    problem: 'Petugas harus memasukkan data buku dan data peminjam.',
-
-                    analysis: 'Sistem membutuhkan data awal agar proses peminjaman dapat berjalan.',
-
-                    solution: 'Gunakan form digital untuk memasukkan data secara otomatis.',
+                    problem: 'Terdapat IP yang berbeda subnet.',
+                    analysis: 'PC-03 menggunakan 192.168.2.15.',
+                    solution: 'Ubah menjadi 192.168.1.x.',
                 },
-
                 {
-                    id: 'process',
-
-                    title: 'Proses Peminjaman',
-
+                    id: 'mask',
+                    title: 'Subnet Mask',
+                    x: '38%',
+                    y: '30%',
                     icon: 'queue',
-
-                    x: '50%',
-                    y: '40%',
-
-                    problem: 'Proses pencatatan dilakukan satu per satu sehingga memakan waktu.',
-
-                    analysis: 'Tanpa alur yang jelas, proses menjadi lambat dan tidak efisien.',
-
-                    solution: 'Gunakan algoritma terstruktur untuk mempercepat proses peminjaman.',
+                    problem: 'Periksa subnet mask.',
+                    analysis: 'Subnet harus konsisten.',
+                    solution: 'Gunakan 255.255.255.0.',
                 },
-
                 {
-                    id: 'output',
-
-                    title: 'Output Informasi',
-
+                    id: 'gateway',
+                    title: 'Default Gateway',
+                    x: '68%',
+                    y: '22%',
                     icon: 'lost',
-
-                    x: '78%',
-                    y: '62%',
-
-                    problem: 'Siswa kesulitan mengetahui status peminjaman buku.',
-
-                    analysis: 'Informasi hasil peminjaman tidak tersampaikan dengan baik.',
-
-                    solution: 'Tampilkan status peminjaman secara otomatis pada sistem.',
+                    problem: 'Gateway tidak sesuai.',
+                    analysis: 'Gateway berbeda dengan host lain.',
+                    solution: 'Gunakan 192.168.1.1.',
                 },
             ]}
         />

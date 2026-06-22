@@ -1,8 +1,8 @@
 import LearningLayout from '@/layouts/LearningLayout';
 
-import { AlertCircle, CheckCircle2, Database, FileClock, Library, XCircle } from 'lucide-react';
+import { CheckCircle2, Globe, MemoryStick, Monitor, Network, Palette, Router, Ruler, Wifi, XCircle } from 'lucide-react';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function InformationGathering() {
     const [selected, setSelected] = useState<string[]>([]);
@@ -11,37 +11,58 @@ export default function InformationGathering() {
 
     const options = [
         {
-            id: 'books',
-            label: 'Data Buku',
-            icon: Library,
+            id: 'ip',
+            label: 'Konfigurasi IP tiap PC',
+            icon: Network,
             correct: true,
         },
 
         {
-            id: 'borrowers',
-            label: 'Data Peminjam',
-            icon: Database,
+            id: 'switch',
+            label: 'Status Lampu Indikator Switch / Router',
+            icon: Router,
             correct: true,
         },
 
         {
-            id: 'duration',
-            label: 'Lama Peminjaman',
-            icon: FileClock,
+            id: 'ping',
+            label: 'Hasil Ping ke Gateway & Internet',
+            icon: Wifi,
             correct: true,
         },
 
         {
-            id: 'rack',
-            label: 'Warna Rak Buku',
-            icon: AlertCircle,
+            id: 'dns',
+            label: 'Pengaturan Gateway / DNS',
+            icon: Globe,
+            correct: true,
+        },
+
+        {
+            id: 'casing',
+            label: 'Warna Casing PC',
+            icon: Palette,
             correct: false,
         },
 
         {
-            id: 'pages',
-            label: 'Jumlah Halaman Buku',
-            icon: AlertCircle,
+            id: 'monitor',
+            label: 'Merek Monitor',
+            icon: Monitor,
+            correct: false,
+        },
+
+        {
+            id: 'desk',
+            label: 'Ukuran Meja Laboratorium',
+            icon: Ruler,
+            correct: false,
+        },
+
+        {
+            id: 'ram',
+            label: 'Jumlah RAM Komputer',
+            icon: MemoryStick,
             correct: false,
         },
     ];
@@ -76,6 +97,12 @@ export default function InformationGathering() {
 
     const isCorrect = JSON.stringify([...selected].sort()) === JSON.stringify([...correctAnswers].sort());
 
+    useEffect(() => {
+        localStorage.setItem('information-gathering-completed', submitted ? 'true' : 'false');
+
+        window.dispatchEvent(new Event('information-gathering-completed-change'));
+    }, [submitted]);
+
     return (
         <LearningLayout>
             <div className="min-h-screen overflow-y-auto py-8 text-white">
@@ -101,9 +128,18 @@ export default function InformationGathering() {
 
                     {/* DESCRIPTION */}
                     <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-300">
-                        Pilih informasi yang diperlukan untuk membantu sekolah mengelola sistem perpustakaan digital dengan lebih efektif.
+                        Pilih informasi yang DIPERLUKAN untuk mendiagnosis masalah jaringan pada laboratorium komputer. Tidak semua informasi yang
+                        tersedia relevan untuk proses troubleshooting.
                     </p>
 
+                    <div className="mt-6 rounded-2xl border border-cyan-400/20 bg-cyan-400/5 p-5">
+                        <p className="text-sm font-semibold text-cyan-300">Narasi</p>
+
+                        <p className="mt-2 text-slate-300">
+                            Sebagai teknisi jaringan, kamu harus menentukan informasi mana yang benar-benar diperlukan untuk menemukan akar masalah.
+                            Fokuslah pada data yang berhubungan langsung dengan konektivitas jaringan.
+                        </p>
+                    </div>
                     {/* CHECKLIST */}
                     <div className="mt-8 grid gap-4 md:grid-cols-2">
                         {options.map((option) => {
@@ -188,8 +224,8 @@ export default function InformationGathering() {
 
                                         <p className="mt-2 leading-relaxed text-slate-300">
                                             {isCorrect
-                                                ? 'Informasi yang dipilih sudah sesuai untuk membantu pengelolaan perpustakaan digital.'
-                                                : 'Masih ada informasi yang kurang relevan atau belum dipilih dengan tepat.'}
+                                                ? 'Informasi yang dipilih sudah relevan untuk melakukan diagnosis jaringan secara sistematis.'
+                                                : 'Masih terdapat informasi penting yang belum dipilih atau terdapat data yang sebenarnya tidak relevan terhadap masalah jaringan.'}
                                         </p>
                                     </div>
                                 </div>

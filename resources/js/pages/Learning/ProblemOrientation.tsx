@@ -1,28 +1,55 @@
 import LearningLayout from '@/layouts/LearningLayout';
 
-import { AlertTriangle, CheckCircle2, PlayCircle } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Gauge, PlayCircle, Printer, WifiOff } from 'lucide-react';
 
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export default function ProblemOrientation() {
     const [selectedProblem, setSelectedProblem] = useState<string | null>(null);
 
+    const [visited, setVisited] = useState({
+        internet: false,
+        slow: false,
+        printer: false,
+    });
+
     const problems = {
-        queue: {
-            title: 'Antrean Panjang',
-            description: 'Proses pencarian dan pencatatan buku masih manual sehingga pelayanan menjadi lambat.',
+        internet: {
+            title: 'PC Tidak Dapat Mengakses Internet',
+            description: 'Beberapa komputer tidak dapat membuka website maupun mengakses internet.',
         },
 
-        lost: {
-            title: 'Data Mudah Hilang',
-            description: 'Pencatatan menggunakan buku menyebabkan data peminjaman mudah hilang atau rusak.',
+        slow: {
+            title: 'Koneksi Jaringan Sangat Lambat',
+            description: 'Sebagian komputer masih terhubung ke jaringan namun akses internet berjalan sangat lambat.',
         },
 
-        search: {
-            title: 'Pencarian Buku Lambat',
-            description: 'Petugas harus mencari data buku satu per satu secara manual.',
+        printer: {
+            title: 'Printer Jaringan Tidak Terdeteksi',
+            description: 'Printer yang terhubung ke jaringan tidak muncul pada perangkat pengguna.',
         },
     };
+
+    const handleHotspot = (key: 'internet' | 'slow' | 'printer') => {
+        setSelectedProblem(key);
+
+        setVisited((prev) => ({
+            ...prev,
+            [key]: true,
+        }));
+    };
+
+    const progress = useMemo(() => {
+        return Number(visited.internet) + Number(visited.slow) + Number(visited.printer);
+    }, [visited]);
+
+    const completed = visited.internet && visited.slow && visited.printer;
+
+    useEffect(() => {
+        localStorage.setItem('problem-orientation-completed', completed ? 'true' : 'false');
+
+        window.dispatchEvent(new Event('problem-orientation-completed-change'));
+    }, [completed]);
 
     return (
         <LearningLayout>
@@ -44,50 +71,123 @@ export default function ProblemOrientation() {
 
                     {/* TITLE */}
                     <h1 className="mt-5 text-4xl leading-[1] font-black tracking-tight lg:text-6xl">
-                        Permasalahan
-                        <span className="block text-cyan-400">Perpustakaan Sekolah</span>
+                        Masalah Jaringan di
+                        <span className="block text-cyan-400">Laboratorium Komputer</span>
                     </h1>
 
-                    {/* DESC */}
+                    {/* DESCRIPTION */}
                     <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-300">
-                        Perhatikan video berikut lalu klik hotspot untuk mengidentifikasi masalah yang terjadi pada sistem perpustakaan sekolah.
+                        Klik seluruh hotspot pada ilustrasi laboratorium untuk mengidentifikasi gejala masalah jaringan yang ditemukan.
                     </p>
 
-                    {/* VIDEO AREA */}
-                    <div className="relative mt-8 overflow-hidden rounded-[32px] border border-white/10 bg-black shadow-2xl">
-                        {/* VIDEO */}
-                        <video controls className="w-full bg-black">
-                            <source src="/videos/library-case.mp4" type="video/mp4" />
-                        </video>
+                    {/* LAB AREA */}
+                    <div className="relative mt-8 overflow-hidden rounded-[32px] border border-white/10 bg-slate-900 shadow-2xl">
+                        <div className="relative h-[520px]">
+                            {/* LAB IMAGE */}
+                            <div className="relative h-[520px] bg-slate-950">
+                                {/* INTERNET */}
+                                <div className="absolute top-8 left-1/2 -translate-x-1/2">
+                                    <div className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-6 py-3 font-semibold text-cyan-300">
+                                        INTERNET
+                                    </div>
+                                </div>
 
-                        {/* HOTSPOT 1 */}
-                        <button
-                            onClick={() => setSelectedProblem('queue')}
-                            className="absolute top-[35%] left-[22%] flex h-10 w-10 items-center justify-center rounded-full border-4 border-white bg-red-500 shadow-[0_0_25px_rgba(239,68,68,0.8)] transition hover:scale-110"
-                        >
-                            <div className="h-3 w-3 rounded-full bg-white" />
-                        </button>
+                                {/* ROUTER */}
+                                <div className="absolute top-28 left-1/2 -translate-x-1/2">
+                                    <div className="flex h-24 w-24 items-center justify-center rounded-3xl border border-cyan-400/30 bg-cyan-400/10 text-5xl">
+                                        🌐
+                                    </div>
+                                </div>
 
-                        {/* HOTSPOT 2 */}
-                        <button
-                            onClick={() => setSelectedProblem('lost')}
-                            className="absolute top-[55%] left-[55%] flex h-10 w-10 items-center justify-center rounded-full border-4 border-white bg-red-500 shadow-[0_0_25px_rgba(239,68,68,0.8)] transition hover:scale-110"
-                        >
-                            <div className="h-3 w-3 rounded-full bg-white" />
-                        </button>
+                                {/* SWITCH */}
+                                <div className="absolute top-56 left-1/2 -translate-x-1/2">
+                                    <div className="flex h-24 w-40 items-center justify-center rounded-3xl border border-cyan-400/30 bg-cyan-400/10 font-bold text-cyan-300">
+                                        SWITCH
+                                    </div>
+                                </div>
 
-                        {/* HOTSPOT 3 */}
-                        <button
-                            onClick={() => setSelectedProblem('search')}
-                            className="absolute top-[25%] right-[20%] flex h-10 w-10 items-center justify-center rounded-full border-4 border-white bg-red-500 shadow-[0_0_25px_rgba(239,68,68,0.8)] transition hover:scale-110"
-                        >
-                            <div className="h-3 w-3 rounded-full bg-white" />
-                        </button>
+                                {/* CONNECTIONS */}
+                                <svg className="absolute inset-0 h-full w-full">
+                                    <line x1="50%" y1="80" x2="50%" y2="115" stroke="#22d3ee" strokeWidth="2" />
+                                    <line x1="50%" y1="206" x2="50%" y2="225" stroke="#22d3ee" strokeWidth="2" />
+
+                                    <line x1="50%" y1="320" x2="20%" y2="400" stroke="#22d3ee" strokeWidth="2" />
+                                    <line x1="50%" y1="320" x2="40%" y2="400" stroke="#22d3ee" strokeWidth="2" />
+                                    <line x1="50%" y1="320" x2="60%" y2="400" stroke="#22d3ee" strokeWidth="2" />
+                                    <line x1="50%" y1="320" x2="80%" y2="400" stroke="#22d3ee" strokeWidth="2" />
+                                </svg>
+
+                                {/* PC INTERNET */}
+                                <div className="absolute bottom-12 left-[20%] -translate-x-1/2">
+                                    <div className="flex flex-col items-center">
+                                        <div className="text-6xl">🖥️</div>
+                                        <div className="mt-2 text-sm font-semibold text-red-400">❌ Internet</div>
+                                    </div>
+
+                                    <button
+                                        onClick={() => handleHotspot('internet')}
+                                        className={`absolute -top-8 left-1/2 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full border-4 border-white transition ${
+                                            visited.internet
+                                                ? 'bg-emerald-500 shadow-[0_0_30px_rgba(16,185,129,.8)]'
+                                                : 'bg-red-500 shadow-[0_0_30px_rgba(239,68,68,.8)]'
+                                        }`}
+                                    >
+                                        <WifiOff size={18} />
+                                    </button>
+                                </div>
+
+                                {/* PC LAMBAT */}
+                                <div className="absolute bottom-12 left-[40%] -translate-x-1/2">
+                                    <div className="flex flex-col items-center">
+                                        <div className="text-6xl">🖥️</div>
+                                        <div className="mt-2 text-sm font-semibold text-yellow-400">⚠ Lambat</div>
+                                    </div>
+
+                                    <button
+                                        onClick={() => handleHotspot('slow')}
+                                        className={`absolute -top-8 left-1/2 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full border-4 border-white transition ${
+                                            visited.slow
+                                                ? 'bg-emerald-500 shadow-[0_0_30px_rgba(16,185,129,.8)]'
+                                                : 'bg-red-500 shadow-[0_0_30px_rgba(239,68,68,.8)]'
+                                        }`}
+                                    >
+                                        <Gauge size={18} />
+                                    </button>
+                                </div>
+
+                                {/* PC NORMAL */}
+                                <div className="absolute bottom-12 left-[60%] -translate-x-1/2">
+                                    <div className="flex flex-col items-center">
+                                        <div className="text-6xl">🖥️</div>
+                                        <div className="mt-2 text-sm font-semibold text-emerald-400">✓ Normal</div>
+                                    </div>
+                                </div>
+
+                                {/* PRINTER */}
+                                <div className="absolute bottom-12 left-[80%] -translate-x-1/2">
+                                    <div className="flex flex-col items-center">
+                                        <div className="text-6xl">🖨️</div>
+                                        <div className="mt-2 text-sm font-semibold text-red-400">❌ Printer</div>
+                                    </div>
+
+                                    <button
+                                        onClick={() => handleHotspot('printer')}
+                                        className={`absolute -top-8 left-1/2 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full border-4 border-white transition ${
+                                            visited.printer
+                                                ? 'bg-emerald-500 shadow-[0_0_30px_rgba(16,185,129,.8)]'
+                                                : 'bg-red-500 shadow-[0_0_30px_rgba(239,68,68,.8)]'
+                                        }`}
+                                    >
+                                        <Printer size={18} />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     {/* INFO */}
                     <div className="mt-6 grid gap-5 lg:grid-cols-[1.4fr_1fr]">
-                        {/* NARRATION */}
+                        {/* NARASI */}
                         <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
                             <div className="flex items-center gap-3">
                                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-400/10">
@@ -97,24 +197,27 @@ export default function ProblemOrientation() {
                                 <div>
                                     <p className="text-sm text-cyan-300">Narasi Masalah</p>
 
-                                    <h2 className="text-xl font-bold">Sistem Masih Manual</h2>
+                                    <h2 className="text-xl font-bold">Laboratorium Komputer Bermasalah</h2>
                                 </div>
                             </div>
 
                             <p className="mt-5 leading-relaxed text-slate-300">
-                                Perpustakaan sekolah masih menggunakan proses manual untuk pencatatan data buku, peminjaman, dan pengembalian. Hal ini
-                                menyebabkan berbagai masalah dalam pengelolaan perpustakaan.
+                                Laboratorium komputer baru saja dipasangi jaringan. Namun saat digunakan ditemukan beberapa gangguan. Sebagian
+                                komputer tidak dapat mengakses internet, sebagian komputer terhubung tetapi sangat lambat, dan printer jaringan tidak
+                                terdeteksi.
                             </p>
 
-                            {/* QUESTION */}
+                            {/* PERTANYAAN */}
                             <div className="mt-6 rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-5">
                                 <p className="text-sm font-semibold text-cyan-300">Pertanyaan Pemantik</p>
 
-                                <h3 className="mt-3 text-2xl leading-tight font-black">Apa masalah utama dari sistem perpustakaan tersebut?</h3>
+                                <h3 className="mt-3 text-2xl leading-tight font-black">
+                                    Apa kemungkinan akar masalah jaringan ini, dan gejala mana yang saling berkaitan?
+                                </h3>
                             </div>
                         </div>
 
-                        {/* HOTSPOT INFO */}
+                        {/* HASIL IDENTIFIKASI */}
                         <div className="rounded-3xl border border-emerald-400/20 bg-emerald-400/10 p-6">
                             <div className="flex items-center gap-3">
                                 <CheckCircle2 className="text-emerald-400" size={24} />
@@ -122,23 +225,64 @@ export default function ProblemOrientation() {
                                 <div>
                                     <p className="text-sm text-emerald-300">Hasil Identifikasi</p>
 
-                                    <h2 className="text-xl font-bold">Informasi Masalah</h2>
+                                    <h2 className="text-xl font-bold">Gejala Ditemukan</h2>
                                 </div>
                             </div>
 
-                            {!selectedProblem ? (
+                            {progress === 0 ? (
                                 <div className="mt-8 rounded-2xl border border-dashed border-white/10 p-6 text-center">
-                                    <p className="text-slate-400">Klik hotspot pada video untuk melihat masalah yang ditemukan.</p>
+                                    <p className="text-slate-400">Klik seluruh hotspot untuk mengidentifikasi masalah.</p>
                                 </div>
                             ) : (
-                                <div className="mt-6">
-                                    <h3 className="text-2xl font-black text-white">{problems[selectedProblem as keyof typeof problems].title}</h3>
+                                <div className="mt-6 space-y-4">
+                                    {visited.internet && (
+                                        <div className="rounded-2xl bg-white/5 p-4">
+                                            <h4 className="font-semibold">{problems.internet.title}</h4>
 
-                                    <p className="mt-4 leading-relaxed text-slate-300">
-                                        {problems[selectedProblem as keyof typeof problems].description}
-                                    </p>
+                                            <p className="mt-2 text-sm text-slate-300">{problems.internet.description}</p>
+                                        </div>
+                                    )}
+
+                                    {visited.slow && (
+                                        <div className="rounded-2xl bg-white/5 p-4">
+                                            <h4 className="font-semibold">{problems.slow.title}</h4>
+
+                                            <p className="mt-2 text-sm text-slate-300">{problems.slow.description}</p>
+                                        </div>
+                                    )}
+
+                                    {visited.printer && (
+                                        <div className="rounded-2xl bg-white/5 p-4">
+                                            <h4 className="font-semibold">{problems.printer.title}</h4>
+
+                                            <p className="mt-2 text-sm text-slate-300">{problems.printer.description}</p>
+                                        </div>
+                                    )}
                                 </div>
                             )}
+
+                            {/* PROGRESS */}
+                            <div className="mt-6">
+                                <div className="mb-2 flex justify-between text-sm">
+                                    <span>Progress Identifikasi</span>
+                                    <span>{progress}/3</span>
+                                </div>
+
+                                <div className="h-3 overflow-hidden rounded-full bg-white/10">
+                                    <div
+                                        className="h-full bg-emerald-400 transition-all"
+                                        style={{
+                                            width: `${(progress / 3) * 100}%`,
+                                        }}
+                                    />
+                                </div>
+
+                                {completed && (
+                                    <div className="mt-4 rounded-xl border border-emerald-400/20 bg-emerald-500/10 p-3 text-sm text-emerald-300">
+                                        Semua gejala berhasil diidentifikasi. Anda dapat melanjutkan ke tahap berikutnya.
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

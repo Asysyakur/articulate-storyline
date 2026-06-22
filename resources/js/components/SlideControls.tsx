@@ -8,13 +8,12 @@ export default function SlideControls() {
     const { url } = usePage();
 
     const [audioOn, setAudioOn] = useState(true);
-
     const [solutionDevelopmentChecked, setSolutionDevelopmentChecked] = useState(false);
-
     const [evaluationCompleted, setEvaluationCompleted] = useState(false);
-
     const [evaluationScore, setEvaluationScore] = useState(0);
-
+    const [problemOrientationCompleted, setProblemOrientationCompleted] = useState(false);
+    const [informationGatheringCompleted, setInformationGatheringCompleted] = useState(false);
+    const [computationalThinkingCompleted, setComputationalThinkingCompleted] = useState(false);
     /*
     |--------------------------------------------------------------------------
     | SLIDES
@@ -77,6 +76,9 @@ export default function SlideControls() {
             }
 
             setSolutionDevelopmentChecked(window.localStorage.getItem('solution-development-checked') === 'true');
+            setProblemOrientationCompleted(localStorage.getItem('problem-orientation-completed') === 'true');
+            setInformationGatheringCompleted(localStorage.getItem('information-gathering-completed') === 'true');
+            setComputationalThinkingCompleted(localStorage.getItem('computational-thinking-completed') === 'true');
 
             const completed = window.sessionStorage.getItem('evaluationCompleted') === 'true';
             const score = Number(window.sessionStorage.getItem('evaluationScore') ?? 0);
@@ -89,10 +91,15 @@ export default function SlideControls() {
 
         window.addEventListener('solution-development-checked-change', readCheckedState);
         window.addEventListener('evaluation-completed-change', readCheckedState);
-
+        window.addEventListener('problem-orientation-completed-change', readCheckedState);
+        window.addEventListener('information-gathering-completed-change', readCheckedState);
+        window.addEventListener('computational-thinking-completed-change', readCheckedState);
         return () => {
             window.removeEventListener('solution-development-checked-change', readCheckedState);
             window.removeEventListener('evaluation-completed-change', readCheckedState);
+            window.removeEventListener('problem-orientation-completed-change', readCheckedState);
+            window.removeEventListener('information-gathering-completed-change', readCheckedState);
+            window.removeEventListener('computational-thinking-completed-change', readCheckedState);
         };
     }, [url]);
 
@@ -111,7 +118,10 @@ export default function SlideControls() {
 
     const nextEnabled =
         nextSlide &&
+        (url !== '/problem-orientation' || problemOrientationCompleted) &&
+        (url !== '/information-gathering' || informationGatheringCompleted) &&
         (url !== '/solution-development' || solutionDevelopmentChecked) &&
+        (url !== '/investigation/computational-thinking' || computationalThinkingCompleted) &&
         (url !== '/evaluation' || evaluationCompleted) &&
         (url !== '/result' || evaluationScore >= 75);
 

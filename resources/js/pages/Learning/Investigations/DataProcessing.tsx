@@ -3,6 +3,7 @@ import InvestigationSlide from '@/components/InvestigationSlide';
 export default function DataProcessing() {
     return (
         <InvestigationSlide
+            storageKey="data-processing-completed"
             slideNumber={9}
             title="Pengolahan Data"
             description="Peserta didik memahami bagaimana sistem perpustakaan mengolah data agar informasi dapat digunakan dengan cepat dan akurat."
