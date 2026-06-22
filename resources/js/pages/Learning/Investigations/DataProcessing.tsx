@@ -5,72 +5,61 @@ export default function DataProcessing() {
         <InvestigationSlide
             storageKey="data-processing-completed"
             slideNumber={9}
-            title="Pengolahan Data"
-            description="Peserta didik memahami bagaimana sistem perpustakaan mengolah data agar informasi dapat digunakan dengan cepat dan akurat."
-
+            title="Troubleshooting Jaringan dengan Ping Test"
+            description="Gunakan hasil pengujian ping untuk menentukan lokasi gangguan jaringan secara sistematis."
             image="/images/library.png"
-
-            note="Pengolahan data membantu sekolah mendapatkan informasi penting secara otomatis dan efisien."
-
+            note="Pola 'ping gateway berhasil tetapi ping internet gagal' menunjukkan bahwa jaringan lokal masih berfungsi, namun terdapat gangguan pada koneksi menuju internet."
             hotspots={[
                 {
-                    id: 'search',
+                    id: 'gateway',
 
-                    title: 'Pencarian Buku',
+                    title: 'Ping Gateway',
 
                     icon: 'search',
 
                     x: '28%',
-                    y: '30%',
+                    y: '35%',
 
-                    problem:
-                        'Petugas membutuhkan waktu lama mencari buku tertentu.',
+                    problem: 'Perlu memastikan apakah komputer masih dapat berkomunikasi dengan perangkat jaringan lokal.',
 
                     analysis:
-                        'Pencarian manual membuat proses menjadi lambat.',
+                        'Hasil ping ke gateway (192.168.1.1) berhasil dengan Reply dari host tujuan. Hal ini menunjukkan koneksi LAN masih berfungsi dengan baik.',
 
-                    solution:
-                        'Gunakan fitur search untuk menemukan buku secara cepat.',
+                    solution: 'Lanjutkan pengujian ke internet untuk menentukan apakah gangguan berada pada jaringan lokal atau koneksi keluar.',
                 },
 
                 {
-                    id: 'sorting',
+                    id: 'internet',
 
-                    title: 'Pengurutan Data',
+                    title: 'Ping 8.8.8.8',
 
                     icon: 'queue',
 
-                    x: '58%',
-                    y: '50%',
+                    x: '55%',
+                    y: '55%',
 
-                    problem:
-                        'Data buku tidak tersusun sehingga sulit dibaca.',
+                    problem: 'Komputer masih belum dapat mengakses internet meskipun terhubung ke LAN.',
 
-                    analysis:
-                        'Data perlu diurutkan berdasarkan kategori tertentu.',
+                    analysis: 'Hasil ping ke 8.8.8.8 mengalami Request Timed Out (RTO) sehingga paket tidak berhasil mencapai jaringan internet.',
 
-                    solution:
-                        'Urutkan data berdasarkan nama buku, kategori, atau tanggal.',
+                    solution: 'Periksa koneksi internet, gateway upstream, atau konfigurasi routing pada router.',
                 },
 
                 {
-                    id: 'report',
+                    id: 'nic',
 
-                    title: 'Laporan Otomatis',
+                    title: 'Indikator NIC & Switch',
 
                     icon: 'lost',
 
-                    x: '78%',
+                    x: '80%',
                     y: '25%',
 
-                    problem:
-                        'Pembuatan laporan perpustakaan memerlukan waktu lama.',
+                    problem: 'Perlu memastikan apakah terdapat gangguan fisik pada koneksi jaringan.',
 
-                    analysis:
-                        'Petugas harus menghitung data secara manual.',
+                    analysis: 'Lampu indikator pada NIC dan switch menyala serta berkedip normal sehingga koneksi fisik masih aktif.',
 
-                    solution:
-                        'Gunakan sistem otomatis untuk membuat laporan peminjaman.',
+                    solution: 'Fokuskan pemeriksaan pada konfigurasi jaringan atau koneksi internet, bukan pada kabel atau port jaringan.',
                 },
             ]}
         />

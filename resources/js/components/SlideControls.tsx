@@ -14,6 +14,9 @@ export default function SlideControls() {
     const [problemOrientationCompleted, setProblemOrientationCompleted] = useState(false);
     const [informationGatheringCompleted, setInformationGatheringCompleted] = useState(false);
     const [computationalThinkingCompleted, setComputationalThinkingCompleted] = useState(false);
+    const [algorithmCompleted, setAlgorithmCompleted] = useState(false);
+    const [dataRepresentationCompleted, setDataRepresentationCompleted] = useState(false);
+    const [dataProcessingCompleted, setDataProcessingCompleted] = useState(false);
     /*
     |--------------------------------------------------------------------------
     | SLIDES
@@ -79,6 +82,9 @@ export default function SlideControls() {
             setProblemOrientationCompleted(localStorage.getItem('problem-orientation-completed') === 'true');
             setInformationGatheringCompleted(localStorage.getItem('information-gathering-completed') === 'true');
             setComputationalThinkingCompleted(localStorage.getItem('computational-thinking-completed') === 'true');
+            setAlgorithmCompleted(localStorage.getItem('algorithm-completed') === 'true');
+            setDataRepresentationCompleted(localStorage.getItem('data-representation-completed') === 'true');
+            setDataProcessingCompleted(localStorage.getItem('data-processing-completed') === 'true');
 
             const completed = window.sessionStorage.getItem('evaluationCompleted') === 'true';
             const score = Number(window.sessionStorage.getItem('evaluationScore') ?? 0);
@@ -94,12 +100,18 @@ export default function SlideControls() {
         window.addEventListener('problem-orientation-completed-change', readCheckedState);
         window.addEventListener('information-gathering-completed-change', readCheckedState);
         window.addEventListener('computational-thinking-completed-change', readCheckedState);
+        window.addEventListener('algorithm-completed-change', readCheckedState);
+        window.addEventListener('data-representation-completed-change', readCheckedState);
+        window.addEventListener('data-processing-completed-change', readCheckedState);
         return () => {
             window.removeEventListener('solution-development-checked-change', readCheckedState);
             window.removeEventListener('evaluation-completed-change', readCheckedState);
             window.removeEventListener('problem-orientation-completed-change', readCheckedState);
             window.removeEventListener('information-gathering-completed-change', readCheckedState);
             window.removeEventListener('computational-thinking-completed-change', readCheckedState);
+            window.removeEventListener('algorithm-completed-change', readCheckedState);
+            window.removeEventListener('data-representation-completed-change', readCheckedState);
+            window.removeEventListener('data-processing-completed-change', readCheckedState);
         };
     }, [url]);
 
@@ -120,8 +132,11 @@ export default function SlideControls() {
         nextSlide &&
         (url !== '/problem-orientation' || problemOrientationCompleted) &&
         (url !== '/information-gathering' || informationGatheringCompleted) &&
-        (url !== '/solution-development' || solutionDevelopmentChecked) &&
         (url !== '/investigation/computational-thinking' || computationalThinkingCompleted) &&
+        (url !== '/investigation/algorithm' || algorithmCompleted) &&
+        (url !== '/investigation/data-representation' || dataRepresentationCompleted) &&
+        (url !== '/investigation/data-processing' || dataProcessingCompleted) &&
+        (url !== '/solution-development' || solutionDevelopmentChecked) &&
         (url !== '/evaluation' || evaluationCompleted) &&
         (url !== '/result' || evaluationScore >= 75);
 

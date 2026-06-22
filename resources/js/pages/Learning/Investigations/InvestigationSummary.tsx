@@ -1,6 +1,7 @@
 import LearningLayout from '@/layouts/LearningLayout';
 
 import { Link } from '@inertiajs/react';
+import { motion } from 'framer-motion';
 
 import { ArrowRight, Brain, CheckCircle2, Database, FileBarChart, Workflow } from 'lucide-react';
 
@@ -8,34 +9,26 @@ export default function InvestigationSummary() {
     const points = [
         {
             icon: Brain,
-
-            title: 'Berpikir Komputasional',
-
-            desc: 'Masalah dianalisis secara logis dan terstruktur.',
+            title: 'Topologi Jaringan',
+            desc: 'Mengidentifikasi perangkat jaringan dan hubungan antar perangkat pada laboratorium komputer.',
         },
 
         {
             icon: Workflow,
-
-            title: 'Algoritma',
-
-            desc: 'Langkah penyelesaian dibuat berurutan.',
+            title: 'IP Addressing',
+            desc: 'Menganalisis konfigurasi IP Address, subnet mask, dan gateway untuk menemukan kesalahan konfigurasi.',
         },
 
         {
             icon: Database,
-
-            title: 'Representasi Data',
-
-            desc: 'Data disimpan dalam bentuk digital yang terorganisir.',
+            title: 'Gateway & DNS',
+            desc: 'Memahami peran gateway dan DNS dalam proses akses internet dari jaringan lokal.',
         },
 
         {
             icon: FileBarChart,
-
-            title: 'Pengolahan Data',
-
-            desc: 'Data dapat dicari, diurutkan, dan dibuat laporan otomatis.',
+            title: 'Troubleshooting Ping',
+            desc: 'Menggunakan pengujian ping untuk menentukan lokasi gangguan jaringan secara sistematis.',
         },
     ];
 
@@ -60,14 +53,14 @@ export default function InvestigationSummary() {
 
                         {/* TITLE */}
                         <h1 className="mt-4 text-4xl leading-[0.95] font-black tracking-tight lg:text-5xl">
-                            Hasil
-                            <span className="block text-cyan-400">Investigasi Masalah</span>
+                            Kesimpulan Investigasi
+                            <span className="block text-cyan-400">Gangguan Jaringan</span>
                         </h1>
 
                         {/* DESC */}
                         <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-300">
-                            Peserta didik telah melakukan investigasi terhadap permasalahan sistem perpustakaan sekolah dan memahami konsep
-                            informatika untuk menyelesaikan masalah tersebut.
+                            Peserta didik telah melakukan investigasi terhadap berbagai gangguan jaringan komputer dan memahami langkah-langkah
+                            analisis yang digunakan untuk menemukan akar permasalahan secara sistematis.
                         </p>
                     </div>
 
@@ -77,18 +70,30 @@ export default function InvestigationSummary() {
                             const Icon = item.icon;
 
                             return (
-                                <div key={index} className="rounded-[24px] border border-white/10 bg-white/5 p-5">
-                                    {/* ICON */}
+                                <motion.div
+                                    key={index}
+                                    initial={{
+                                        opacity: 0,
+                                        y: 30,
+                                    }}
+                                    animate={{
+                                        opacity: 1,
+                                        y: 0,
+                                    }}
+                                    transition={{
+                                        duration: 0.5,
+                                        delay: index * 0.5,
+                                    }}
+                                    className="rounded-[24px] border border-white/10 bg-white/5 p-5"
+                                >
                                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
                                         <Icon size={24} />
                                     </div>
 
-                                    {/* TITLE */}
                                     <h3 className="mt-4 text-xl font-bold">{item.title}</h3>
 
-                                    {/* DESC */}
                                     <p className="mt-2 text-sm leading-relaxed text-slate-300">{item.desc}</p>
-                                </div>
+                                </motion.div>
                             );
                         })}
                     </div>
@@ -106,9 +111,10 @@ export default function InvestigationSummary() {
                                 <h2 className="text-xl font-black text-white">Kesimpulan Investigasi</h2>
 
                                 <p className="mt-3 max-w-4xl text-sm leading-relaxed text-slate-200">
-                                    Sistem perpustakaan manual memiliki berbagai masalah seperti pencarian lambat, data mudah hilang, dan proses
-                                    peminjaman yang tidak efisien. Dengan bantuan konsep informatika, masalah dapat dianalisis dan diselesaikan
-                                    menggunakan sistem digital.
+                                    Jaringan komputer dapat mengalami berbagai gangguan, mulai dari masalah perangkat jaringan, konfigurasi IP
+                                    Address, gateway dan DNS, hingga konektivitas internet. Melalui proses investigasi, setiap gangguan dapat
+                                    diidentifikasi menggunakan pendekatan yang sistematis sehingga solusi yang tepat dapat diterapkan sesuai penyebab
+                                    masalah yang ditemukan.
                                 </p>
                             </div>
                         </div>
@@ -123,7 +129,8 @@ export default function InvestigationSummary() {
                             <h2 className="mt-2 text-2xl font-black">Penyusunan Solusi</h2>
 
                             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-300">
-                                Peserta didik akan menyusun solusi digital untuk membantu sekolah mengelola data perpustakaan dengan lebih efektif.
+                                Peserta didik akan merancang solusi jaringan berdasarkan hasil investigasi yang telah dilakukan untuk mengatasi
+                                permasalahan pada laboratorium komputer.
                             </p>
                         </div>
 

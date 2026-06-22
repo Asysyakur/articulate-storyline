@@ -3,11 +3,11 @@ import InvestigationSlide from '@/components/InvestigationSlide';
 export default function Algorithm() {
     return (
         <InvestigationSlide
-            storageKey="ip-addressing-completed"
+            storageKey="algorithm-completed"
             slideNumber={7}
             title="IP Addressing"
             description="Identifikasi masalah konfigurasi IP Address."
-            image="/images/ip-addressing-topology.png"
+            image="/images/library.png"
             note="IP conflict menyebabkan koneksi jaringan terganggu."
             hotspots={[
                 {
