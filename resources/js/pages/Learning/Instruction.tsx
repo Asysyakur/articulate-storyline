@@ -1,5 +1,6 @@
 import LearningLayout from '@/layouts/LearningLayout';
 
+import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Home, LogOut, MousePointerClick, Volume2, VolumeX } from 'lucide-react';
 
 import { useState } from 'react';
@@ -8,6 +9,8 @@ export default function Instruction() {
     const [audioOn, setAudioOn] = useState(true);
 
     const [activePreview, setActivePreview] = useState<string | null>(null);
+
+    const [visitedButtons, setVisitedButtons] = useState<string[]>([]);
 
     const buttons = [
         {
@@ -49,6 +52,8 @@ export default function Instruction() {
     const handleClick = (id: string) => {
         setActivePreview(id);
 
+        setVisitedButtons((currentVisited) => (currentVisited.includes(id) ? currentVisited : [...currentVisited, id]));
+
         if (id === 'audio') {
             setAudioOn(!audioOn);
         }
@@ -69,8 +74,8 @@ export default function Instruction() {
 
                             {/* TITLE */}
                             <h1 className="mt-6 text-5xl leading-[1.05] font-black tracking-tight lg:text-6xl">
-                                Coba Klik
-                                <span className="block text-cyan-400">Tombol Navigasi</span>
+                                Kenali Tombol
+                                <span className="block text-cyan-400">Navigasi</span>
                             </h1>
 
                             {/* DESC */}
@@ -93,13 +98,23 @@ export default function Instruction() {
                                     </div>
 
                                     {/* CONTENT */}
-                                    <div className="flex min-h-[300px] flex-col justify-center p-8">
+                                    <motion.div
+                                        key={activePreview ?? 'default'}
+                                        initial={{ opacity: 0, scale: 0.98, y: 8 }}
+                                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                                        transition={{ duration: 0.28 }}
+                                        className="flex min-h-[300px] flex-col justify-center p-8"
+                                    >
                                         {/* DEFAULT */}
                                         {!activePreview && (
                                             <div className="text-center">
-                                                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-cyan-400/10">
+                                                <motion.div
+                                                    animate={{ y: [0, -8, 0] }}
+                                                    transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+                                                    className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-cyan-400/10"
+                                                >
                                                     <MousePointerClick size={38} className="text-cyan-400" />
-                                                </div>
+                                                </motion.div>
 
                                                 <h3 className="mt-6 text-2xl font-black">Coba Interaksi</h3>
 
@@ -111,41 +126,115 @@ export default function Instruction() {
 
                                         {/* HOME */}
                                         {activePreview === 'home' && (
-                                            <div className="rounded-2xl border border-slate-800 bg-slate-950 p-6">
-                                                <p className="text-sm text-cyan-400">HOME BUTTON</p>
+                                            <div className="mx-auto w-full max-w-md">
+                                                <div className="relative overflow-hidden rounded-3xl border border-slate-800 bg-slate-950 p-6">
+                                                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,.14),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(34,211,238,.08),transparent_38%)]" />
 
-                                                <h3 className="mt-3 text-3xl font-black">Halaman Utama</h3>
+                                                    <div className="relative flex items-center justify-between gap-6">
+                                                        <div className="flex-1">
+                                                            <p className="text-sm text-cyan-400">Klik Home</p>
 
-                                                <p className="mt-4 text-slate-300">Tombol Home digunakan untuk kembali ke halaman utama media.</p>
+                                                            <h3 className="mt-2 text-3xl font-black">Kembali ke Beranda</h3>
+                                                        </div>
+
+                                                        <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-cyan-400/10">
+                                                            <motion.div
+                                                                animate={{ scale: [1, 1.12, 1], rotate: [0, 6, 0] }}
+                                                                transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+                                                                className="flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-400 text-slate-950"
+                                                            >
+                                                                <Home size={30} />
+                                                            </motion.div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="relative mt-6 flex items-center gap-3 rounded-2xl border border-cyan-400/20 bg-cyan-400/5 p-3">
+                                                        <motion.div
+                                                            animate={{ x: [0, -6, 0] }}
+                                                            transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+                                                            className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-400/10 text-cyan-400"
+                                                        >
+                                                            <Home size={20} />
+                                                        </motion.div>
+
+                                                        <div className="flex-1">
+                                                            <p className="text-sm font-semibold text-white">Menuju halaman utama</p>
+
+                                                            <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-800">
+                                                                <motion.div
+                                                                    animate={{ x: ['-100%', '0%', '100%'] }}
+                                                                    transition={{ duration: 1.3, repeat: Infinity, ease: 'easeInOut' }}
+                                                                    className="h-full w-1/2 rounded-full bg-cyan-400"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         )}
 
                                         {/* NEXT */}
                                         {activePreview === 'next' && (
-                                            <div className="flex items-center gap-5">
-                                                <div className="flex-1 rounded-2xl border border-slate-800 bg-slate-950 p-5">
-                                                    <p className="text-slate-500">Slide Sekarang</p>
+                                            <div className="flex flex-col items-center gap-4">
+                                                <div className="rounded-2xl border border-amber-400/30 bg-amber-400/10 px-4 py-2 text-center text-sm text-amber-300">
+                                                    Pada slide aktivitas, tombol Next aktif setelah aktivitas diselesaikan.
                                                 </div>
 
-                                                <ChevronRight className="animate-pulse text-cyan-400" size={40} />
+                                                <div className="relative flex w-full max-w-md items-center gap-4 rounded-3xl border border-slate-800 bg-slate-950 p-5">
+                                                    <div className="flex-1 rounded-2xl border border-slate-800 bg-slate-900 p-4">
+                                                        <p className="text-xs tracking-[0.18em] text-slate-500 uppercase">Slide Sekarang</p>
+                                                        <p className="mt-2 text-lg font-bold text-white">2 / 15</p>
+                                                    </div>
 
-                                                <div className="flex-1 rounded-2xl border border-cyan-400 bg-cyan-400/10 p-5">
-                                                    <p className="text-cyan-300">Slide Berikutnya</p>
+                                                    <motion.div
+                                                        animate={{ x: [0, 8, 0] }}
+                                                        transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
+                                                        className="flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-400 text-slate-950"
+                                                    >
+                                                        <ChevronRight size={28} />
+                                                    </motion.div>
+
+                                                    <div className="flex-1 rounded-2xl border border-cyan-400/40 bg-cyan-400/10 p-4">
+                                                        <p className="text-xs tracking-[0.18em] text-cyan-300 uppercase">Slide Berikutnya</p>
+                                                        <motion.div
+                                                            animate={{ opacity: [0.5, 1, 0.5] }}
+                                                            transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+                                                            className="mt-2 h-2 rounded-full bg-cyan-400/60"
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
                                         )}
 
                                         {/* PREVIOUS */}
                                         {activePreview === 'previous' && (
-                                            <div className="flex items-center gap-5">
-                                                <div className="flex-1 rounded-2xl border border-cyan-400 bg-cyan-400/10 p-5">
-                                                    <p className="text-cyan-300">Slide Sebelumnya</p>
+                                            <div className="flex flex-col items-center gap-4">
+                                                <div className="rounded-2xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-center text-sm text-cyan-300">
+                                                    Tombol Previous mengembalikan pengguna ke slide sebelumnya.
                                                 </div>
 
-                                                <ChevronLeft className="animate-pulse text-cyan-400" size={40} />
+                                                <div className="relative flex w-full max-w-md items-center gap-4 rounded-3xl border border-slate-800 bg-slate-950 p-5">
+                                                    <div className="flex-1 rounded-2xl border border-cyan-400/40 bg-cyan-400/10 p-4">
+                                                        <p className="text-xs tracking-[0.18em] text-cyan-300 uppercase">Slide Sebelumnya</p>
+                                                        <motion.div
+                                                            animate={{ opacity: [0.4, 1, 0.4] }}
+                                                            transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+                                                            className="mt-2 h-2 rounded-full bg-cyan-400/60"
+                                                        />
+                                                    </div>
 
-                                                <div className="flex-1 rounded-2xl border border-slate-800 bg-slate-950 p-5">
-                                                    <p className="text-slate-500">Slide Sekarang</p>
+                                                    <motion.div
+                                                        animate={{ x: [0, -8, 0] }}
+                                                        transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
+                                                        className="flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-400 text-slate-950"
+                                                    >
+                                                        <ChevronLeft size={28} />
+                                                    </motion.div>
+
+                                                    <div className="flex-1 rounded-2xl border border-slate-800 bg-slate-900 p-4">
+                                                        <p className="text-xs tracking-[0.18em] text-slate-500 uppercase">Slide Sekarang</p>
+                                                        <p className="mt-2 text-lg font-bold text-white">2 / 15</p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         )}
@@ -153,35 +242,68 @@ export default function Instruction() {
                                         {/* AUDIO */}
                                         {activePreview === 'audio' && (
                                             <div className="text-center">
-                                                <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-cyan-400/10">
+                                                <motion.div
+                                                    animate={{ scale: audioOn ? [1, 1.08, 1] : [1, 0.94, 1] }}
+                                                    transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+                                                    className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-cyan-400/10"
+                                                >
                                                     {audioOn ? (
                                                         <Volume2 size={42} className="text-cyan-400" />
                                                     ) : (
                                                         <VolumeX size={42} className="text-red-400" />
                                                     )}
-                                                </div>
+                                                </motion.div>
 
                                                 <h3 className="mt-6 text-3xl font-black">{audioOn ? 'Audio Aktif' : 'Audio Dimatikan'}</h3>
 
                                                 <p className="mt-3 text-slate-400">Tombol audio digunakan untuk mengatur musik latar media.</p>
+
+                                                <div className="mt-5 flex items-center justify-center gap-2">
+                                                    {[0, 1, 2, 3].map((bar) => (
+                                                        <motion.span
+                                                            key={bar}
+                                                            animate={{ scaleY: audioOn ? [0.6, 1, 0.6] : [0.4, 0.7, 0.4] }}
+                                                            transition={{ duration: 0.9 + bar * 0.12, repeat: Infinity, ease: 'easeInOut' }}
+                                                            className={`w-2 rounded-full ${audioOn ? 'bg-cyan-400' : 'bg-red-400'}`}
+                                                            style={{ height: 18 + bar * 8 }}
+                                                        />
+                                                    ))}
+                                                </div>
                                             </div>
                                         )}
 
                                         {/* EXIT */}
                                         {activePreview === 'exit' && (
                                             <div className="mx-auto max-w-md rounded-3xl border border-red-500/20 bg-red-500/10 p-6">
-                                                <p className="font-semibold text-red-400">Konfirmasi Keluar</p>
+                                                <div className="flex items-center gap-3 text-red-400">
+                                                    <motion.div
+                                                        animate={{ rotate: [0, 8, -8, 0] }}
+                                                        transition={{ duration: 1.3, repeat: Infinity, ease: 'easeInOut' }}
+                                                        className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-500/10"
+                                                    >
+                                                        <LogOut size={24} />
+                                                    </motion.div>
 
-                                                <h3 className="mt-3 text-2xl font-black">Keluar dari Media?</h3>
+                                                    <div>
+                                                        <p className="font-semibold">Konfirmasi Keluar</p>
+                                                        <h3 className="text-2xl font-black text-white">Keluar dari Media?</h3>
+                                                    </div>
+                                                </div>
 
                                                 <div className="mt-6 flex gap-3">
                                                     <button className="flex-1 rounded-2xl bg-slate-800 py-3">Batal</button>
 
-                                                    <button className="flex-1 rounded-2xl bg-red-500 py-3 text-white">Keluar</button>
+                                                    <motion.button
+                                                        animate={{ x: [0, 2, 0] }}
+                                                        transition={{ duration: 1.3, repeat: Infinity, ease: 'easeInOut' }}
+                                                        className="flex-1 rounded-2xl bg-red-500 py-3 text-white"
+                                                    >
+                                                        Keluar
+                                                    </motion.button>
                                                 </div>
                                             </div>
                                         )}
-                                    </div>
+                                    </motion.div>
                                 </div>
                             </div>
                         </div>
@@ -209,7 +331,15 @@ export default function Instruction() {
                                         </div>
 
                                         {/* TITLE */}
-                                        <h3 className="mt-6 text-2xl font-bold">{button.title}</h3>
+                                        <div className="mt-6 flex items-center justify-between gap-3">
+                                            <h3 className="text-2xl font-bold">{button.title}</h3>
+
+                                            {visitedButtons.includes(button.id) && (
+                                                <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-[11px] font-semibold text-emerald-200">
+                                                    Visited
+                                                </span>
+                                            )}
+                                        </div>
 
                                         {/* DESC */}
                                         <p className="mt-3 text-sm leading-relaxed text-slate-400">{button.desc}</p>
