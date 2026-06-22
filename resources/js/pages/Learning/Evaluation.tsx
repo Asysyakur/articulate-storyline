@@ -2,9 +2,11 @@ import LearningLayout from '@/layouts/LearningLayout';
 
 import MultipleChoice from '@/components/Evaluation/MultipleChoice';
 
+import { Link } from '@inertiajs/react';
+
 import { evaluationQuestions } from '@/data/evaluationQuestions';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { RotateCcw, Trophy } from 'lucide-react';
 
@@ -15,6 +17,8 @@ export default function Evaluation() {
 
     const finished = currentIndex >= evaluationQuestions.length;
 
+    const totalScore = evaluationQuestions.reduce((sum, question) => sum + question.points, 0);
+
     const currentQuestion = evaluationQuestions[currentIndex];
 
     /*
@@ -23,13 +27,29 @@ export default function Evaluation() {
     |--------------------------------------------------------------------------
     */
 
-    const handleNext = (correct: boolean) => {
+    const handleNext = (correct: boolean, points: number) => {
         if (correct) {
-            setScore((prev) => prev + 1);
+            setScore((prev) => prev + points);
         }
 
         setCurrentIndex((prev) => prev + 1);
     };
+
+    useEffect(() => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        if (finished) {
+            sessionStorage.setItem('evaluationScore', String(score));
+            sessionStorage.setItem('evaluationCompleted', 'true');
+            window.dispatchEvent(new Event('evaluation-completed-change'));
+            return;
+        }
+
+        sessionStorage.removeItem('evaluationCompleted');
+        window.dispatchEvent(new Event('evaluation-completed-change'));
+    }, [finished, score]);
 
     /*
     |--------------------------------------------------------------------------
@@ -41,6 +61,12 @@ export default function Evaluation() {
         setCurrentIndex(0);
 
         setScore(0);
+
+        if (typeof window !== 'undefined') {
+            sessionStorage.removeItem('evaluationScore');
+            sessionStorage.removeItem('evaluationCompleted');
+            window.dispatchEvent(new Event('evaluation-completed-change'));
+        }
     };
 
     return (
@@ -59,7 +85,7 @@ export default function Evaluation() {
                     <div className="text-center">
                         {/* LABEL */}
                         <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
-                            Slide 12 — Evaluasi
+                            Slide 12 — Kuis Graded
                         </div>
 
                         {/* TITLE */}
@@ -96,24 +122,32 @@ export default function Evaluation() {
 
                             {/* SCORE */}
                             <h2 className="mt-6 text-4xl font-black">
-                                {score}/{evaluationQuestions.length}
+                                {score}/{totalScore}
                             </h2>
 
-                            <p className="mt-2 text-lg text-slate-300">Jawaban Benar</p>
+                            <p className="mt-2 text-lg text-slate-300">Poin Terkumpul</p>
 
                             {/* DESC */}
                             <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-slate-300">
-                                Selamat! Anda telah menyelesaikan evaluasi pembelajaran perpustakaan digital.
+                                Selamat! Anda telah menyelesaikan kuis graded dan siap melihat hasil pada Result Slide 13.
                             </p>
 
-                            {/* BUTTON */}
-                            <button
-                                onClick={restart}
-                                className="mt-8 inline-flex items-center gap-3 rounded-2xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:scale-105"
-                            >
-                                <RotateCcw size={18} />
-                                Ulangi Evaluasi
-                            </button>
+                            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                                <button
+                                    onClick={restart}
+                                    className="inline-flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-6 py-3 font-bold transition hover:bg-white/10"
+                                >
+                                    <RotateCcw size={18} />
+                                    Ulangi Kuis
+                                </button>
+
+                                <Link
+                                    href="/result"
+                                    className="inline-flex items-center gap-3 rounded-2xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:scale-105"
+                                >
+                                    Lihat Result Slide
+                                </Link>
+                            </div>
                         </div>
                     )}
                 </div>

@@ -52,14 +52,18 @@ export default function InformationGathering() {
     |--------------------------------------------------------------------------
     */
 
+    const isLocked = submitted;
+
     const toggleOption = (id: string) => {
+        if (isLocked) {
+            return;
+        }
+
         if (selected.includes(id)) {
             setSelected(selected.filter((item) => item !== id));
         } else {
             setSelected([...selected, id]);
         }
-
-        setSubmitted(false);
     };
 
     /*
@@ -110,12 +114,13 @@ export default function InformationGathering() {
                             return (
                                 <button
                                     key={option.id}
+                                    disabled={isLocked}
                                     onClick={() => toggleOption(option.id)}
                                     className={`group rounded-2xl border p-5 text-left transition-all duration-300 ${
                                         active
                                             ? 'border-cyan-400 bg-cyan-400/10'
                                             : 'border-white/10 bg-white/5 hover:border-cyan-400/40 hover:bg-cyan-400/5'
-                                    }`}
+                                    } ${isLocked ? 'cursor-not-allowed opacity-80' : ''}`}
                                 >
                                     {/* TOP */}
                                     <div className="flex items-start justify-between">
@@ -152,7 +157,8 @@ export default function InformationGathering() {
                     <div className="mt-8 flex flex-col items-start gap-4">
                         <button
                             onClick={() => setSubmitted(true)}
-                            className="rounded-2xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:scale-105"
+                            disabled={submitted}
+                            className="rounded-2xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40"
                         >
                             Periksa Jawaban
                         </button>

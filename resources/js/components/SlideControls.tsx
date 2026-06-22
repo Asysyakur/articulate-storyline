@@ -2,12 +2,18 @@ import { Link, router, usePage } from '@inertiajs/react';
 
 import { ChevronLeft, ChevronRight, Home, LogOut, Volume2, VolumeX } from 'lucide-react';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export default function SlideControls() {
     const { url } = usePage();
 
     const [audioOn, setAudioOn] = useState(true);
+
+    const [solutionDevelopmentChecked, setSolutionDevelopmentChecked] = useState(false);
+
+    const [evaluationCompleted, setEvaluationCompleted] = useState(false);
+
+    const [evaluationScore, setEvaluationScore] = useState(0);
 
     /*
     |--------------------------------------------------------------------------
@@ -64,6 +70,32 @@ export default function SlideControls() {
 
     const prevSlide = currentIndex > 0 ? slides[currentIndex - 1] : null;
 
+    useEffect(() => {
+        const readCheckedState = () => {
+            if (typeof window === 'undefined') {
+                return;
+            }
+
+            setSolutionDevelopmentChecked(window.localStorage.getItem('solution-development-checked') === 'true');
+
+            const completed = window.sessionStorage.getItem('evaluationCompleted') === 'true';
+            const score = Number(window.sessionStorage.getItem('evaluationScore') ?? 0);
+
+            setEvaluationCompleted(completed);
+            setEvaluationScore(Number.isFinite(score) ? score : 0);
+        };
+
+        readCheckedState();
+
+        window.addEventListener('solution-development-checked-change', readCheckedState);
+        window.addEventListener('evaluation-completed-change', readCheckedState);
+
+        return () => {
+            window.removeEventListener('solution-development-checked-change', readCheckedState);
+            window.removeEventListener('evaluation-completed-change', readCheckedState);
+        };
+    }, [url]);
+
     /*
     |--------------------------------------------------------------------------
     | HIDE CONTROLS
@@ -76,6 +108,12 @@ export default function SlideControls() {
     if (url === '/') {
         return null;
     }
+
+    const nextEnabled =
+        nextSlide &&
+        (url !== '/solution-development' || solutionDevelopmentChecked) &&
+        (url !== '/evaluation' || evaluationCompleted) &&
+        (url !== '/result' || evaluationScore >= 75);
 
     return (
         <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2">
@@ -122,14 +160,14 @@ export default function SlideControls() {
 
                 {/* NEXT */}
                 <button
-                    disabled={!nextSlide}
+                    disabled={!nextEnabled}
                     onClick={() => {
-                        if (nextSlide) {
+                        if (nextEnabled) {
                             router.visit(nextSlide.path);
                         }
                     }}
                     className={`flex h-12 w-12 items-center justify-center rounded-xl transition-all ${
-                        nextSlide ? 'bg-cyan-400 text-slate-950 hover:scale-105' : 'cursor-not-allowed bg-slate-900 text-slate-600'
+                        nextEnabled ? 'bg-cyan-400 text-slate-950 hover:scale-105' : 'cursor-not-allowed bg-slate-900 text-slate-600'
                     } `}
                 >
                     <ChevronRight size={20} />

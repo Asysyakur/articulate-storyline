@@ -2,14 +2,15 @@ import LearningLayout from '@/layouts/LearningLayout';
 
 import { ArrowRight, BadgeCheck, RotateCcw, Trophy } from 'lucide-react';
 
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 
 import { useEffect, useState } from 'react';
 
 export default function Result() {
     const [score, setScore] = useState(0);
 
-    const totalQuestions = 3;
+    const totalQuestions = 100;
+    const passingScore = 75;
 
     useEffect(() => {
         const saved = sessionStorage.getItem('evaluationScore');
@@ -21,7 +22,23 @@ export default function Result() {
 
     const percentage = Math.round((score / totalQuestions) * 100);
 
-    const passed = percentage >= 75;
+    const passed = percentage >= passingScore;
+
+    const statusLabel = passed ? 'Tuntas' : 'Belum Tuntas';
+
+    const statusMessage = passed
+        ? 'Selamat! Anda telah mencapai passing score dan siap melanjutkan ke refleksi.'
+        : 'Anda belum mencapai passing score. Pelajari ulang investigasi dan solusi, lalu ulangi kuis.';
+
+    const handleRetry = () => {
+        if (typeof window !== 'undefined') {
+            sessionStorage.removeItem('evaluationScore');
+            sessionStorage.removeItem('evaluationCompleted');
+            window.dispatchEvent(new Event('evaluation-completed-change'));
+        }
+
+        router.visit('/evaluation');
+    };
 
     return (
         <LearningLayout>
@@ -47,15 +64,18 @@ export default function Result() {
 
                         {/* TITLE */}
                         <h1 className="mt-6 text-4xl leading-[0.95] font-black tracking-tight lg:text-5xl">
-                            Hasil
-                            <span className="block text-cyan-400">Evaluasi</span>
+                            <span className="block text-cyan-400">Hasil Evaluasi</span>
                         </h1>
 
                         {/* SCORE */}
                         <div className="mt-8">
-                            <h2 className="text-6xl font-black">{percentage}</h2>
+                            <p className="text-base font-medium text-slate-400">
+                                Nilai Akhir: <span className="text-white">{percentage}%</span>
+                            </p>
 
-                            <p className="mt-2 text-base text-slate-400">Nilai Akhir</p>
+                            <h2 className="mt-2 text-6xl font-black">{score}</h2>
+
+                            <p className="mt-3 text-sm font-medium text-slate-400">Passing score: {passingScore}%</p>
                         </div>
 
                         {/* STATUS */}
@@ -66,21 +86,17 @@ export default function Result() {
                         >
                             <BadgeCheck size={20} />
 
-                            <span className="text-base font-bold">{passed ? 'Tuntas' : 'Belum Tuntas'}</span>
+                            <span className="text-base font-bold">{statusLabel}</span>
                         </div>
 
                         {/* FEEDBACK */}
-                        <p className="mx-auto mt-6 max-w-2xl text-sm leading-relaxed text-slate-300">
-                            {passed
-                                ? 'Selamat! Anda telah berhasil memahami konsep berpikir komputasional dan membantu sekolah menemukan solusi pengelolaan perpustakaan digital.'
-                                : 'Anda masih perlu mempelajari kembali materi investigasi dan penyusunan solusi.'}
-                        </p>
+                        <p className="mx-auto mt-6 max-w-2xl text-sm leading-relaxed text-slate-300">{statusMessage}</p>
 
                         {/* ACTION */}
                         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                             {/* RESTART */}
                             <button
-                                onClick={() => location.reload()}
+                                onClick={handleRetry}
                                 className="inline-flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 font-bold transition hover:bg-white/10"
                             >
                                 <RotateCcw size={18} />
@@ -88,13 +104,24 @@ export default function Result() {
                             </button>
 
                             {/* NEXT */}
-                            <Link
-                                href="/reflection"
-                                className="inline-flex items-center gap-3 rounded-2xl bg-cyan-400 px-5 py-3 font-bold text-slate-950 transition hover:scale-105"
-                            >
-                                Lanjut Refleksi
-                                <ArrowRight size={18} />
-                            </Link>
+                            {passed ? (
+                                <Link
+                                    href="/reflection"
+                                    className="inline-flex items-center gap-3 rounded-2xl bg-cyan-400 px-5 py-3 font-bold text-slate-950 transition hover:scale-105"
+                                >
+                                    Lanjut Refleksi
+                                    <ArrowRight size={18} />
+                                </Link>
+                            ) : (
+                                <button
+                                    type="button"
+                                    disabled
+                                    className="inline-flex items-center gap-3 rounded-2xl bg-slate-700 px-5 py-3 font-bold text-slate-300 opacity-80 cursor-not-allowed"
+                                >
+                                    Lanjut Refleksi
+                                    <ArrowRight size={18} />
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>

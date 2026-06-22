@@ -1,11 +1,15 @@
 import LearningLayout from '@/layouts/LearningLayout';
 
-import { BookOpen, CheckCircle2, Github, GraduationCap, Mail } from 'lucide-react';
+import { ArrowRight, BookOpen, CheckCircle2, Github, GraduationCap, Mail, School2 } from 'lucide-react';
+
+import { Link } from '@inertiajs/react';
+
+import { motion } from 'framer-motion';
 
 export default function DeveloperProfile() {
     return (
         <LearningLayout>
-            <div className="min-h-screen overflow-y-auto bg-[#020617] rounded-3xl text-white">
+            <div className="min-h-screen overflow-y-auto text-white">
                 {/* BACKGROUND */}
                 <div className="fixed inset-0 -z-10">
                     <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950" />
@@ -14,23 +18,43 @@ export default function DeveloperProfile() {
                 </div>
 
                 {/* CONTENT */}
-                <div className="mx-auto flex min-h-screen max-w-5xl items-center px-6 py-8 pb-24">
-                    <div className="grid w-full items-center gap-8 lg:grid-cols-[0.8fr_1fr]">
+                <div className="mx-auto flex min-h-screen max-w-6xl items-center px-6 py-8 pb-24">
+                    <div className="grid w-full items-center gap-10 lg:grid-cols-[0.82fr_1fr]">
                         {/* LEFT */}
-                        <div className="flex justify-center">
-                            <div className="relative">
-                                {/* GLOW */}
-                                <div className="absolute inset-0 rounded-full bg-cyan-400/20 blur-3xl" />
+                        <div className="flex justify-center lg:justify-start">
+                            <motion.div
+                                initial={{ opacity: 0, y: 24, scale: 0.98 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                transition={{ duration: 0.55, ease: 'easeOut' }}
+                                className="relative w-full max-w-[420px]"
+                            >
+                                <div className="absolute -inset-6 rounded-[36px] bg-cyan-400/10 blur-3xl" />
 
-                                {/* IMAGE */}
-                                <div className="relative h-[240px] w-[240px] overflow-hidden rounded-full border-4 border-cyan-400/20 bg-slate-900 shadow-2xl lg:h-[280px] lg:w-[280px]">
-                                    <img src="/images/library.png" alt="Developer" className="h-full w-full object-cover" />
+                                <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-slate-900/80 p-5 shadow-2xl shadow-cyan-950/20">
+                                    <div className="aspect-[4/5] overflow-hidden rounded-[26px] border border-cyan-400/15 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950">
+                                        <img src="/images/library.png" alt="Logo atau foto pengembang" className="h-full w-full object-cover opacity-90" />
+                                    </div>
+
+                                    <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                                        <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                            <p className="text-xs text-slate-400">Nama</p>
+                                            <p className="mt-1 text-sm font-semibold text-white">Asysyakur</p>
+                                        </div>
+                                        <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                            <p className="text-xs text-slate-400">Status</p>
+                                            <p className="mt-1 text-sm font-semibold text-white">Pengembang Media</p>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            </motion.div>
                         </div>
 
                         {/* RIGHT */}
-                        <div>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.08 }}
+                        >
                             {/* LABEL */}
                             <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
                                 Slide 15 — Profil Pengembang
@@ -44,61 +68,69 @@ export default function DeveloperProfile() {
 
                             {/* DESC */}
                             <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-300">
-                                Media pembelajaran interaktif ini dikembangkan untuk membantu peserta didik memahami konsep berpikir komputasional
-                                dalam pengelolaan perpustakaan digital.
+                                Media pembelajaran interaktif ini dikembangkan untuk membantu peserta didik memahami konsep berpikir
+                                komputasional dalam pengelolaan perpustakaan digital.
                             </p>
 
-                            {/* INFO */}
-                            <div className="mt-6 space-y-3">
-                                {/* NAME */}
+                            {/* IDENTITY */}
+                            <div className="mt-6 grid gap-3">
                                 <div className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
                                     <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
                                         <GraduationCap size={20} />
                                     </div>
 
-                                    <div>
+                                    <div className="min-w-0">
                                         <p className="text-xs text-slate-400">Nama Pengembang</p>
-
-                                        <h3 className="mt-1 text-base font-bold">-</h3>
+                                        <h3 className="mt-1 text-base font-bold">Asysyakur</h3>
+                                        <p className="mt-1 text-sm text-slate-300">NIM: Tidak dicantumkan</p>
                                     </div>
                                 </div>
 
-                                {/* MEDIA */}
                                 <div className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
                                     <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
                                         <BookOpen size={20} />
                                     </div>
 
-                                    <div>
-                                        <p className="text-xs text-slate-400">Media Pembelajaran</p>
-
-                                        <h3 className="mt-1 text-base font-bold">Perpustakaan Digital</h3>
+                                    <div className="min-w-0">
+                                        <p className="text-xs text-slate-400">Program Studi</p>
+                                        <h3 className="mt-1 text-base font-bold">Pendidikan Ilmu Komputer</h3>
+                                        <p className="mt-1 text-sm text-slate-300">Nama Universitas: Belum dicantumkan</p>
                                     </div>
                                 </div>
 
-                                {/* GITHUB */}
                                 <div className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
                                     <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
-                                        <Github size={20} />
+                                        <School2 size={20} />
                                     </div>
 
-                                    <div>
-                                        <p className="text-xs text-slate-400">Github</p>
-
-                                        <h3 className="mt-1 text-base font-bold">-</h3>
+                                    <div className="min-w-0">
+                                        <p className="text-xs text-slate-400">Instansi mitra</p>
+                                        <h3 className="mt-1 text-base font-bold">SMK Indonesia Mas</h3>
+                                        <p className="mt-1 text-sm text-slate-300">Media pembelajaran interaktif jaringan komputer dan internet.</p>
                                     </div>
                                 </div>
 
-                                {/* EMAIL */}
-                                <div className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
-                                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
-                                        <Mail size={20} />
+                                <div className="grid gap-3 sm:grid-cols-2">
+                                    <div className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+                                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
+                                            <Mail size={20} />
+                                        </div>
+
+                                        <div className="min-w-0">
+                                            <p className="text-xs text-slate-400">Email</p>
+                                            <h3 className="mt-1 text-sm font-bold break-all">hilmiasysyakur123@gmail.com</h3>
+                                        </div>
                                     </div>
 
-                                    <div>
-                                        <p className="text-xs text-slate-400">Email</p>
+                                    <div className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+                                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
+                                            <Github size={20} />
+                                        </div>
 
-                                        <h3 className="mt-1 text-base font-bold">-</h3>
+                                        <div className="min-w-0">
+                                            <p className="text-xs text-slate-400">Github</p>
+                                            <h3 className="mt-1 text-sm font-bold">Belum dicantumkan</h3>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -110,16 +142,26 @@ export default function DeveloperProfile() {
                                         <CheckCircle2 size={20} />
                                     </div>
 
-                                    <div>
+                                    <div className="min-w-0">
                                         <h3 className="text-lg font-bold text-emerald-300">Pembelajaran Selesai</h3>
 
                                         <p className="mt-2 text-sm leading-relaxed text-slate-300">
-                                            Terima kasih telah menggunakan media pembelajaran interaktif perpustakaan digital.
+                                            Terima kasih telah menggunakan media pembelajaran interaktif Jaringan Komputer dan Internet.
                                         </p>
+
+                                        <div className="mt-4 flex flex-wrap gap-3">
+                                            <Link
+                                                href="/"
+                                                className="inline-flex items-center gap-2 rounded-2xl bg-emerald-400 px-4 py-2 text-sm font-bold text-slate-950 transition hover:scale-105"
+                                            >
+                                                Exit course
+                                                <ArrowRight size={16} />
+                                            </Link>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
             </div>
