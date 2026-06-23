@@ -7,14 +7,14 @@ export default function Algorithm() {
             slideNumber={7}
             title="IP Addressing"
             description="Identifikasi masalah konfigurasi IP Address."
-            image="/images/library.png"
+            image="/images/konfigurasi-ip.png"
             note="IP conflict menyebabkan koneksi jaringan terganggu."
             hotspots={[
                 {
                     id: 'ip',
                     title: 'IP Address',
-                    x: '12%',
-                    y: '22%',
+                    x: '2%',
+                    y: '50%',
                     icon: 'search',
                     problem: 'Terdapat IP yang berbeda subnet.',
                     analysis: 'PC-03 menggunakan 192.168.2.15.',
@@ -23,8 +23,8 @@ export default function Algorithm() {
                 {
                     id: 'mask',
                     title: 'Subnet Mask',
-                    x: '38%',
-                    y: '30%',
+                    x: '60%',
+                    y: '5%',
                     icon: 'queue',
                     problem: 'Periksa subnet mask.',
                     analysis: 'Subnet harus konsisten.',
@@ -33,8 +33,8 @@ export default function Algorithm() {
                 {
                     id: 'gateway',
                     title: 'Default Gateway',
-                    x: '68%',
-                    y: '22%',
+                    x: '60%',
+                    y: '20%',
                     icon: 'lost',
                     problem: 'Gateway tidak sesuai.',
                     analysis: 'Gateway berbeda dengan host lain.',

@@ -7,7 +7,7 @@ export default function DataRepresentation() {
             slideNumber={8}
             title="Gateway & DNS"
             description="Analisis konfigurasi jaringan untuk menemukan penyebab komputer tidak dapat mengakses internet meskipun masih terhubung ke jaringan lokal."
-            image="/images/library.png"
+            image="/images/pengaturan-jaringan.png"
             note="Jika komputer dapat terhubung ke LAN tetapi tidak dapat mengakses internet, kemungkinan masalah berada pada konfigurasi Default Gateway atau DNS."
             hotspots={[
                 {
@@ -17,8 +17,8 @@ export default function DataRepresentation() {
 
                     icon: 'search',
 
-                    x: '22%',
-                    y: '35%',
+                    x: '55%',
+                    y: '25%',
 
                     problem: 'Komputer terhubung ke jaringan lokal namun tidak dapat mengakses internet.',
 
@@ -36,7 +36,7 @@ export default function DataRepresentation() {
                     icon: 'queue',
 
                     x: '55%',
-                    y: '42%',
+                    y: '40%',
 
                     problem: 'Website tidak dapat dibuka meskipun koneksi jaringan terlihat aktif.',
 
@@ -53,8 +53,8 @@ export default function DataRepresentation() {
 
                     icon: 'lost',
 
-                    x: '80%',
-                    y: '25%',
+                    x: '55%',
+                    y: '55%',
 
                     problem: 'Status jaringan menunjukkan Connected tetapi internet tidak dapat diakses.',
 

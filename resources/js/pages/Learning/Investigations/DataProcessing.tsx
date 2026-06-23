@@ -7,7 +7,7 @@ export default function DataProcessing() {
             slideNumber={9}
             title="Troubleshooting Jaringan dengan Ping Test"
             description="Gunakan hasil pengujian ping untuk menentukan lokasi gangguan jaringan secara sistematis."
-            image="/images/library.png"
+            image="/images/diagnosa-jaringan.png"
             note="Pola 'ping gateway berhasil tetapi ping internet gagal' menunjukkan bahwa jaringan lokal masih berfungsi, namun terdapat gangguan pada koneksi menuju internet."
             hotspots={[
                 {
@@ -17,8 +17,8 @@ export default function DataProcessing() {
 
                     icon: 'search',
 
-                    x: '28%',
-                    y: '35%',
+                    x: '59%',
+                    y: '3%',
 
                     problem: 'Perlu memastikan apakah komputer masih dapat berkomunikasi dengan perangkat jaringan lokal.',
 
@@ -35,8 +35,8 @@ export default function DataProcessing() {
 
                     icon: 'queue',
 
-                    x: '55%',
-                    y: '55%',
+                    x: '59%',
+                    y: '24%',
 
                     problem: 'Komputer masih belum dapat mengakses internet meskipun terhubung ke LAN.',
 
@@ -52,8 +52,8 @@ export default function DataProcessing() {
 
                     icon: 'lost',
 
-                    x: '80%',
-                    y: '25%',
+                    x: '59%',
+                    y: '45%',
 
                     problem: 'Perlu memastikan apakah terdapat gangguan fisik pada koneksi jaringan.',
 
