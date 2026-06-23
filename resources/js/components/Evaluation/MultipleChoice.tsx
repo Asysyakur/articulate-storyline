@@ -1,5 +1,6 @@
 import { ArrowRight, CheckCircle2, XCircle } from 'lucide-react';
 
+import { playCorrectSound, playWrongSound } from '@/utils/sound';
 import { useEffect, useMemo, useState } from 'react';
 
 interface Question {
@@ -127,7 +128,17 @@ export default function MultipleChoice({ question, questionNumber, totalQuestion
                 <div className="mt-6 flex justify-center">
                     <button
                         disabled={!selected}
-                        onClick={() => setChecked(true)}
+                        onClick={() => {
+                            const correct = selected === question.answer;
+
+                            if (correct) {
+                                playCorrectSound();
+                            } else {
+                                playWrongSound();
+                            }
+
+                            setChecked(true);
+                        }}
                         className="rounded-2xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40"
                     >
                         Periksa Jawaban

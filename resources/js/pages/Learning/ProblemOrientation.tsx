@@ -1,4 +1,6 @@
 import LearningLayout from '@/layouts/LearningLayout';
+import { playClickSound } from '@/utils/sound';
+import { speak } from '@/utils/speech';
 
 import { AlertTriangle, CheckCircle2, Gauge, PlayCircle, Printer, WifiOff } from 'lucide-react';
 
@@ -31,12 +33,26 @@ export default function ProblemOrientation() {
     };
 
     const handleHotspot = (key: 'internet' | 'slow' | 'printer') => {
+        playClickSound();
+
         setSelectedProblem(key);
 
         setVisited((prev) => ({
             ...prev,
             [key]: true,
         }));
+
+        if (key === 'internet') {
+            speak('Komputer tidak dapat mengakses internet. Periksa koneksi jaringan dan konfigurasi perangkat.');
+        }
+
+        if (key === 'slow') {
+            speak('Koneksi jaringan sangat lambat. Kemungkinan terjadi kepadatan trafik atau gangguan jaringan.');
+        }
+
+        if (key === 'printer') {
+            speak('Printer jaringan tidak terdeteksi oleh komputer pengguna.');
+        }
     };
 
     const progress = useMemo(() => {
@@ -44,6 +60,19 @@ export default function ProblemOrientation() {
     }, [visited]);
 
     const completed = visited.internet && visited.slow && visited.printer;
+
+    useEffect(() => {
+        speak(`
+        Lab komputer baru dipasangi jaringan,
+        namun muncul beberapa gangguan saat digunakan.
+
+        Beberapa komputer tidak dapat mengakses internet,
+        sebagian komputer mengalami koneksi yang sangat lambat,
+        dan printer jaringan tidak terdeteksi.
+
+        Klik seluruh hotspot untuk mengidentifikasi gejala masalah jaringan.
+    `);
+    }, []);
 
     useEffect(() => {
         localStorage.setItem('problem-orientation-completed', completed ? 'true' : 'false');

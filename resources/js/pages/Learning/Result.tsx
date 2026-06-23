@@ -4,6 +4,7 @@ import { ArrowRight, BadgeCheck, RotateCcw, Trophy } from 'lucide-react';
 
 import { Link, router } from '@inertiajs/react';
 
+import { playFailSound, playPassSound } from '@/utils/sound';
 import { useEffect, useState } from 'react';
 
 export default function Result() {
@@ -24,6 +25,18 @@ export default function Result() {
 
     const passed = percentage >= passingScore;
 
+    useEffect(() => {
+        if (score === 0) {
+            return;
+        }
+
+        if (passed) {
+            playPassSound();
+        } else {
+            playFailSound();
+        }
+    }, [score]);
+    
     const statusLabel = passed ? 'Tuntas' : 'Belum Tuntas';
 
     const statusMessage = passed
@@ -116,7 +129,7 @@ export default function Result() {
                                 <button
                                     type="button"
                                     disabled
-                                    className="inline-flex items-center gap-3 rounded-2xl bg-slate-700 px-5 py-3 font-bold text-slate-300 opacity-80 cursor-not-allowed"
+                                    className="inline-flex cursor-not-allowed items-center gap-3 rounded-2xl bg-slate-700 px-5 py-3 font-bold text-slate-300 opacity-80"
                                 >
                                     Lanjut Refleksi
                                     <ArrowRight size={18} />

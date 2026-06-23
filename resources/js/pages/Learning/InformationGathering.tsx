@@ -1,4 +1,5 @@
 import LearningLayout from '@/layouts/LearningLayout';
+import { speak } from '@/utils/speech';
 
 import { CheckCircle2, Globe, MemoryStick, Monitor, Network, Palette, Router, Ruler, Wifi, XCircle } from 'lucide-react';
 
@@ -96,6 +97,18 @@ export default function InformationGathering() {
     const correctAnswers = options.filter((item) => item.correct).map((item) => item.id);
 
     const isCorrect = JSON.stringify([...selected].sort()) === JSON.stringify([...correctAnswers].sort());
+
+    useEffect(() => {
+        speak(`
+        Sebagai teknisi jaringan,
+        tugasmu adalah memilih informasi yang benar-benar relevan untuk diagnosis.
+
+        Fokus pada data yang berkaitan dengan konektivitas jaringan,
+        dan abaikan informasi yang tidak membantu proses troubleshooting.
+
+        Pilih semua informasi yang diperlukan untuk menemukan penyebab gangguan jaringan.
+    `);
+    }, []);
 
     useEffect(() => {
         localStorage.setItem('information-gathering-completed', submitted ? 'true' : 'false');

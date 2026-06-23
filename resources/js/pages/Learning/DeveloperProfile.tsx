@@ -4,9 +4,24 @@ import { ArrowRight, BookOpen, CheckCircle2, Github, GraduationCap, Mail, School
 
 import { Link } from '@inertiajs/react';
 
+import { fadeOutMusic } from '@/utils/sound';
+import { speak } from '@/utils/speech';
 import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 
 export default function DeveloperProfile() {
+    useEffect(() => {
+        speak('Terima kasih telah mengikuti media pembelajaran interaktif Jaringan Komputer dan Internet.');
+
+        setTimeout(() => {
+            fadeOutMusic(5000);
+
+            setTimeout(() => {
+                window.bgMusic = undefined;
+            }, 5000);
+        }, 8000);
+    }, []);
+
     return (
         <LearningLayout>
             <div className="min-h-screen overflow-y-auto text-white">
@@ -32,7 +47,11 @@ export default function DeveloperProfile() {
 
                                 <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-slate-900/80 p-5 shadow-2xl shadow-cyan-950/20">
                                     <div className="aspect-[4/5] overflow-hidden rounded-[26px] border border-cyan-400/15 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950">
-                                        <img src="/images/library.png" alt="Logo atau foto pengembang" className="h-full w-full object-cover opacity-90" />
+                                        <img
+                                            src="/images/library.png"
+                                            alt="Logo atau foto pengembang"
+                                            className="h-full w-full object-cover opacity-90"
+                                        />
                                     </div>
 
                                     <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -50,11 +69,7 @@ export default function DeveloperProfile() {
                         </div>
 
                         {/* RIGHT */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: 0.08 }}
-                        >
+                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.08 }}>
                             {/* LABEL */}
                             <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
                                 Slide 15 — Profil Pengembang
@@ -68,8 +83,8 @@ export default function DeveloperProfile() {
 
                             {/* DESC */}
                             <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-300">
-                                Media pembelajaran interaktif ini dikembangkan untuk membantu peserta didik memahami konsep berpikir
-                                komputasional dalam pengelolaan perpustakaan digital.
+                                Media pembelajaran interaktif ini dikembangkan untuk membantu peserta didik memahami konsep berpikir komputasional
+                                dalam pengelolaan perpustakaan digital.
                             </p>
 
                             {/* IDENTITY */}

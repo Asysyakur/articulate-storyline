@@ -3,7 +3,8 @@ import LearningLayout from '@/layouts/LearningLayout';
 import { motion } from 'framer-motion';
 import { BookOpen, Brain, CheckCircle2, Database, Lightbulb, Target } from 'lucide-react';
 
-import { useState } from 'react';
+import { speak } from '@/utils/speech';
+import { useEffect, useState } from 'react';
 
 type Outcome = {
     id: string;
@@ -54,6 +55,19 @@ export default function LearningOutcomes() {
     const panelLabel = selected.id === 'konsep' ? 'Change state of panel teks' : 'Show layer';
     const SelectedIcon = selected.icon;
 
+    useEffect(() => {
+        speak(`
+        Selamat datang pada tahap capaian pembelajaran.
+
+        Setelah mengikuti pembelajaran ini, Anda diharapkan mampu memahami konsep dasar jaringan komputer,
+        mengenali topologi dan perangkat jaringan,
+        memahami pengalamatan IP Address, subnet mask, dan default gateway,
+        serta melakukan troubleshooting dasar pada konektivitas jaringan.
+
+        Silakan klik setiap kompetensi untuk mempelajari detail capaian pembelajaran.
+    `);
+    }, []);
+
     return (
         <LearningLayout fullscreen>
             <div className="relative flex min-h-screen items-center overflow-hidden">
@@ -92,7 +106,7 @@ export default function LearningOutcomes() {
 
                                     <div className="min-w-0">
                                         <p className="text-sm text-cyan-400">{panelLabel}</p>
-                                        <h3 className="mt-1 text-xl font-black leading-tight lg:text-2xl">{selected.title}</h3>
+                                        <h3 className="mt-1 text-xl leading-tight font-black lg:text-2xl">{selected.title}</h3>
                                     </div>
                                 </div>
 
@@ -145,13 +159,15 @@ export default function LearningOutcomes() {
                                         }`}
                                     >
                                         <div className="flex items-start gap-4">
-                                            <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${isActive ? 'bg-cyan-400 text-slate-950' : 'bg-cyan-400/10 text-cyan-300'}`}>
+                                            <div
+                                                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${isActive ? 'bg-cyan-400 text-slate-950' : 'bg-cyan-400/10 text-cyan-300'}`}
+                                            >
                                                 <Icon size={22} />
                                             </div>
 
                                             <div className="min-w-0 flex-1">
                                                 <div className="flex flex-wrap items-start gap-2">
-                                                    <h3 className="text-lg font-black leading-tight text-white lg:text-xl">{item.title}</h3>
+                                                    <h3 className="text-lg leading-tight font-black text-white lg:text-xl">{item.title}</h3>
 
                                                     {isActive && (
                                                         <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-2.5 py-1 text-[11px] font-semibold text-cyan-300">

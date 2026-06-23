@@ -9,6 +9,7 @@ import { closestCenter, DndContext, type DragEndEvent, PointerSensor, useSensor,
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 import { CSS } from '@dnd-kit/utilities';
+import { speak } from '@/utils/speech';
 
 type FeedbackState = 'correct' | 'wrong' | null;
 
@@ -35,17 +36,7 @@ const stepDetails: Record<string, string> = {
     'Dokumentasikan solusi': 'Catat hasil agar solusi bisa dipakai kembali saat kasus serupa muncul.',
 };
 
-function SortableItem({
-    id,
-    index,
-    hint,
-    disabled,
-}: {
-    id: string;
-    index: number;
-    hint: string;
-    disabled: boolean;
-}) {
+function SortableItem({ id, index, hint, disabled }: { id: string; index: number; hint: string; disabled: boolean }) {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
         id,
         disabled,
@@ -80,8 +71,8 @@ function SortableItem({
                 </button>
 
                 <div>
-                    <p className="text-xs uppercase tracking-[0.16em] text-slate-400">Langkah {index + 1}</p>
-                    <h3 className="text-base font-bold leading-tight text-white">{id}</h3>
+                    <p className="text-xs tracking-[0.16em] text-slate-400 uppercase">Langkah {index + 1}</p>
+                    <h3 className="text-base leading-tight font-bold text-white">{id}</h3>
                     <p className="mt-1 text-sm leading-relaxed text-slate-400">{hint}</p>
                 </div>
             </div>
@@ -163,6 +154,21 @@ export default function SolutionDevelopment() {
         }
     };
 
+    useEffect(() => {
+        speak(`
+        Setelah berhasil mengidentifikasi penyebab gangguan jaringan,
+        langkah berikutnya adalah menyusun strategi penyelesaian secara sistematis.
+
+        Urutkan setiap langkah troubleshooting dari proses identifikasi masalah,
+        pemeriksaan koneksi,
+        pengecekan konfigurasi,
+        pengujian konektivitas,
+        hingga penerapan solusi dan dokumentasi.
+
+        Susun urutan yang paling logis agar proses perbaikan dapat dilakukan secara efektif dan efisien.
+    `);
+    }, []);
+
     return (
         <LearningLayout>
             <div className="relative min-h-screen overflow-y-auto text-white">
@@ -185,8 +191,8 @@ export default function SolutionDevelopment() {
                         </h1>
 
                         <p className="mx-auto mt-4 max-w-3xl text-base leading-relaxed text-slate-300">
-                            Gunakan drag and drop untuk mengurutkan langkah penyelesaian masalah. Setelah diperiksa, jawaban akan dikunci
-                            sampai Anda menekan Coba Lagi.
+                            Gunakan drag and drop untuk mengurutkan langkah penyelesaian masalah. Setelah diperiksa, jawaban akan dikunci sampai Anda
+                            menekan Coba Lagi.
                         </p>
                     </div>
 
@@ -257,7 +263,13 @@ export default function SolutionDevelopment() {
                                                   : 'bg-white/5 text-slate-400'
                                         }`}
                                     >
-                                        {feedback === 'correct' ? <CheckCircle2 size={20} /> : feedback === 'wrong' ? <XCircle size={20} /> : <ShieldCheck size={20} />}
+                                        {feedback === 'correct' ? (
+                                            <CheckCircle2 size={20} />
+                                        ) : feedback === 'wrong' ? (
+                                            <XCircle size={20} />
+                                        ) : (
+                                            <ShieldCheck size={20} />
+                                        )}
                                     </div>
 
                                     <div>
@@ -314,9 +326,7 @@ export default function SolutionDevelopment() {
                                         <div>
                                             <h3 className="text-lg font-bold text-red-300">Belum Tepat</h3>
 
-                                            <p className="mt-2 text-sm leading-relaxed text-slate-300">
-                                                Coba susun ulang, lalu periksa kembali.
-                                            </p>
+                                            <p className="mt-2 text-sm leading-relaxed text-slate-300">Coba susun ulang, lalu periksa kembali.</p>
                                         </div>
                                     </div>
                                 </div>

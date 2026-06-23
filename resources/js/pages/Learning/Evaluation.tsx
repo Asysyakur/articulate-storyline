@@ -10,6 +10,8 @@ import { useEffect, useState } from 'react';
 
 import { RotateCcw, Trophy } from 'lucide-react';
 
+import { playFinishSound } from '@/utils/sound';
+
 export default function Evaluation() {
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -34,6 +36,12 @@ export default function Evaluation() {
 
         setCurrentIndex((prev) => prev + 1);
     };
+    
+    useEffect(() => {
+        if (finished) {
+            playFinishSound();
+        }
+    }, [finished]);
 
     useEffect(() => {
         if (typeof window === 'undefined') {

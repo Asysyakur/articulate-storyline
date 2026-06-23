@@ -4,7 +4,8 @@ import { ArrowRight, Brain, CheckCircle2, Database, Lightbulb, MessageSquareQuot
 
 import { Link } from '@inertiajs/react';
 
-import { useState } from 'react';
+import { speak } from '@/utils/speech';
+import { useEffect, useState } from 'react';
 
 const reflections = [
     {
@@ -50,6 +51,12 @@ export default function Reflection() {
             [id]: value,
         }));
     };
+
+    useEffect(() => {
+        speak(
+            'Mari refleksikan proses berpikir yang telah kamu lakukan. Pikirkan strategi yang paling membantu, bukti yang mendukung kesimpulanmu, dan bagaimana kamu akan menyesuaikan langkah jika menghadapi masalah yang berbeda.',
+        );
+    }, []);
 
     return (
         <LearningLayout>
@@ -179,7 +186,7 @@ export default function Reflection() {
                                     onChange={(event) => handleAnswerChange(activeReflection.id, event.target.value)}
                                     rows={5}
                                     placeholder={activeReflection.example}
-                                    className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm leading-relaxed text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-400/10"
+                                    className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm leading-relaxed text-white transition outline-none placeholder:text-slate-500 focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-400/10"
                                 />
                             </div>
 

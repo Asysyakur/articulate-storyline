@@ -1,9 +1,11 @@
 import LearningLayout from '@/layouts/LearningLayout';
+import { speak } from '@/utils/speech';
 
 import { Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 
 import { ArrowRight, Brain, CheckCircle2, Database, FileBarChart, Workflow } from 'lucide-react';
+import { useEffect } from 'react';
 
 export default function InvestigationSummary() {
     const points = [
@@ -31,6 +33,18 @@ export default function InvestigationSummary() {
             desc: 'Menggunakan pengujian ping untuk menentukan lokasi gangguan jaringan secara sistematis.',
         },
     ];
+
+    useEffect(() => {
+        speak(`
+        Investigasi telah selesai dilakukan.
+
+        Dari hasil investigasi, diketahui bahwa gangguan jaringan dapat disebabkan oleh masalah pada topologi jaringan, konfigurasi IP Address, pengaturan gateway dan DNS, maupun konektivitas internet.
+
+        Melalui proses analisis yang sistematis, setiap gangguan dapat diidentifikasi berdasarkan gejala dan data yang ditemukan.
+
+        Selanjutnya, mari menyusun solusi yang tepat untuk mengatasi permasalahan jaringan pada laboratorium komputer.
+    `);
+    }, []);
 
     return (
         <LearningLayout>

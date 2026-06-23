@@ -3,6 +3,7 @@ import LearningLayout from '@/layouts/LearningLayout';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Home, LogOut, MousePointerClick, Volume2, VolumeX } from 'lucide-react';
 
+import { speak } from '@/utils/speech';
 import { useState } from 'react';
 
 export default function Instruction() {
@@ -52,11 +53,27 @@ export default function Instruction() {
     const handleClick = (id: string) => {
         setActivePreview(id);
 
-        setVisitedButtons((currentVisited) => (currentVisited.includes(id) ? currentVisited : [...currentVisited, id]));
+        if (id === 'home') {
+            speak('Tombol Home digunakan untuk kembali ke halaman utama.');
+        }
+
+        if (id === 'next') {
+            speak('Tombol Next digunakan untuk menuju slide berikutnya.');
+        }
+
+        if (id === 'previous') {
+            speak('Tombol Previous digunakan untuk kembali ke slide sebelumnya.');
+        }
 
         if (id === 'audio') {
-            setAudioOn(!audioOn);
+            speak('Tombol Audio digunakan untuk mengaktifkan atau mematikan audio.');
         }
+
+        if (id === 'exit') {
+            speak('Tombol Exit digunakan untuk keluar dari media pembelajaran.');
+        }
+
+        setVisitedButtons((currentVisited) => (currentVisited.includes(id) ? currentVisited : [...currentVisited, id]));
     };
 
     return (
