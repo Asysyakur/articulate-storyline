@@ -19,7 +19,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
 
           script: |
-            cd /www/wwwroot/oopcode.site
+            cd /www/wwwroot/articulate-storyline.site
 
             git fetch origin
             git reset --hard origin/main
