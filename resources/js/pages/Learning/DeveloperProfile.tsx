@@ -1,6 +1,6 @@
 import LearningLayout from '@/layouts/LearningLayout';
 
-import { ArrowRight, BookOpen, CheckCircle2, Github, GraduationCap, Mail, School2 } from 'lucide-react';
+import { ArrowRight, BookOpen, CheckCircle2, GraduationCap, Mail, School2 } from 'lucide-react';
 
 import { Link } from '@inertiajs/react';
 
@@ -57,7 +57,7 @@ export default function DeveloperProfile() {
                                     <div className="mt-5 grid gap-3 sm:grid-cols-2">
                                         <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                                             <p className="text-xs text-slate-400">Nama</p>
-                                            <p className="mt-1 text-sm font-semibold text-white">Asysyakur</p>
+                                            <p className="mt-1 text-sm font-semibold text-white">Kaisar Setio Febrian</p>
                                         </div>
                                         <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                                             <p className="text-xs text-slate-400">Status</p>
@@ -96,8 +96,8 @@ export default function DeveloperProfile() {
 
                                     <div className="min-w-0">
                                         <p className="text-xs text-slate-400">Nama Pengembang</p>
-                                        <h3 className="mt-1 text-base font-bold">Asysyakur</h3>
-                                        <p className="mt-1 text-sm text-slate-300">NIM: Tidak dicantumkan</p>
+                                        <h3 className="mt-1 text-base font-bold">Kaisar Setio Febrian</h3>
+                                        <p className="mt-1 text-sm text-slate-300">NIM: 2209410</p>
                                     </div>
                                 </div>
 
@@ -109,7 +109,7 @@ export default function DeveloperProfile() {
                                     <div className="min-w-0">
                                         <p className="text-xs text-slate-400">Program Studi</p>
                                         <h3 className="mt-1 text-base font-bold">Pendidikan Ilmu Komputer</h3>
-                                        <p className="mt-1 text-sm text-slate-300">Nama Universitas: Belum dicantumkan</p>
+                                        <p className="mt-1 text-sm text-slate-300">Nama Universitas: Universitas Pendidikan Indonesia</p>
                                     </div>
                                 </div>
 
@@ -125,27 +125,14 @@ export default function DeveloperProfile() {
                                     </div>
                                 </div>
 
-                                <div className="grid gap-3 sm:grid-cols-2">
-                                    <div className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
-                                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
-                                            <Mail size={20} />
-                                        </div>
-
-                                        <div className="min-w-0">
-                                            <p className="text-xs text-slate-400">Email</p>
-                                            <h3 className="mt-1 text-sm font-bold break-all">hilmiasysyakur123@gmail.com</h3>
-                                        </div>
+                                <div className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+                                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
+                                        <Mail size={20} />
                                     </div>
 
-                                    <div className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
-                                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300">
-                                            <Github size={20} />
-                                        </div>
-
-                                        <div className="min-w-0">
-                                            <p className="text-xs text-slate-400">Github</p>
-                                            <h3 className="mt-1 text-sm font-bold">Belum dicantumkan</h3>
-                                        </div>
+                                    <div className="min-w-0">
+                                        <p className="text-xs text-slate-400">Email</p>
+                                        <h3 className="mt-1 text-sm font-bold break-all">kaisartio6@upi.edu</h3>
                                     </div>
                                 </div>
                             </div>
