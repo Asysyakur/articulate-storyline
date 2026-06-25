@@ -48,7 +48,7 @@ export default function DeveloperProfile() {
                                 <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-slate-900/80 p-5 shadow-2xl shadow-cyan-950/20">
                                     <div className="aspect-[4/5] overflow-hidden rounded-[26px] border border-cyan-400/15 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950">
                                         <img
-                                            src="/images/library.png"
+                                            src="/images/dummy-profile.png"
                                             alt="Logo atau foto pengembang"
                                             className="h-full w-full object-cover opacity-90"
                                         />
