@@ -4,7 +4,7 @@ export default function DataProcessing() {
     return (
         <InvestigationSlide
             storageKey="data-processing-completed"
-            slideNumber={9}
+            slideNumber={14}
             title="Troubleshooting Jaringan dengan Ping Test"
             description="Gunakan hasil pengujian ping untuk menentukan lokasi gangguan jaringan secara sistematis."
             image="/images/diagnosa-jaringan.png"

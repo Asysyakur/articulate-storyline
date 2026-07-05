@@ -72,7 +72,7 @@ export default function DeveloperProfile() {
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.08 }}>
                             {/* LABEL */}
                             <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
-                                Slide 15 — Profil Pengembang
+                                Slide 20 — Profil Pengembang
                             </div>
 
                             {/* TITLE */}
@@ -83,8 +83,8 @@ export default function DeveloperProfile() {
 
                             {/* DESC */}
                             <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-300">
-                                Media pembelajaran interaktif ini dikembangkan untuk membantu peserta didik memahami konsep berpikir komputasional
-                                dalam pengelolaan perpustakaan digital.
+                                Media pembelajaran interaktif ini dikembangkan berbasis Problem Based Learning (PBL) untuk melatih kemampuan
+                                berpikir kritis peserta didik melalui studi kasus troubleshooting jaringan komputer.
                             </p>
 
                             {/* IDENTITY */}

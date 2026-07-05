@@ -130,7 +130,7 @@ export default function InformationGathering() {
                 <div className="relative z-10 mx-auto flex max-w-5xl flex-col px-6 pt-6 pb-24">
                     {/* LABEL */}
                     <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
-                        Slide 5 — Pengumpulan Informasi
+                        Slide 10 — Pengumpulan Informasi
                     </div>
 
                     {/* TITLE */}

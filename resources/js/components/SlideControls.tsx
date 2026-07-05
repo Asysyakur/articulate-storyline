@@ -35,7 +35,12 @@ export default function SlideControls() {
 
     const slides = useMemo(
         () => [
-            { title: 'Cover', path: '/' },
+            { title: 'Login', path: '/' },
+            { title: 'Materi 1 — Mengenal Jaringan Komputer', path: '/materi/mengenal-jaringan-komputer' },
+            { title: 'Materi 2 — Topologi Jaringan', path: '/materi/topologi-jaringan' },
+            { title: 'Materi 3 — Media & Komponen Jaringan', path: '/materi/media-komponen-jaringan' },
+            { title: 'Materi 4 — Dasar Pengalamatan', path: '/materi/dasar-pengalamatan' },
+            { title: 'Cover', path: '/beranda' },
             { title: 'Instruction', path: '/instruction' },
             { title: 'Learning Outcomes', path: '/learning-outcomes' },
             { title: 'Problem Orientation', path: '/problem-orientation' },

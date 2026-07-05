@@ -95,7 +95,7 @@ export default function ProblemOrientation() {
                     {/* LABEL */}
                     <div className="inline-flex items-center gap-2 rounded-full border border-red-400/20 bg-red-500/10 px-4 py-2 text-sm text-red-300">
                         <AlertTriangle size={15} />
-                        Slide 4 — Orientasi Masalah
+                        Slide 9 — Orientasi Masalah
                     </div>
 
                     {/* TITLE */}

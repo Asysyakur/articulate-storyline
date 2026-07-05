@@ -28,10 +28,10 @@ const reflections = [
 
     {
         id: 3,
-        title: 'Jika gejalanya berubah',
-        prompt: 'Jika gejalanya berbeda, langkah mana yang akan kamu ubah?',
-        example: 'Misalnya: urutan pengecekan, alat yang dipakai, atau bagian sistem yang diprioritaskan.',
-        feedback: 'Refleksi yang baik menunjukkan penyesuaian strategi, bukan mengulang langkah yang sama tanpa evaluasi.',
+        title: 'Memutuskan solusi',
+        prompt: 'Bagaimana kamu memilih perbaikan yang tepat sesuai gejala yang ditemukan?',
+        example: 'Misalnya: memasang ulang kabel, mengubah konfigurasi IP/gateway/DNS, atau mengganti port switch.',
+        feedback: 'Keputusan solusi yang baik selalu mengacu pada gejala dan bukti yang ditemukan, bukan tebakan acak.',
         icon: Database,
     },
 ];
@@ -74,7 +74,7 @@ export default function Reflection() {
                     <div className="text-center">
                         {/* LABEL */}
                         <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
-                            Slide 14 — Refleksi
+                            Slide 19 — Refleksi
                         </div>
 
                         {/* TITLE */}

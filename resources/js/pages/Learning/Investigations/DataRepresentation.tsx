@@ -4,7 +4,7 @@ export default function DataRepresentation() {
     return (
         <InvestigationSlide
             storageKey="data-representation-completed"
-            slideNumber={8}
+            slideNumber={13}
             title="Gateway & DNS"
             description="Analisis konfigurasi jaringan untuk menemukan penyebab komputer tidak dapat mengakses internet meskipun masih terhubung ke jaringan lokal."
             image="/images/pengaturan-jaringan.png"

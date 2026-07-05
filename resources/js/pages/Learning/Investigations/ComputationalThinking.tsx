@@ -60,7 +60,7 @@ export default function ComputationalThinking() {
                 <div className="mx-auto max-w-7xl px-6 py-8">
                     {/* LABEL */}
                     <div className="inline-flex rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
-                        Slide 6 — Investigasi
+                        Slide 11 — Investigasi
                     </div>
 
                     {/* TITLE */}
@@ -164,7 +164,7 @@ export default function ComputationalThinking() {
                                             )}
                                             <div className="text-5xl">🖥️</div>
 
-                                            <p className="mt-2 text-sm">PC {index + 1}</p>
+                                            <p className="mt-2 text-sm">{index === 3 ? 'PC-12' : `PC ${index + 1}`}</p>
                                         </div>
                                     </div>
                                 ))}

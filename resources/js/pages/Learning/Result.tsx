@@ -66,6 +66,11 @@ export default function Result() {
                 {/* CONTENT */}
                 <div className="mx-auto flex min-h-screen max-w-4xl items-center px-6 py-8 pb-24">
                     <div className="w-full rounded-[28px] border border-white/10 bg-slate-900/70 p-8 text-center shadow-2xl">
+                        {/* LABEL */}
+                        <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
+                            Slide 18 — Hasil Evaluasi
+                        </div>
+
                         {/* ICON */}
                         <div
                             className={`mx-auto flex h-20 w-20 items-center justify-center rounded-full ${

@@ -1,7 +1,7 @@
 import LearningLayout from '@/layouts/LearningLayout';
 
 import { motion } from 'framer-motion';
-import { BookOpen, Brain, CheckCircle2, Database, Lightbulb, Target } from 'lucide-react';
+import { BookOpen, Brain, CheckCircle2, Database, Lightbulb, Target, Wifi } from 'lucide-react';
 
 import { speak } from '@/utils/speech';
 import { useEffect, useState } from 'react';
@@ -19,30 +19,29 @@ const outcomes: Outcome[] = [
         id: 'konsep',
         title: 'Konsep & Jenis Jaringan (LAN/MAN/WAN)',
         icon: Brain,
-        description:
-            'Peserta didik mampu memahami konsep dasar jaringan komputer dan jenis-jenis jaringan yang digunakan dalam sistem perpustakaan digital.',
-        points: ['Mengidentifikasi masalah', 'Menyusun solusi secara sistematis', 'Memecahkan masalah secara logis'],
+        description: 'Peserta didik mampu memahami konsep dasar jaringan komputer, manfaatnya, serta klasifikasi jaringan berdasarkan cakupan area.',
+        points: ['Memahami pengertian jaringan komputer', 'Mengenali manfaat jaringan komputer', 'Membedakan PAN, LAN, MAN, dan WAN'],
     },
     {
         id: 'topologi',
         title: 'Topologi & Perangkat Jaringan',
         icon: Lightbulb,
-        description: 'Peserta didik mampu menyusun langkah-langkah solusi secara runtut dan logis.',
-        points: ['Menentukan urutan langkah', 'Menyusun solusi terstruktur', 'Membuat alur penyelesaian'],
+        description: 'Peserta didik mampu mengenali berbagai jenis topologi jaringan beserta perangkat pembentuk jaringan dan fungsinya.',
+        points: ['Membedakan jenis topologi jaringan', 'Mempertimbangkan pemilihan topologi', 'Mengenal fungsi NIC, switch, dan router'],
     },
     {
         id: 'ip',
         title: 'Pengalamatan IP (IP, subnet, gateway)',
         icon: Database,
-        description: 'Peserta didik mampu memahami cara mengelola dan merepresentasikan data perpustakaan digital.',
-        points: ['Mengelola data buku', 'Memahami data peminjaman', 'Menyusun informasi digital'],
+        description: 'Peserta didik mampu memahami dasar pengalamatan IP, subnet, dan protokol dalam mekanisme pertukaran data jaringan.',
+        points: ['Memahami alamat IP dan subnet', 'Mengenal protokol TCP/IP', 'Memahami mekanisme pertukaran paket data'],
     },
     {
         id: 'konektivitas',
         title: 'Konektivitas Internet & Troubleshooting',
-        icon: Database,
-        description: 'Peserta didik mampu memahami cara mengelola dan merepresentasikan data perpustakaan digital.',
-        points: ['Mengelola data buku', 'Memahami data peminjaman', 'Menyusun informasi digital'],
+        icon: Wifi,
+        description: 'Peserta didik mampu mendiagnosis dan mengatasi gangguan konektivitas jaringan komputer secara sistematis.',
+        points: ['Menelusuri gejala gangguan jaringan', 'Menguji konektivitas dengan ping', 'Menyusun langkah troubleshooting'],
     },
 ];
 
@@ -81,7 +80,7 @@ export default function LearningOutcomes() {
                         <motion.section initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
                             <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
                                 <Target size={15} />
-                                Slide 3 — Capaian Pembelajaran
+                                Slide 8 — Capaian Pembelajaran
                             </div>
 
                             <h1 className="mt-5 text-4xl leading-[1.02] font-black tracking-tight lg:text-5xl">

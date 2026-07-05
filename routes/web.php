@@ -14,6 +14,23 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/', function () {
+    return Inertia::render('Learning/Login');
+});
+
+Route::get('/materi/mengenal-jaringan-komputer', function () {
+    return Inertia::render('Learning/NetworkIntroduction');
+});
+Route::get('/materi/topologi-jaringan', function () {
+    return Inertia::render('Learning/TopologiJaringan');
+});
+Route::get('/materi/media-komponen-jaringan', function () {
+    return Inertia::render('Learning/MediaKomponenJaringan');
+});
+Route::get('/materi/dasar-pengalamatan', function () {
+    return Inertia::render('Learning/DasarPengalamatan');
+});
+
+Route::get('/beranda', function () {
     return Inertia::render('Learning/Home');
 });
 Route::get('/instruction', function () {
@@ -27,9 +44,6 @@ Route::get('/problem-orientation', function () {
 });
 Route::get('/information-gathering', function () {
     return Inertia::render('Learning/InformationGathering');
-});
-Route::get('/computational-thinking', function () {
-    return Inertia::render('Learning/ComputationalThinking');
 });
 
 /*
@@ -78,5 +92,5 @@ Route::get('/developer-profile', function () {
     return Inertia::render('Learning/DeveloperProfile');
 });
 
-require __DIR__ . '/settings.php';
-require __DIR__ . '/auth.php';
+require __DIR__.'/settings.php';
+require __DIR__.'/auth.php';
