@@ -164,7 +164,7 @@ export default function ComputationalThinking() {
                                             )}
                                             <div className="text-5xl">🖥️</div>
 
-                                            <p className="mt-2 text-sm">{index === 3 ? 'PC-12' : `PC ${index + 1}`}</p>
+                                            <p className="mt-2 text-sm">{index === 3 ? 'PC-04' : `PC ${index + 1}`}</p>
                                         </div>
                                     </div>
                                 ))}

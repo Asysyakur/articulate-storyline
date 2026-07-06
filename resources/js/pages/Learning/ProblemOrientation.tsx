@@ -7,35 +7,40 @@ import { AlertTriangle, CheckCircle2, Gauge, PlayCircle, Printer, WifiOff } from
 import { useEffect, useMemo, useState } from 'react';
 
 export default function ProblemOrientation() {
-    const [selectedProblem, setSelectedProblem] = useState<string | null>(null);
-
     const [visited, setVisited] = useState({
         internet: false,
         slow: false,
         printer: false,
     });
 
-    const problems = {
-        internet: {
+    const tickets = [
+        {
+            key: 'internet' as const,
+            ticketId: 'TCK-01',
+            category: 'Konektivitas',
             title: 'PC Tidak Dapat Mengakses Internet',
             description: 'Beberapa komputer tidak dapat membuka website maupun mengakses internet.',
         },
 
-        slow: {
+        {
+            key: 'slow' as const,
+            ticketId: 'TCK-02',
+            category: 'Performa Jaringan',
             title: 'Koneksi Jaringan Sangat Lambat',
             description: 'Sebagian komputer masih terhubung ke jaringan namun akses internet berjalan sangat lambat.',
         },
 
-        printer: {
+        {
+            key: 'printer' as const,
+            ticketId: 'TCK-03',
+            category: 'Perangkat Keras',
             title: 'Printer Jaringan Tidak Terdeteksi',
             description: 'Printer yang terhubung ke jaringan tidak muncul pada perangkat pengguna.',
         },
-    };
+    ];
 
     const handleHotspot = (key: 'internet' | 'slow' | 'printer') => {
         playClickSound();
-
-        setSelectedProblem(key);
 
         setVisited((prev) => ({
             ...prev,
@@ -264,28 +269,27 @@ export default function ProblemOrientation() {
                                 </div>
                             ) : (
                                 <div className="mt-6 space-y-4">
-                                    {visited.internet && (
-                                        <div className="rounded-2xl bg-white/5 p-4">
-                                            <h4 className="font-semibold">{problems.internet.title}</h4>
+                                    {tickets.map(
+                                        (ticket) =>
+                                            visited[ticket.key] && (
+                                                <div key={ticket.key} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                                    <div className="flex items-center justify-between">
+                                                        <span className="font-mono text-xs text-slate-400">{ticket.ticketId}</span>
 
-                                            <p className="mt-2 text-sm text-slate-300">{problems.internet.description}</p>
-                                        </div>
-                                    )}
+                                                        <span className="rounded-full border border-red-400/30 bg-red-400/10 px-2 py-0.5 text-[10px] font-semibold tracking-wide text-red-300 uppercase">
+                                                            Open
+                                                        </span>
+                                                    </div>
 
-                                    {visited.slow && (
-                                        <div className="rounded-2xl bg-white/5 p-4">
-                                            <h4 className="font-semibold">{problems.slow.title}</h4>
+                                                    <p className="mt-3 text-[11px] font-semibold tracking-wide text-cyan-300 uppercase">
+                                                        {ticket.category}
+                                                    </p>
 
-                                            <p className="mt-2 text-sm text-slate-300">{problems.slow.description}</p>
-                                        </div>
-                                    )}
+                                                    <h4 className="mt-1 font-semibold">{ticket.title}</h4>
 
-                                    {visited.printer && (
-                                        <div className="rounded-2xl bg-white/5 p-4">
-                                            <h4 className="font-semibold">{problems.printer.title}</h4>
-
-                                            <p className="mt-2 text-sm text-slate-300">{problems.printer.description}</p>
-                                        </div>
+                                                    <p className="mt-2 text-sm text-slate-300">{ticket.description}</p>
+                                                </div>
+                                            ),
                                     )}
                                 </div>
                             )}

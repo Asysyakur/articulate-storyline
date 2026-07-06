@@ -4,7 +4,7 @@ import LearningLayout from '@/layouts/LearningLayout';
 import { speak } from '@/utils/speech';
 import { motion } from 'framer-motion';
 
-import { Bluetooth, Cable, Network, Router, Wifi, Zap } from 'lucide-react';
+import { Bluetooth, Cable, Globe2, Laptop, Network, Router, Smartphone, Wifi, Zap } from 'lucide-react';
 import { useEffect } from 'react';
 
 const mediaTransmisi = [
@@ -59,6 +59,26 @@ const komponen = [
     },
 ];
 
+function IllustrationNode({ icon: Icon, label }: { icon: typeof Globe2; label: string }) {
+    return (
+        <div className="flex shrink-0 flex-col items-center gap-1">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/10 text-cyan-300">
+                <Icon size={20} />
+            </div>
+            <span className="text-[11px] whitespace-nowrap text-slate-400">{label}</span>
+        </div>
+    );
+}
+
+function Connector({ label, dashed }: { label: string; dashed?: boolean }) {
+    return (
+        <div className="flex min-w-[64px] flex-1 flex-col items-center gap-1">
+            <span className="text-[10px] whitespace-nowrap text-cyan-300">{label}</span>
+            <div className={`h-0.5 w-full ${dashed ? 'border-t-2 border-dashed border-cyan-400/50' : 'bg-cyan-400/50'}`} />
+        </div>
+    );
+}
+
 export default function MediaKomponenJaringan() {
     useEffect(() => {
         speak(`
@@ -84,6 +104,58 @@ export default function MediaKomponenJaringan() {
                         Media &amp; Komponen
                         <span className="block text-cyan-400">Jaringan</span>
                     </h1>
+
+                    {/* ILUSTRASI */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4 }}
+                        className="mt-6 rounded-3xl border border-white/10 bg-slate-900/70 p-6"
+                    >
+                        <p className="text-sm font-semibold text-cyan-300">Ilustrasi</p>
+
+                        {/* WIRED ROW */}
+                        <div className="mt-5">
+                            <p className="text-xs tracking-wide text-slate-500 uppercase">Media Kabel &amp; Perangkat Jaringan</p>
+
+                            <div className="mt-3 flex items-center gap-2 overflow-x-auto pb-2">
+                                <IllustrationNode icon={Globe2} label="Internet" />
+
+                                <Connector label="Serat Optik" />
+
+                                <IllustrationNode icon={Router} label="Router" />
+
+                                <Connector label="Kabel UTP" />
+
+                                <IllustrationNode icon={Network} label="Switch" />
+
+                                <Connector label="Kabel UTP" />
+
+                                <IllustrationNode icon={Laptop} label="PC" />
+                            </div>
+                        </div>
+
+                        {/* WIRELESS ROW */}
+                        <div className="mt-6">
+                            <p className="text-xs tracking-wide text-slate-500 uppercase">Media Nirkabel</p>
+
+                            <div className="mt-3 flex items-center gap-2 overflow-x-auto pb-2">
+                                <IllustrationNode icon={Router} label="Router" />
+
+                                <Connector label="Nirkabel" dashed />
+
+                                <IllustrationNode icon={Wifi} label="Access Point" />
+
+                                <Connector label="Wi-Fi" dashed />
+
+                                <IllustrationNode icon={Smartphone} label="Smartphone" />
+
+                                <Connector label="Bluetooth" dashed />
+
+                                <IllustrationNode icon={Bluetooth} label="Perangkat Lain" />
+                            </div>
+                        </div>
+                    </motion.div>
 
                     {/* MEDIA TRANSMISI */}
                     <div className="mt-6">

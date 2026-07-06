@@ -11,26 +11,26 @@ export default function InvestigationSummary() {
     const points = [
         {
             icon: Brain,
-            title: 'Topologi Jaringan',
-            desc: 'Mengidentifikasi perangkat jaringan dan hubungan antar perangkat pada laboratorium komputer.',
+            title: 'Topologi & Perangkat',
+            desc: 'Kabel longgar & port mati memutus koneksi fisik PC-04.',
         },
 
         {
             icon: Workflow,
-            title: 'IP Addressing',
-            desc: 'Menganalisis konfigurasi IP Address, subnet mask, dan gateway untuk menemukan kesalahan konfigurasi.',
+            title: 'IP Address',
+            desc: 'IP PC-04 salah segmen sehingga tidak dapat berkomunikasi.',
         },
 
         {
             icon: Database,
             title: 'Gateway & DNS',
-            desc: 'Memahami peran gateway dan DNS dalam proses akses internet dari jaringan lokal.',
+            desc: 'Gateway/DNS kosong membuat akses internet gagal.',
         },
 
         {
             icon: FileBarChart,
-            title: 'Troubleshooting Ping',
-            desc: 'Menggunakan pengujian ping untuk menentukan lokasi gangguan jaringan secara sistematis.',
+            title: 'Diagnosis',
+            desc: 'Ping bertingkat menunjuk jalur keluar sebagai sumber gangguan.',
         },
     ];
 

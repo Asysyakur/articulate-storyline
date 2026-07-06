@@ -17,7 +17,7 @@ export default function Algorithm() {
                     y: '50%',
                     icon: 'search',
                     problem: 'Terdapat IP yang berbeda subnet.',
-                    analysis: 'PC-12 menggunakan 192.168.2.15.',
+                    analysis: 'PC-04 menggunakan 192.168.2.25.',
                     solution: 'Ubah menjadi 192.168.1.x.',
                 },
                 {

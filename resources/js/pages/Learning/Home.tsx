@@ -1,7 +1,7 @@
 import LearningLayout from '@/layouts/LearningLayout';
 import { Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { BookOpen, Clock3, Cpu, GraduationCap, Monitor, Network, Play, Router } from 'lucide-react';
+import { ArrowRight, BookOpen, Clock3, Cpu, GraduationCap, Monitor, Network, Router } from 'lucide-react';
 
 export default function Home() {
     return (
@@ -36,18 +36,11 @@ export default function Home() {
                                 {/* BUTTONS */}
                                 <div className="mt-8 flex flex-wrap gap-4">
                                     <Link
-                                        href="/learning-outcomes"
+                                        href="/instruction"
                                         className="inline-flex items-center gap-2 rounded-2xl bg-cyan-400 px-8 py-4 font-bold text-slate-950 transition hover:scale-105"
                                     >
-                                        <Play size={18} />
-                                        Mulai Belajar
-                                    </Link>
-
-                                    <Link
-                                        href="/instruction"
-                                        className="rounded-2xl border border-white/10 bg-white/5 px-8 py-4 font-semibold transition hover:bg-white/10"
-                                    >
-                                        Petunjuk
+                                        Berikutnya
+                                        <ArrowRight size={18} />
                                     </Link>
                                 </div>
 
@@ -64,9 +57,7 @@ export default function Home() {
                                     </div>
 
                                     <p className="mt-3 text-sm text-slate-300">
-                                        • Sebagian PC tidak terhubung internet
-                                        <br />
-                                        • Koneksi jaringan lambat
+                                        • Sebagian PC gagal mengakses internet
                                         <br />• Printer jaringan tidak terdeteksi
                                     </p>
 
