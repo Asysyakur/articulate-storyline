@@ -138,7 +138,8 @@ export default function InformationGathering() {
                 {/* CONTENT */}
                 <div className="relative z-10 mx-auto flex max-w-5xl flex-col px-6 pt-6 pb-24">
                     {/* LABEL */}
-                    <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-[0px]">
+                        <span className="text-sm text-cyan-300">Indikator Facione: analysis</span>
                         Slide 6 — Mengorganisasi Penyelidikan (Fase 2)
                     </div>
 

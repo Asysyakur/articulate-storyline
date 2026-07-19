@@ -106,8 +106,9 @@ export default function InvestigationSummary() {
 
                 <div className="mx-auto max-w-7xl px-6 py-8 pb-28">
                     <div className="max-w-3xl">
-                        <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
+                        <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-[0px]">
                             <Terminal size={16} />
+                            <span className="text-sm text-cyan-300">Indikator Facione: inference</span>
                             Slide 15 — Praktik Diagnosis
                         </div>
                         <h1 className="mt-4 text-4xl font-black tracking-tight lg:text-5xl">

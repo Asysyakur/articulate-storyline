@@ -104,8 +104,9 @@ export default function ProblemOrientation() {
                 {/* CONTENT */}
                 <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 pb-32 lg:px-8">
                     {/* LABEL */}
-                    <div className="inline-flex items-center gap-2 rounded-full border border-red-400/20 bg-red-500/10 px-4 py-2 text-sm text-red-300">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-red-400/20 bg-red-500/10 px-4 py-2 text-[0px]">
                         <AlertTriangle size={15} />
+                        <span className="text-sm text-red-300">Indikator Facione: interpretation</span>
                         Slide 5 — Orientasi Masalah (Fase 1)
                     </div>
 
