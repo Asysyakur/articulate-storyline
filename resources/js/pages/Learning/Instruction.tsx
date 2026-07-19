@@ -9,6 +9,7 @@ import { useState } from 'react';
 export default function Instruction() {
     const [musicOn, setMusicOn] = useState(true);
     const [narrationOn, setNarrationOn] = useState(false);
+    const [sfxOn, setSfxOn] = useState(true);
 
     const [activePreview, setActivePreview] = useState<string | null>(null);
 
@@ -39,8 +40,8 @@ export default function Instruction() {
         {
             id: 'audio',
             title: 'Volume',
-            icon: musicOn || narrationOn ? Volume2 : VolumeX,
-            desc: 'Membuka pengaturan musik dan narasi.',
+            icon: musicOn || narrationOn || sfxOn ? Volume2 : VolumeX,
+            desc: 'Membuka pengaturan musik, narasi, dan SFX.',
         },
 
         {
@@ -67,7 +68,7 @@ export default function Instruction() {
         }
 
         if (id === 'audio') {
-            speak('Tombol Volume membuka pengaturan musik dan narasi. Narasi dalam keadaan nonaktif secara bawaan.');
+            speak('Tombol Volume membuka pengaturan musik, narasi, dan efek suara. Narasi dalam keadaan nonaktif secara bawaan.');
         }
 
         if (id === 'exit') {
@@ -285,6 +286,15 @@ export default function Instruction() {
                                                         </div>
                                                         <button onClick={() => setNarrationOn((on) => !on)} className={`rounded-lg px-3 py-1.5 text-xs font-bold ${narrationOn ? 'bg-cyan-400 text-slate-950' : 'bg-slate-800 text-slate-400'}`}>
                                                             {narrationOn ? 'Aktif' : 'Nonaktif'}
+                                                        </button>
+                                                    </div>
+                                                    <div className="mt-1 flex items-center justify-between gap-4 rounded-xl px-3 py-2">
+                                                        <div>
+                                                            <p className="font-semibold">SFX</p>
+                                                            <p className="text-xs text-slate-400">Efek klik dan umpan balik</p>
+                                                        </div>
+                                                        <button onClick={() => setSfxOn((on) => !on)} className={`rounded-lg px-3 py-1.5 text-xs font-bold ${sfxOn ? 'bg-cyan-400 text-slate-950' : 'bg-slate-800 text-slate-400'}`}>
+                                                            {sfxOn ? 'Aktif' : 'Nonaktif'}
                                                         </button>
                                                     </div>
                                                 </div>

@@ -1,5 +1,6 @@
 import { Link, router, usePage } from '@inertiajs/react';
 import { NARRATION_STORAGE_KEY, stopSpeak } from '@/utils/speech';
+import { SFX_STORAGE_KEY, stopSfx } from '@/utils/sound';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { BookOpen, ChevronLeft, ChevronRight, Home, LogOut, Volume2, VolumeX } from 'lucide-react';
@@ -14,10 +15,12 @@ export default function SlideControls() {
 
     const [audioOn, setAudioOn] = useState(true);
     const [narrationOn, setNarrationOn] = useState(false);
+    const [sfxOn, setSfxOn] = useState(true);
 
     useEffect(() => {
         setAudioOn(localStorage.getItem('bg-music-muted') !== 'true');
         setNarrationOn(localStorage.getItem(NARRATION_STORAGE_KEY) === 'true');
+        setSfxOn(localStorage.getItem(SFX_STORAGE_KEY) !== 'false');
     }, []);
     const [solutionDevelopmentChecked, setSolutionDevelopmentChecked] = useState(false);
     const [evaluationCompleted, setEvaluationCompleted] = useState(false);
@@ -231,6 +234,16 @@ export default function SlideControls() {
         }
     };
 
+    const toggleSfx = () => {
+        const next = !sfxOn;
+        setSfxOn(next);
+        localStorage.setItem(SFX_STORAGE_KEY, String(next));
+
+        if (!next) {
+            stopSfx();
+        }
+    };
+
     if (url === '/') {
         return null;
     }
@@ -359,12 +372,12 @@ export default function SlideControls() {
                             aria-label="Pengaturan volume"
                             aria-expanded={showAudioMenu}
                             className={`flex h-12 w-12 items-center justify-center rounded-xl transition-all ${
-                                audioOn || narrationOn
+                                audioOn || narrationOn || sfxOn
                                     ? 'bg-slate-800 hover:bg-cyan-400 hover:text-slate-950'
                                     : 'bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white'
                             }`}
                         >
-                            {audioOn || narrationOn ? <Volume2 size={20} /> : <VolumeX size={20} />}
+                            {audioOn || narrationOn || sfxOn ? <Volume2 size={20} /> : <VolumeX size={20} />}
                         </button>
 
                         {showAudioMenu && (
@@ -400,6 +413,22 @@ export default function SlideControls() {
                                         }`}
                                     >
                                         {narrationOn ? 'Aktif' : 'Nonaktif'}
+                                    </button>
+                                </div>
+
+                                <div className="mt-1 flex items-center justify-between gap-3 rounded-lg px-2 py-2">
+                                    <div>
+                                        <p className="text-sm font-semibold text-white">SFX</p>
+                                        <p className="text-xs text-slate-400">Efek klik dan umpan balik</p>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={toggleSfx}
+                                        className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${
+                                            sfxOn ? 'bg-cyan-400 text-slate-950' : 'bg-slate-800 text-slate-400'
+                                        }`}
+                                    >
+                                        {sfxOn ? 'Aktif' : 'Nonaktif'}
                                     </button>
                                 </div>
                             </div>

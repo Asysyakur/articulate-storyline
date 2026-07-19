@@ -1,58 +1,40 @@
-// utils/sound.ts
+export const SFX_STORAGE_KEY = 'sfx-enabled';
 
-export const playClickSound = () => {
-    const audio = new Audio('/audio/hotspot-click.mp3');
+const activeSfx = new Set<HTMLAudioElement>();
 
-    audio.volume = 0.5;
+const isSfxEnabled = () => typeof window !== 'undefined' && window.localStorage.getItem(SFX_STORAGE_KEY) !== 'false';
 
-    audio.play().catch(() => {});
+const playSfx = (source: string, volume: number) => {
+    if (!isSfxEnabled()) {
+        return;
+    }
+
+    const audio = new Audio(source);
+    audio.volume = volume;
+    activeSfx.add(audio);
+    audio.addEventListener('ended', () => activeSfx.delete(audio), { once: true });
+    audio.play().catch(() => activeSfx.delete(audio));
 };
 
-export const playCorrectSound = () => {
-    const audio = new Audio('/audio/hotspot-click.mp3');
-
-    audio.volume = 0.5;
-
-    audio.play().catch(() => {});
+export const stopSfx = () => {
+    activeSfx.forEach((audio) => {
+        audio.pause();
+        audio.currentTime = 0;
+    });
+    activeSfx.clear();
 };
 
-export const playWrongSound = () => {
-    const audio = new Audio('/audio/wrong.mp3');
-
-    audio.volume = 0.5;
-
-    audio.play().catch(() => {});
-};
-
-export const playFinishSound = () => {
-    const audio = new Audio('/audio/finish.mp3');
-
-    audio.volume = 0.5;
-
-    audio.play().catch(() => {});
-};
-
-export const playPassSound = () => {
-    const audio = new Audio('/audio/pass.mp3');
-
-    audio.volume = 0.7;
-
-    audio.play().catch(() => {});
-};
-
-export const playFailSound = () => {
-    const audio = new Audio('/audio/fail.mp3');
-
-    audio.volume = 0.7;
-
-    audio.play().catch(() => {});
-};
+export const playClickSound = () => playSfx('/audio/hotspot-click.mp3', 0.5);
+export const playCorrectSound = () => playSfx('/audio/hotspot-click.mp3', 0.5);
+export const playWrongSound = () => playSfx('/audio/wrong.mp3', 0.5);
+export const playFinishSound = () => playSfx('/audio/finish.mp3', 0.5);
+export const playPassSound = () => playSfx('/audio/pass.mp3', 0.7);
+export const playFailSound = () => playSfx('/audio/fail.mp3', 0.7);
 
 export const fadeOutMusic = (duration = 5000) => {
     if (!window.bgMusic) return;
 
     const audio = window.bgMusic;
-
     const step = audio.volume / (duration / 100);
 
     const interval = setInterval(() => {
@@ -61,7 +43,6 @@ export const fadeOutMusic = (duration = 5000) => {
         } else {
             audio.pause();
             audio.currentTime = 0;
-
             clearInterval(interval);
         }
     }, 100);
