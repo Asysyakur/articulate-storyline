@@ -1,12 +1,13 @@
 import MateriStepIndicator from '@/components/MateriStepIndicator';
 import LearningLayout from '@/layouts/LearningLayout';
-import { getLearner } from '@/utils/learner';
+import { type SharedData } from '@/types';
 
 import { speak } from '@/utils/speech';
 import { motion } from 'framer-motion';
 
 import { Globe2, Monitor, Network, Printer, Radio, Share2, Smartphone } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { usePage } from '@inertiajs/react';
+import { useEffect } from 'react';
 
 const manfaat = [
     { icon: Share2, text: 'Berbagi data dan informasi antarperangkat.' },
@@ -43,11 +44,10 @@ const klasifikasi = [
 ];
 
 export default function NetworkIntroduction() {
-    const [learner, setLearner] = useState({ name: '', kelas: '' });
+    const { learning } = usePage<SharedData>().props;
+    const learner = learning?.learner;
 
     useEffect(() => {
-        setLearner(getLearner());
-
         speak(`
         Jaringan komputer adalah sekumpulan komputer dan perangkat lain yang saling terhubung melalui media transmisi,
         sehingga dapat berkomunikasi dan berbagi sumber daya.
@@ -59,7 +59,7 @@ export default function NetworkIntroduction() {
     `);
     }, []);
 
-    const greeting = learner.name ? `Halo, ${learner.name} · ${learner.kelas || 'Kelas belum diisi'}` : 'Halo, Peserta Didik';
+    const greeting = learner?.name ? `Halo, ${learner.name} · ${learner.class_name || 'Kelas belum diisi'}` : 'Halo, Peserta Didik';
 
     return (
         <LearningLayout>

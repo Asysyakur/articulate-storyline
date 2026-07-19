@@ -1,8 +1,10 @@
 import LearningLayout from '@/layouts/LearningLayout';
+import { type SharedData } from '@/types';
+import { saveLearningProgress } from '@/utils/learningState';
 
 import { ArrowRight, Brain, CheckCircle2, Database, Lightbulb, MessageSquareQuote, PenLine } from 'lucide-react';
 
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 
 import { speak } from '@/utils/speech';
 import { useEffect, useState } from 'react';
@@ -64,9 +66,21 @@ const reflections = [
 ];
 
 export default function Reflection() {
+    const { learning } = usePage<SharedData>().props;
+    const savedReflection = learning?.progress.find((item) => item.activity_key === 'reflection');
     const [activeId, setActiveId] = useState(reflections[0].id);
 
-    const [answers, setAnswers] = useState<Record<number, string>>({});
+    const [answers, setAnswers] = useState<Record<number, string>>(() => {
+        const savedAnswers = savedReflection?.payload?.answers;
+
+        if (!savedAnswers || typeof savedAnswers !== 'object') {
+            return {};
+        }
+
+        return Object.fromEntries(
+            Object.entries(savedAnswers).filter(([, answer]) => typeof answer === 'string'),
+        ) as Record<number, string>;
+    });
 
     const activeReflection = reflections.find((item) => item.id === activeId) ?? reflections[0];
 
@@ -84,6 +98,10 @@ export default function Reflection() {
             'Mari refleksikan proses berpikir yang telah kamu lakukan. Pikirkan strategi yang paling membantu, bukti yang mendukung kesimpulanmu, dan bagaimana kamu akan menyesuaikan langkah jika menghadapi masalah yang berbeda.',
         );
     }, []);
+
+    useEffect(() => {
+        void saveLearningProgress('reflection', completed, { answers });
+    }, [answers, completed]);
 
     return (
         <LearningLayout>

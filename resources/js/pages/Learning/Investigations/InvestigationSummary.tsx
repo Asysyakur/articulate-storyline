@@ -1,4 +1,5 @@
 import LearningLayout from '@/layouts/LearningLayout';
+import { saveLearningProgress } from '@/utils/learningState';
 import { speak } from '@/utils/speech';
 
 import { Link } from '@inertiajs/react';
@@ -88,12 +89,14 @@ export default function InvestigationSummary() {
 
         if (!correct) {
             window.localStorage.removeItem('diagnostic-practice-completed');
+            void saveLearningProgress('diagnostic-practice', false, { ran, diagnosis });
             window.dispatchEvent(new Event('diagnostic-practice-completed-change'));
             setFeedback({ type: 'wrong', message: 'Diagnosis belum tepat. Buka kembali keluaran konsol dan bandingkan gejalanya.' });
             return;
         }
 
         window.localStorage.setItem('diagnostic-practice-completed', 'true');
+        void saveLearningProgress('diagnostic-practice', true, { ran, diagnosis });
         window.dispatchEvent(new Event('diagnostic-practice-completed-change'));
         setCompleted(true);
         setFeedback({ type: 'correct', message: 'Tepat. Semua PC sudah didiagnosis berdasarkan bukti hasil pengujian.' });

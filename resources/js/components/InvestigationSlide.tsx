@@ -1,4 +1,5 @@
 import LearningLayout from '@/layouts/LearningLayout';
+import { saveLearningProgress } from '@/utils/learningState';
 
 import { CheckCircle2, Clock3, Lightbulb, Search, ShieldAlert } from 'lucide-react';
 
@@ -80,9 +81,10 @@ export default function InvestigationSlide({ storageKey, slideNumber, title, des
 
     useEffect(() => {
         localStorage.setItem(storageKey, completed ? 'true' : 'false');
+        void saveLearningProgress(storageKey, completed, { visited });
 
         window.dispatchEvent(new Event(`${storageKey}-change`));
-    }, [completed, storageKey]);
+    }, [completed, storageKey, visited]);
 
     return (
         <LearningLayout>

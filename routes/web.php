@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\AdminLearningDataController;
+use App\Http\Controllers\LearningSessionController;
 
 // Route::get('/', function () {
 //     return Inertia::render('welcome');
@@ -11,11 +13,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
+
+    Route::get('admin/data-pembelajaran', [AdminLearningDataController::class, 'index'])
+        ->middleware('admin')
+        ->name('admin.learning-data');
 });
 
 Route::get('/', function () {
     return Inertia::render('Learning/Login');
-});
+})->name('home');
+
+Route::post('/learning/session', [LearningSessionController::class, 'store'])->name('learning.session.store');
+Route::get('/learning/state', [LearningSessionController::class, 'show'])->name('learning.state.show');
+Route::put('/learning/state', [LearningSessionController::class, 'updateState'])->name('learning.state.update');
+Route::put('/learning/progress/{activity}', [LearningSessionController::class, 'updateProgress'])->name('learning.progress.update');
 
 Route::get('/materi/mengenal-jaringan-komputer', function () {
     return Inertia::render('Learning/NetworkIntroduction');
@@ -32,7 +43,7 @@ Route::get('/materi/dasar-pengalamatan', function () {
 
 Route::get('/beranda', function () {
     return Inertia::render('Learning/Home');
-});
+})->name('learning.home');
 Route::get('/instruction', function () {
     return Inertia::render('Learning/Instruction');
 });

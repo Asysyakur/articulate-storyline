@@ -36,13 +36,13 @@ export default function Login({ status, canResetPassword }: LoginProps) {
     };
 
     return (
-        <AuthLayout title="Log in to your account" description="Enter your email and password below to log in">
-            <Head title="Log in" />
+        <AuthLayout title="Masuk Panel Admin" description="Gunakan akun administrator untuk memantau data pembelajaran.">
+            <Head title="Masuk Admin" />
 
             <form className="flex flex-col gap-6" onSubmit={submit}>
                 <div className="grid gap-6">
                     <div className="grid gap-2">
-                        <Label htmlFor="email">Email address</Label>
+                        <Label htmlFor="email" className="text-slate-200">Email</Label>
                         <Input
                             id="email"
                             type="email"
@@ -52,17 +52,18 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                             autoComplete="email"
                             value={data.email}
                             onChange={(e) => setData('email', e.target.value)}
-                            placeholder="email@example.com"
+                            placeholder="admin@mail.com"
+                            className="border-white/10 bg-slate-950/70 text-white placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-400/20"
                         />
                         <InputError message={errors.email} />
                     </div>
 
                     <div className="grid gap-2">
                         <div className="flex items-center">
-                            <Label htmlFor="password">Password</Label>
+                            <Label htmlFor="password" className="text-slate-200">Password</Label>
                             {canResetPassword && (
-                                <TextLink href={route('password.request')} className="ml-auto text-sm" tabIndex={5}>
-                                    Forgot password?
+                                <TextLink href={route('password.request')} className="ml-auto text-sm text-cyan-300" tabIndex={5}>
+                                    Lupa password?
                                 </TextLink>
                             )}
                         </div>
@@ -74,31 +75,27 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                             autoComplete="current-password"
                             value={data.password}
                             onChange={(e) => setData('password', e.target.value)}
-                            placeholder="Password"
+                            placeholder="Masukkan password"
+                            className="border-white/10 bg-slate-950/70 text-white placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-400/20"
                         />
                         <InputError message={errors.password} />
                     </div>
 
                     <div className="flex items-center space-x-3">
                         <Checkbox id="remember" name="remember" tabIndex={3} />
-                        <Label htmlFor="remember">Remember me</Label>
+                        <Label htmlFor="remember" className="text-slate-300">Ingat saya</Label>
                     </div>
 
-                    <Button type="submit" className="mt-4 w-full" tabIndex={4} disabled={processing}>
+                    <Button type="submit" className="mt-4 w-full bg-cyan-400 font-bold text-slate-950 hover:bg-cyan-300" tabIndex={4} disabled={processing}>
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                        Log in
+                        Masuk
                     </Button>
                 </div>
 
-                <div className="text-muted-foreground text-center text-sm">
-                    Don't have an account?{' '}
-                    <TextLink href={route('register')} tabIndex={5}>
-                        Sign up
-                    </TextLink>
-                </div>
+                <p className="text-center text-xs leading-relaxed text-slate-500">Akses halaman ini dibatasi untuk administrator pembelajaran.</p>
             </form>
 
-            {status && <div className="mb-4 text-center text-sm font-medium text-green-600">{status}</div>}
+            {status && <div className="mb-4 text-center text-sm font-medium text-emerald-300">{status}</div>}
         </AuthLayout>
     );
 }

@@ -1,8 +1,10 @@
 import LearningLayout from '@/layouts/LearningLayout';
+import { type SharedData } from '@/types';
+import { saveLearningProgress } from '@/utils/learningState';
 
 import MultipleChoice from '@/components/Evaluation/MultipleChoice';
 
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 
 import { evaluationQuestions } from '@/data/evaluationQuestions';
 
@@ -13,9 +15,12 @@ import { RotateCcw, Trophy } from 'lucide-react';
 import { playFinishSound } from '@/utils/sound';
 
 export default function Evaluation() {
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const { learning } = usePage<SharedData>().props;
+    const savedEvaluation = learning?.progress.find((item) => item.activity_key === 'evaluation');
+    const savedScore = typeof savedEvaluation?.payload?.score === 'number' ? savedEvaluation.payload.score : 0;
+    const [currentIndex, setCurrentIndex] = useState(() => (savedEvaluation?.completed ? evaluationQuestions.length : 0));
 
-    const [score, setScore] = useState(0);
+    const [score, setScore] = useState(savedScore);
 
     const finished = currentIndex >= evaluationQuestions.length;
 
@@ -51,11 +56,13 @@ export default function Evaluation() {
         if (finished) {
             sessionStorage.setItem('evaluationScore', String(score));
             sessionStorage.setItem('evaluationCompleted', 'true');
+            void saveLearningProgress('evaluation', true, { score, totalScore });
             window.dispatchEvent(new Event('evaluation-completed-change'));
             return;
         }
 
         sessionStorage.removeItem('evaluationCompleted');
+        void saveLearningProgress('evaluation', false, { score, totalScore });
         window.dispatchEvent(new Event('evaluation-completed-change'));
     }, [finished, score]);
 
@@ -75,6 +82,8 @@ export default function Evaluation() {
             sessionStorage.removeItem('evaluationCompleted');
             window.dispatchEvent(new Event('evaluation-completed-change'));
         }
+
+        void saveLearningProgress('evaluation', false, { score: 0, totalScore });
     };
 
     return (

@@ -1,4 +1,5 @@
 import LearningLayout from '@/layouts/LearningLayout';
+import { saveLearningProgress } from '@/utils/learningState';
 import { playClickSound } from '@/utils/sound';
 import { speak } from '@/utils/speech';
 
@@ -87,9 +88,10 @@ export default function ProblemOrientation() {
 
     useEffect(() => {
         localStorage.setItem('problem-orientation-completed', completed ? 'true' : 'false');
+        void saveLearningProgress('problem-orientation', completed, { visited });
 
         window.dispatchEvent(new Event('problem-orientation-completed-change'));
-    }, [completed]);
+    }, [completed, visited]);
 
     return (
         <LearningLayout>

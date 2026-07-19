@@ -1,17 +1,22 @@
 import LearningLayout from '@/layouts/LearningLayout';
+import { type SharedData } from '@/types';
+import { saveLearningProgress, saveLearningState } from '@/utils/learningState';
 import { speak } from '@/utils/speech';
 
 import { CheckCircle2, Globe, MemoryStick, Monitor, Network, Palette, Router, Ruler, Wifi, XCircle } from 'lucide-react';
 
+import { usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 
 export default function InformationGathering() {
+    const { learning } = usePage<SharedData>().props;
+    const savedRoles = learning?.state?.roles;
     const [selected, setSelected] = useState<string[]>([]);
 
     const [submitted, setSubmitted] = useState(false);
-    const [vKetua, setVKetua] = useState(() => (typeof window === 'undefined' ? '' : window.localStorage.getItem('vKetua') ?? ''));
-    const [vPenguji, setVPenguji] = useState(() => (typeof window === 'undefined' ? '' : window.localStorage.getItem('vPenguji') ?? ''));
-    const [vPencatat, setVPencatat] = useState(() => (typeof window === 'undefined' ? '' : window.localStorage.getItem('vPencatat') ?? ''));
+    const [vKetua, setVKetua] = useState(savedRoles?.ketua ?? '');
+    const [vPenguji, setVPenguji] = useState(savedRoles?.penguji ?? '');
+    const [vPencatat, setVPencatat] = useState(savedRoles?.pencatat ?? '');
 
     const options = [
         {
@@ -115,14 +120,16 @@ export default function InformationGathering() {
 
     useEffect(() => {
         localStorage.setItem('information-gathering-completed', submitted ? 'true' : 'false');
+        void saveLearningProgress('information-gathering', submitted && isCorrect, { selected, isCorrect });
 
         window.dispatchEvent(new Event('information-gathering-completed-change'));
-    }, [submitted]);
+    }, [submitted, selected, isCorrect]);
 
     useEffect(() => {
         window.localStorage.setItem('vKetua', vKetua);
         window.localStorage.setItem('vPenguji', vPenguji);
         window.localStorage.setItem('vPencatat', vPencatat);
+        void saveLearningState('roles', { ketua: vKetua, penguji: vPenguji, pencatat: vPencatat });
     }, [vKetua, vPenguji, vPencatat]);
 
     return (

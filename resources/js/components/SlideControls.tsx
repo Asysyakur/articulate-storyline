@@ -1,6 +1,8 @@
 import { Link, router, usePage } from '@inertiajs/react';
+import { type SharedData } from '@/types';
 import { NARRATION_STORAGE_KEY, stopSpeak } from '@/utils/speech';
 import { SFX_STORAGE_KEY, stopSfx } from '@/utils/sound';
+import { saveLearningState } from '@/utils/learningState';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { BookOpen, ChevronLeft, ChevronRight, Home, LogOut, Volume2, VolumeX } from 'lucide-react';
@@ -8,19 +10,25 @@ import { BookOpen, ChevronLeft, ChevronRight, Home, LogOut, Volume2, VolumeX } f
 import { useEffect, useMemo, useState } from 'react';
 
 export default function SlideControls() {
-    const { url } = usePage();
+    const { url, props } = usePage<SharedData>();
+    const preferences = props.learning?.state?.preferences;
+    const savedProgress = props.learning?.progress ?? [];
     const [showExitModal, setShowExitModal] = useState(false);
     const [showMaterialMenu, setShowMaterialMenu] = useState(false);
     const [showAudioMenu, setShowAudioMenu] = useState(false);
 
-    const [audioOn, setAudioOn] = useState(true);
-    const [narrationOn, setNarrationOn] = useState(false);
-    const [sfxOn, setSfxOn] = useState(true);
+    const [audioOn, setAudioOn] = useState(preferences?.music ?? true);
+    const [narrationOn, setNarrationOn] = useState(preferences?.narration ?? false);
+    const [sfxOn, setSfxOn] = useState(preferences?.sfx ?? true);
 
     useEffect(() => {
-        setAudioOn(localStorage.getItem('bg-music-muted') !== 'true');
-        setNarrationOn(localStorage.getItem(NARRATION_STORAGE_KEY) === 'true');
-        setSfxOn(localStorage.getItem(SFX_STORAGE_KEY) !== 'false');
+        if (window.bgMusic) {
+            window.bgMusic.muted = !audioOn;
+        }
+
+        localStorage.setItem('bg-music-muted', String(!audioOn));
+        localStorage.setItem(NARRATION_STORAGE_KEY, String(narrationOn));
+        localStorage.setItem(SFX_STORAGE_KEY, String(sfxOn));
     }, []);
     const [solutionDevelopmentChecked, setSolutionDevelopmentChecked] = useState(false);
     const [evaluationCompleted, setEvaluationCompleted] = useState(false);
@@ -141,19 +149,22 @@ export default function SlideControls() {
 
     const prevSlide = activeIndex > 0 ? activeSlides[activeIndex - 1] : null;
 
+    const navigate = (path: string) => {
+        stopSpeak();
+        window.location.assign(path);
+    };
+
     const returnFromMaterial = () => {
         const returnPath = window.sessionStorage.getItem('material-return-path') ?? '/beranda';
 
         window.sessionStorage.removeItem('material-return-path');
-        stopSpeak();
-        router.visit(returnPath);
+        navigate(returnPath);
     };
 
     const openMaterial = (path: string) => {
         window.sessionStorage.setItem('material-return-path', url);
         setShowMaterialMenu(false);
-        stopSpeak();
-        router.visit(path);
+        navigate(path);
     };
 
     useEffect(() => {
@@ -162,17 +173,21 @@ export default function SlideControls() {
                 return;
             }
 
-            setSolutionDevelopmentChecked(window.localStorage.getItem('solution-development-checked') === 'true');
-            setProblemOrientationCompleted(localStorage.getItem('problem-orientation-completed') === 'true');
-            setInformationGatheringCompleted(localStorage.getItem('information-gathering-completed') === 'true');
-            setComputationalThinkingCompleted(localStorage.getItem('computational-thinking-completed') === 'true');
-            setAlgorithmCompleted(localStorage.getItem('algorithm-completed') === 'true');
-            setDataRepresentationCompleted(localStorage.getItem('data-representation-completed') === 'true');
-            setDataProcessingCompleted(localStorage.getItem('data-processing-completed') === 'true');
-            setDiagnosticPracticeCompleted(localStorage.getItem('diagnostic-practice-completed') === 'true');
+            const isSaved = (activity: string) => savedProgress.some((item) => item.activity_key === activity && item.completed);
+            setSolutionDevelopmentChecked(isSaved('solution-development') || window.localStorage.getItem('solution-development-checked') === 'true');
+            setProblemOrientationCompleted(isSaved('problem-orientation') || localStorage.getItem('problem-orientation-completed') === 'true');
+            setInformationGatheringCompleted(isSaved('information-gathering') || localStorage.getItem('information-gathering-completed') === 'true');
+            setComputationalThinkingCompleted(isSaved('computational-thinking') || localStorage.getItem('computational-thinking-completed') === 'true');
+            setAlgorithmCompleted(isSaved('algorithm') || localStorage.getItem('algorithm-completed') === 'true');
+            setDataRepresentationCompleted(isSaved('data-representation') || localStorage.getItem('data-representation-completed') === 'true');
+            setDataProcessingCompleted(isSaved('data-processing') || localStorage.getItem('data-processing-completed') === 'true');
+            setDiagnosticPracticeCompleted(isSaved('diagnostic-practice') || localStorage.getItem('diagnostic-practice-completed') === 'true');
 
-            const completed = window.sessionStorage.getItem('evaluationCompleted') === 'true';
-            const score = Number(window.sessionStorage.getItem('evaluationScore') ?? 0);
+            const savedEvaluation = savedProgress.find((item) => item.activity_key === 'evaluation');
+            const completed = Boolean(savedEvaluation?.completed) || window.sessionStorage.getItem('evaluationCompleted') === 'true';
+            const score = typeof savedEvaluation?.payload?.score === 'number'
+                ? savedEvaluation.payload.score
+                : Number(window.sessionStorage.getItem('evaluationScore') ?? 0);
 
             setEvaluationCompleted(completed);
             setEvaluationScore(Number.isFinite(score) ? score : 0);
@@ -200,7 +215,7 @@ export default function SlideControls() {
             window.removeEventListener('data-processing-completed-change', readCheckedState);
             window.removeEventListener('diagnostic-practice-completed-change', readCheckedState);
         };
-    }, [url]);
+    }, [url, savedProgress]);
 
     /*
     |--------------------------------------------------------------------------
@@ -221,6 +236,7 @@ export default function SlideControls() {
         }
 
         localStorage.setItem('bg-music-muted', String(!next));
+        void saveLearningState('preferences', { music: next, narration: narrationOn, sfx: sfxOn });
     };
 
     const toggleNarration = () => {
@@ -228,6 +244,7 @@ export default function SlideControls() {
 
         setNarrationOn(next);
         localStorage.setItem(NARRATION_STORAGE_KEY, String(next));
+        void saveLearningState('preferences', { music: audioOn, narration: next, sfx: sfxOn });
 
         if (!next) {
             stopSpeak();
@@ -238,6 +255,7 @@ export default function SlideControls() {
         const next = !sfxOn;
         setSfxOn(next);
         localStorage.setItem(SFX_STORAGE_KEY, String(next));
+        void saveLearningState('preferences', { music: audioOn, narration: narrationOn, sfx: next });
 
         if (!next) {
             stopSfx();
@@ -278,8 +296,7 @@ export default function SlideControls() {
                         disabled={!prevSlide}
                         onClick={() => {
                             if (prevSlide) {
-                                stopSpeak();
-                                router.visit(prevSlide.path);
+                                navigate(prevSlide.path);
                             }
                         }}
                         className={`flex h-12 w-12 items-center justify-center rounded-xl transition-all ${
@@ -352,8 +369,7 @@ export default function SlideControls() {
                         disabled={!nextEnabled}
                         onClick={() => {
                             if (nextEnabled) {
-                                stopSpeak();
-                                router.visit(nextSlide.path);
+                                navigate(nextSlide.path);
                             }
                         }}
                         className={`flex h-12 w-12 items-center justify-center rounded-xl transition-all ${

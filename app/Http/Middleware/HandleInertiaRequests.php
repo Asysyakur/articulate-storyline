@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use App\Models\LearningSession;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -45,6 +46,9 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'learning' => fn () => $request->session()->has('learning_session_id')
+                ? LearningSession::with(['learner', 'progress'])->find($request->session()->get('learning_session_id'))
+                : null,
         ]);
     }
 }

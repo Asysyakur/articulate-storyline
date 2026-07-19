@@ -1,4 +1,5 @@
 import LearningLayout from '@/layouts/LearningLayout';
+import { saveLearningProgress } from '@/utils/learningState';
 import { Cable, CheckCircle2, Info, Network, Router, Search, ShieldAlert } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -50,9 +51,10 @@ export default function ComputationalThinking() {
 
     useEffect(() => {
         localStorage.setItem('computational-thinking-completed', completed ? 'true' : 'false');
+        void saveLearningProgress('computational-thinking', completed, { visited });
 
         window.dispatchEvent(new Event('computational-thinking-completed-change'));
-    }, [completed]);
+    }, [completed, visited]);
 
     return (
         <LearningLayout>

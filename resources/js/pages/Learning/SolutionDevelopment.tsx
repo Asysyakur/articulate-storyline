@@ -1,4 +1,5 @@
 import LearningLayout from '@/layouts/LearningLayout';
+import { saveLearningProgress } from '@/utils/learningState';
 
 import { useEffect, useMemo, useState } from 'react';
 
@@ -145,9 +146,11 @@ export default function SolutionDevelopment() {
         if (typeof window !== 'undefined' && correct) {
             setShowPresentationCard(true);
             window.localStorage.setItem('solution-development-checked', 'true');
+            void saveLearningProgress('solution-development', true, { order: items });
             window.dispatchEvent(new Event('solution-development-checked-change'));
         } else if (typeof window !== 'undefined') {
             window.localStorage.removeItem('solution-development-checked');
+            void saveLearningProgress('solution-development', false, { order: items });
             window.dispatchEvent(new Event('solution-development-checked-change'));
         }
     };
@@ -160,6 +163,7 @@ export default function SolutionDevelopment() {
 
         if (typeof window !== 'undefined') {
             window.localStorage.removeItem('solution-development-checked');
+            void saveLearningProgress('solution-development', false, { order: [] });
             window.dispatchEvent(new Event('solution-development-checked-change'));
         }
     };

@@ -1,6 +1,4 @@
 import LearningLayout from '@/layouts/LearningLayout';
-import { setLearner } from '@/utils/learner';
-
 import { router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 
@@ -21,8 +19,7 @@ export default function Login() {
         }
 
         setError(false);
-        setLearner(name.trim(), kelas.trim());
-        router.visit('/beranda');
+        router.post('/learning/session', { name: name.trim(), kelas: kelas.trim() });
     };
 
     return (
