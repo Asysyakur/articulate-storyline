@@ -1,13 +1,14 @@
 import { Link, router, usePage } from '@inertiajs/react';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Home, LogOut, Volume2, VolumeX } from 'lucide-react';
+import { BookOpen, ChevronLeft, ChevronRight, Home, LogOut, Volume2, VolumeX } from 'lucide-react';
 
 import { useEffect, useMemo, useState } from 'react';
 
 export default function SlideControls() {
     const { url } = usePage();
     const [showExitModal, setShowExitModal] = useState(false);
+    const [showMaterialMenu, setShowMaterialMenu] = useState(false);
 
     const [audioOn, setAudioOn] = useState(true);
 
@@ -23,13 +24,55 @@ export default function SlideControls() {
     const [algorithmCompleted, setAlgorithmCompleted] = useState(false);
     const [dataRepresentationCompleted, setDataRepresentationCompleted] = useState(false);
     const [dataProcessingCompleted, setDataProcessingCompleted] = useState(false);
+    const materialSlides = [
+        { title: 'Mengenal Jaringan Komputer', path: '/materi/mengenal-jaringan-komputer' },
+        { title: 'Topologi Jaringan', path: '/materi/topologi-jaringan' },
+        { title: 'Media & Komponen Jaringan', path: '/materi/media-komponen-jaringan' },
+        { title: 'Dasar Pengalamatan', path: '/materi/dasar-pengalamatan' },
+    ];
+    const learningSlideOrder = [
+        '/',
+        '/beranda',
+        '/instruction',
+        '/learning-outcomes',
+        '/problem-orientation',
+        '/information-gathering',
+        '/investigation/computational-thinking',
+        '/investigation/algorithm',
+        '/investigation/data-representation',
+        '/investigation/data-processing',
+        '/investigation/summary',
+        '/solution-development',
+        '/evaluation',
+        '/result',
+        '/reflection',
+        '/developer-profile',
+    ];
+    const slideTitles: Record<string, string> = {
+        '/': 'Login',
+        '/beranda': 'Pembuka',
+        '/instruction': 'Petunjuk',
+        '/learning-outcomes': 'Tujuan',
+        '/problem-orientation': 'Orientasi Masalah (Fase 1)',
+        '/information-gathering': 'Mengorganisasi Penyelidikan (Fase 2)',
+        '/investigation/computational-thinking': 'Investigasi (Fase 3): Berpikir Komputasional',
+        '/investigation/algorithm': 'Investigasi (Fase 3): Algoritma',
+        '/investigation/data-representation': 'Investigasi (Fase 3): Representasi Data',
+        '/investigation/data-processing': 'Investigasi (Fase 3): Pengolahan Data',
+        '/investigation/summary': 'Praktik Diagnosis',
+        '/solution-development': 'Solusi & Presentasi (Fase 4)',
+        '/evaluation': 'Kuis',
+        '/result': 'Hasil Kuis',
+        '/reflection': 'Evaluasi Proses & Refleksi (Fase 5)',
+        '/developer-profile': 'Profil',
+    };
     /*
     |--------------------------------------------------------------------------
     | SLIDES
     |--------------------------------------------------------------------------
     |
-    | Hanya slide utama.
-    | Investigation dibuka lewat aktivitas PBL.
+    | Urutan mengikuti alur Problem Based Learning (PBL).
+    | Materi tersedia sebagai scaffolding dan dapat dibuka ulang.
     |
     */
 
@@ -61,7 +104,10 @@ export default function SlideControls() {
             { title: 'Result', path: '/result' },
             { title: 'Reflection', path: '/reflection' },
             { title: 'Developer Profile', path: '/developer-profile' },
-        ],
+        ]
+            .filter((slide) => !slide.path.startsWith('/materi/'))
+            .sort((first, second) => learningSlideOrder.indexOf(first.path) - learningSlideOrder.indexOf(second.path))
+            .map((slide) => ({ ...slide, title: slideTitles[slide.path] ?? slide.title })),
         [],
     );
 
@@ -72,6 +118,10 @@ export default function SlideControls() {
     */
 
     const currentIndex = slides.findIndex((slide) => slide.path === url);
+    const materialIndex = materialSlides.findIndex((slide) => slide.path === url);
+    const isInMaterial = materialIndex !== -1;
+    const activeSlides = isInMaterial ? materialSlides : slides;
+    const activeIndex = isInMaterial ? materialIndex : currentIndex;
 
     /*
     |--------------------------------------------------------------------------
@@ -79,9 +129,22 @@ export default function SlideControls() {
     |--------------------------------------------------------------------------
     */
 
-    const nextSlide = currentIndex < slides.length - 1 ? slides[currentIndex + 1] : null;
+    const nextSlide = activeIndex < activeSlides.length - 1 ? activeSlides[activeIndex + 1] : null;
 
-    const prevSlide = currentIndex > 0 ? slides[currentIndex - 1] : null;
+    const prevSlide = activeIndex > 0 ? activeSlides[activeIndex - 1] : null;
+
+    const returnFromMaterial = () => {
+        const returnPath = window.sessionStorage.getItem('material-return-path') ?? '/beranda';
+
+        window.sessionStorage.removeItem('material-return-path');
+        router.visit(returnPath);
+    };
+
+    const openMaterial = (path: string) => {
+        window.sessionStorage.setItem('material-return-path', url);
+        setShowMaterialMenu(false);
+        router.visit(path);
+    };
 
     useEffect(() => {
         const readCheckedState = () => {
@@ -152,7 +215,7 @@ export default function SlideControls() {
     }
 
     const nextEnabled =
-        nextSlide &&
+        (isInMaterial ? Boolean(nextSlide) : nextSlide) &&
         (url !== '/problem-orientation' || problemOrientationCompleted) &&
         (url !== '/information-gathering' || informationGatheringCompleted) &&
         (url !== '/investigation/computational-thinking' || computationalThinkingCompleted) &&
@@ -190,24 +253,65 @@ export default function SlideControls() {
                         <ChevronLeft size={20} />
                     </button>
 
+                    {!isInMaterial && (
+                    <div className="relative">
+                        <button
+                            type="button"
+                            onClick={() => setShowMaterialMenu((open) => !open)}
+                            aria-label="Buka materi pendukung"
+                            aria-expanded={showMaterialMenu}
+                            className="flex h-12 items-center gap-2 rounded-xl bg-slate-800 px-4 text-sm font-semibold transition hover:bg-cyan-400 hover:text-slate-950"
+                        >
+                            <BookOpen size={20} />
+                            Materi
+                        </button>
+
+                        {showMaterialMenu && (
+                            <div className="absolute bottom-14 left-1/2 w-72 -translate-x-1/2 rounded-xl border border-white/10 bg-slate-900 p-2 shadow-2xl">
+                                <p className="px-3 py-2 text-xs font-semibold tracking-wide text-slate-400 uppercase">Materi pendukung</p>
+                                {materialSlides.map((slide) => (
+                                    <button
+                                        key={slide.path}
+                                        type="button"
+                                        onClick={() => openMaterial(slide.path)}
+                                        className="w-full rounded-lg px-3 py-2 text-left text-sm text-slate-200 transition hover:bg-cyan-400 hover:text-slate-950"
+                                    >
+                                        {slide.title}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                    )}
+
                     {/* SLIDE INFO */}
                     <div className="hidden min-w-[240px] rounded-xl border border-white/10 bg-slate-800/80 px-5 py-3 md:block">
                         <p className="text-xs text-slate-400">Current Slide</p>
 
                         <div className="mt-2 flex items-center justify-between gap-4">
                             <div>
-                                <h3 className="text-sm font-semibold text-white">{slides[currentIndex]?.title}</h3>
+                                <h3 className="text-sm font-semibold text-white">{activeSlides[activeIndex]?.title}</h3>
 
                                 <p className="mt-1 text-xs text-slate-500">Interactive Learning Media</p>
                             </div>
 
                             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400/10 text-sm font-bold text-cyan-400">
-                                {currentIndex + 1}/{slides.length}
+                                {activeIndex + 1}/{activeSlides.length}
                             </div>
                         </div>
                     </div>
 
-                    {/* NEXT */}
+                    {/* NEXT / KEMBALI DARI MATERI */}
+                    {isInMaterial && !nextSlide ? (
+                        <button
+                            type="button"
+                            onClick={returnFromMaterial}
+                            className="flex h-12 items-center gap-2 rounded-xl bg-cyan-400 px-4 text-sm font-bold text-slate-950 transition hover:scale-105"
+                        >
+                            <ChevronLeft size={18} />
+                            Kembali
+                        </button>
+                    ) : (
                     <button
                         disabled={!nextEnabled}
                         onClick={() => {
@@ -221,6 +325,7 @@ export default function SlideControls() {
                     >
                         <ChevronRight size={20} />
                     </button>
+                    )}
 
                     {/* AUDIO */}
                     <button

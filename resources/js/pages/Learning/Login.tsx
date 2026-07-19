@@ -22,7 +22,7 @@ export default function Login() {
 
         setError(false);
         setLearner(name.trim(), kelas.trim());
-        router.visit('/materi/mengenal-jaringan-komputer');
+        router.visit('/beranda');
     };
 
     return (

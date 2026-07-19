@@ -84,6 +84,10 @@ export default function SolutionDevelopment() {
     const [items, setItems] = useState<string[]>([]);
     const [feedback, setFeedback] = useState<FeedbackState>(null);
     const [hasChecked, setHasChecked] = useState(false);
+    const [showPresentationCard, setShowPresentationCard] = useState(false);
+    const [vKetua] = useState(() => (typeof window === 'undefined' ? '' : window.localStorage.getItem('vKetua') ?? ''));
+    const [vPenguji] = useState(() => (typeof window === 'undefined' ? '' : window.localStorage.getItem('vPenguji') ?? ''));
+    const [vPencatat] = useState(() => (typeof window === 'undefined' ? '' : window.localStorage.getItem('vPencatat') ?? ''));
 
     const sensors = useSensors(useSensor(PointerSensor));
     const isLocked = hasChecked;
@@ -94,6 +98,7 @@ export default function SolutionDevelopment() {
         setItems(shuffled);
         setFeedback(null);
         setHasChecked(false);
+        setShowPresentationCard(false);
 
         if (typeof window !== 'undefined') {
             window.localStorage.removeItem('solution-development-checked');
@@ -137,8 +142,12 @@ export default function SolutionDevelopment() {
         setFeedback(correct ? 'correct' : 'wrong');
         setHasChecked(true);
 
-        if (typeof window !== 'undefined') {
+        if (typeof window !== 'undefined' && correct) {
+            setShowPresentationCard(true);
             window.localStorage.setItem('solution-development-checked', 'true');
+            window.dispatchEvent(new Event('solution-development-checked-change'));
+        } else if (typeof window !== 'undefined') {
+            window.localStorage.removeItem('solution-development-checked');
             window.dispatchEvent(new Event('solution-development-checked-change'));
         }
     };
@@ -147,6 +156,7 @@ export default function SolutionDevelopment() {
         setItems([...correctOrder].sort(() => Math.random() - 0.5));
         setFeedback(null);
         setHasChecked(false);
+        setShowPresentationCard(false);
 
         if (typeof window !== 'undefined') {
             window.localStorage.removeItem('solution-development-checked');
@@ -298,7 +308,7 @@ export default function SolutionDevelopment() {
                                 </ul>
                             </div>
 
-                            {hasChecked && (
+                            {feedback === 'correct' && (
                                 <div className="rounded-[28px] border border-emerald-400/20 bg-emerald-400/10 p-5 shadow-2xl shadow-emerald-950/10">
                                     <div className="flex items-start gap-4">
                                         <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-400/20 text-emerald-300">
@@ -313,6 +323,14 @@ export default function SolutionDevelopment() {
                                             </p>
                                         </div>
                                     </div>
+
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPresentationCard(true)}
+                                        className="mt-4 inline-flex items-center gap-2 rounded-xl border border-emerald-300/30 bg-emerald-300/10 px-4 py-2 text-sm font-semibold text-emerald-100 transition hover:bg-emerald-300 hover:text-slate-950"
+                                    >
+                                        Buka Kartu Presentasi
+                                    </button>
                                 </div>
                             )}
 
@@ -334,6 +352,62 @@ export default function SolutionDevelopment() {
                         </div>
                     </div>
                 </div>
+
+                {showPresentationCard && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/80 p-6 backdrop-blur-sm">
+                        <section className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-[28px] border border-cyan-400/30 bg-slate-900 p-6 shadow-2xl shadow-cyan-950/50">
+                            <div className="flex items-start gap-4">
+                                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-400/20 text-emerald-300">
+                                    <CheckCircle2 size={24} />
+                                </div>
+                                <div>
+                                    <p className="text-sm font-semibold text-cyan-300">Fase 4 · Menyajikan Hasil Karya</p>
+                                    <h2 className="mt-1 text-3xl font-black text-white">Kartu Presentasi</h2>
+                                </div>
+                            </div>
+
+                            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                                {[
+                                    ['Ketua/Koordinator', vKetua],
+                                    ['Penguji/Teknisi', vPenguji],
+                                    ['Pencatat/Analis', vPencatat],
+                                ].map(([role, name]) => (
+                                    <div key={role} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                                        <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">{role}</p>
+                                        <p className="mt-2 font-bold text-white">{name || 'Belum diisi'}</p>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="mt-6 rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+                                <p className="text-sm font-semibold text-cyan-300">Urutan Solusi</p>
+                                <ol className="mt-3 space-y-3">
+                                    {correctOrder.map((step, index) => (
+                                        <li key={step} className="flex gap-3 text-sm leading-relaxed text-slate-200">
+                                            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-cyan-400 font-bold text-slate-950">
+                                                {index + 1}
+                                            </span>
+                                            {step}
+                                        </li>
+                                    ))}
+                                </ol>
+                            </div>
+
+                            <p className="mt-6 rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm leading-relaxed text-amber-100">
+                                Presentasikan kartu ini di depan kelas. Jelaskan peran setiap anggota dan alasan urutan solusi tersebut digunakan untuk
+                                menangani masalah jaringan.
+                            </p>
+
+                            <button
+                                type="button"
+                                onClick={() => setShowPresentationCard(false)}
+                                className="mt-6 w-full rounded-xl bg-cyan-400 px-5 py-3 font-bold text-slate-950 transition hover:scale-[1.02]"
+                            >
+                                Siap Mempresentasikan
+                            </button>
+                        </section>
+                    </div>
+                )}
             </div>
         </LearningLayout>
     );

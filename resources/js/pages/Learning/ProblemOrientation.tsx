@@ -2,7 +2,8 @@ import LearningLayout from '@/layouts/LearningLayout';
 import { playClickSound } from '@/utils/sound';
 import { speak } from '@/utils/speech';
 
-import { AlertTriangle, CheckCircle2, Gauge, PlayCircle, Printer, WifiOff } from 'lucide-react';
+import { router } from '@inertiajs/react';
+import { AlertTriangle, BookOpen, CheckCircle2, Gauge, PlayCircle, Printer, WifiOff } from 'lucide-react';
 
 import { useEffect, useMemo, useState } from 'react';
 
@@ -66,6 +67,11 @@ export default function ProblemOrientation() {
 
     const completed = visited.internet && visited.slow && visited.printer;
 
+    const openSupportingMaterial = () => {
+        window.sessionStorage.setItem('material-return-path', '/problem-orientation');
+        router.visit('/materi/mengenal-jaringan-komputer');
+    };
+
     useEffect(() => {
         speak(`
         Lab komputer baru dipasangi jaringan,
@@ -100,7 +106,7 @@ export default function ProblemOrientation() {
                     {/* LABEL */}
                     <div className="inline-flex items-center gap-2 rounded-full border border-red-400/20 bg-red-500/10 px-4 py-2 text-sm text-red-300">
                         <AlertTriangle size={15} />
-                        Slide 9 — Orientasi Masalah
+                        Slide 5 — Orientasi Masalah (Fase 1)
                     </div>
 
                     {/* TITLE */}
@@ -113,6 +119,20 @@ export default function ProblemOrientation() {
                     <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-300">
                         Klik seluruh hotspot pada ilustrasi laboratorium untuk mengidentifikasi gejala masalah jaringan yang ditemukan.
                     </p>
+
+                    <div className="mt-6 flex flex-col items-start gap-3 rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-5 sm:flex-row sm:items-center sm:justify-between">
+                        <p className="max-w-2xl text-sm leading-relaxed text-cyan-100">
+                            Perlu mengingat kembali konsep jaringan sebelum menganalisis masalah? Buka materi pendukung kapan saja.
+                        </p>
+                        <button
+                            type="button"
+                            onClick={openSupportingMaterial}
+                            className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-cyan-400 px-4 py-3 text-sm font-bold text-slate-950 transition hover:scale-105"
+                        >
+                            <BookOpen size={18} />
+                            Buka Materi Pendukung
+                        </button>
+                    </div>
 
                     {/* LAB AREA */}
                     <div className="relative mt-8 overflow-hidden rounded-[32px] border border-white/10 bg-slate-900 shadow-2xl">

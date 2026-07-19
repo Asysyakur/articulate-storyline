@@ -9,6 +9,9 @@ export default function InformationGathering() {
     const [selected, setSelected] = useState<string[]>([]);
 
     const [submitted, setSubmitted] = useState(false);
+    const [vKetua, setVKetua] = useState(() => (typeof window === 'undefined' ? '' : window.localStorage.getItem('vKetua') ?? ''));
+    const [vPenguji, setVPenguji] = useState(() => (typeof window === 'undefined' ? '' : window.localStorage.getItem('vPenguji') ?? ''));
+    const [vPencatat, setVPencatat] = useState(() => (typeof window === 'undefined' ? '' : window.localStorage.getItem('vPencatat') ?? ''));
 
     const options = [
         {
@@ -116,6 +119,12 @@ export default function InformationGathering() {
         window.dispatchEvent(new Event('information-gathering-completed-change'));
     }, [submitted]);
 
+    useEffect(() => {
+        window.localStorage.setItem('vKetua', vKetua);
+        window.localStorage.setItem('vPenguji', vPenguji);
+        window.localStorage.setItem('vPencatat', vPencatat);
+    }, [vKetua, vPenguji, vPencatat]);
+
     return (
         <LearningLayout>
             <div className="min-h-screen overflow-y-auto py-8 text-white">
@@ -130,7 +139,7 @@ export default function InformationGathering() {
                 <div className="relative z-10 mx-auto flex max-w-5xl flex-col px-6 pt-6 pb-24">
                     {/* LABEL */}
                     <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
-                        Slide 10 — Pengumpulan Informasi
+                        Slide 6 — Mengorganisasi Penyelidikan (Fase 2)
                     </div>
 
                     {/* TITLE */}
@@ -153,6 +162,49 @@ export default function InformationGathering() {
                             Fokuslah pada data yang berhubungan langsung dengan konektivitas jaringan.
                         </p>
                     </div>
+
+                    <section className="mt-6 rounded-2xl border border-white/10 bg-slate-900/60 p-5">
+                        <p className="text-sm font-semibold text-cyan-300">Pembagian Peran Tim</p>
+                        <p className="mt-2 text-sm leading-relaxed text-slate-300">
+                            Tentukan pemegang peran agar penyelidikan berjalan terorganisasi.
+                        </p>
+
+                        <div className="mt-5 grid gap-4 md:grid-cols-3">
+                            <label className="block">
+                                <span className="text-sm font-semibold text-white">Ketua/Koordinator</span>
+                                <input
+                                    type="text"
+                                    value={vKetua}
+                                    onChange={(event) => setVKetua(event.target.value)}
+                                    placeholder="Nama ketua"
+                                    className="mt-2 w-full rounded-xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
+                                />
+                            </label>
+
+                            <label className="block">
+                                <span className="text-sm font-semibold text-white">Penguji/Teknisi</span>
+                                <input
+                                    type="text"
+                                    value={vPenguji}
+                                    onChange={(event) => setVPenguji(event.target.value)}
+                                    placeholder="Nama penguji"
+                                    className="mt-2 w-full rounded-xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
+                                />
+                            </label>
+
+                            <label className="block">
+                                <span className="text-sm font-semibold text-white">Pencatat/Analis</span>
+                                <input
+                                    type="text"
+                                    value={vPencatat}
+                                    onChange={(event) => setVPencatat(event.target.value)}
+                                    placeholder="Nama pencatat"
+                                    className="mt-2 w-full rounded-xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
+                                />
+                            </label>
+                        </div>
+                    </section>
+
                     {/* CHECKLIST */}
                     <div className="mt-8 grid gap-4 md:grid-cols-2">
                         {options.map((option) => {

@@ -34,6 +34,33 @@ const reflections = [
         feedback: 'Keputusan solusi yang baik selalu mengacu pada gejala dan bukti yang ditemukan, bukan tebakan acak.',
         icon: Database,
     },
+
+    {
+        id: 4,
+        title: 'Efisiensi penyelidikan',
+        prompt: 'Apakah urutan penyelidikan yang dilakukan sudah efisien? Jelaskan alasanmu.',
+        example: 'Misalnya: urutan sudah efisien karena pengecekan fisik dilakukan sebelum mengubah konfigurasi.',
+        feedback: 'Tinjau apakah setiap langkah membantu mempersempit masalah tanpa melakukan pemeriksaan yang tidak diperlukan.',
+        icon: Brain,
+    },
+
+    {
+        id: 5,
+        title: 'Dugaan dan bukti',
+        prompt: 'Dugaan mana yang keliru dan bukti apa yang mengoreksinya?',
+        example: 'Misalnya: dugaan kabel putus keliru karena lampu port menyala dan hasil ping gateway berhasil.',
+        feedback: 'Bandingkan dugaan awal dengan data yang dikumpulkan untuk melihat bukti mana yang mengubah kesimpulan.',
+        icon: Lightbulb,
+    },
+
+    {
+        id: 6,
+        title: 'Informasi penentu',
+        prompt: 'Informasi mana yang paling menentukan dalam menemukan akar masalah?',
+        example: 'Misalnya: konfigurasi IP dan hasil ping ke gateway karena keduanya menunjukkan sumber gangguan.',
+        feedback: 'Pilih informasi yang paling kuat menghubungkan gejala dengan penyebab masalah.',
+        icon: Database,
+    },
 ];
 
 export default function Reflection() {
@@ -85,7 +112,7 @@ export default function Reflection() {
 
                         {/* DESC */}
                         <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-300">
-                            Pilih dan tanggapi pernyataan refleksi tentang proses berpikir kritis, lalu tulis jawaban singkatmu.
+                            Tanggapi pertanyaan refleksi dan evaluasi proses untuk meninjau strategi, dugaan, serta bukti yang digunakan.
                         </p>
                     </div>
 

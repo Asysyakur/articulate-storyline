@@ -80,7 +80,7 @@ export default function LearningOutcomes() {
                         <motion.section initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
                             <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
                                 <Target size={15} />
-                                Slide 8 — Capaian Pembelajaran
+                                Slide 4 — Capaian Pembelajaran
                             </div>
 
                             <h1 className="mt-5 text-4xl leading-[1.02] font-black tracking-tight lg:text-5xl">
