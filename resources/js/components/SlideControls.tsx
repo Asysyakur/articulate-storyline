@@ -1,4 +1,5 @@
 import { Link, router, usePage } from '@inertiajs/react';
+import { NARRATION_STORAGE_KEY, stopSpeak } from '@/utils/speech';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { BookOpen, ChevronLeft, ChevronRight, Home, LogOut, Volume2, VolumeX } from 'lucide-react';
@@ -9,11 +10,14 @@ export default function SlideControls() {
     const { url } = usePage();
     const [showExitModal, setShowExitModal] = useState(false);
     const [showMaterialMenu, setShowMaterialMenu] = useState(false);
+    const [showAudioMenu, setShowAudioMenu] = useState(false);
 
     const [audioOn, setAudioOn] = useState(true);
+    const [narrationOn, setNarrationOn] = useState(false);
 
     useEffect(() => {
         setAudioOn(localStorage.getItem('bg-music-muted') !== 'true');
+        setNarrationOn(localStorage.getItem(NARRATION_STORAGE_KEY) === 'true');
     }, []);
     const [solutionDevelopmentChecked, setSolutionDevelopmentChecked] = useState(false);
     const [evaluationCompleted, setEvaluationCompleted] = useState(false);
@@ -24,6 +28,7 @@ export default function SlideControls() {
     const [algorithmCompleted, setAlgorithmCompleted] = useState(false);
     const [dataRepresentationCompleted, setDataRepresentationCompleted] = useState(false);
     const [dataProcessingCompleted, setDataProcessingCompleted] = useState(false);
+    const [diagnosticPracticeCompleted, setDiagnosticPracticeCompleted] = useState(false);
     const materialSlides = [
         { title: 'Mengenal Jaringan Komputer', path: '/materi/mengenal-jaringan-komputer' },
         { title: 'Topologi Jaringan', path: '/materi/topologi-jaringan' },
@@ -137,12 +142,14 @@ export default function SlideControls() {
         const returnPath = window.sessionStorage.getItem('material-return-path') ?? '/beranda';
 
         window.sessionStorage.removeItem('material-return-path');
+        stopSpeak();
         router.visit(returnPath);
     };
 
     const openMaterial = (path: string) => {
         window.sessionStorage.setItem('material-return-path', url);
         setShowMaterialMenu(false);
+        stopSpeak();
         router.visit(path);
     };
 
@@ -159,6 +166,7 @@ export default function SlideControls() {
             setAlgorithmCompleted(localStorage.getItem('algorithm-completed') === 'true');
             setDataRepresentationCompleted(localStorage.getItem('data-representation-completed') === 'true');
             setDataProcessingCompleted(localStorage.getItem('data-processing-completed') === 'true');
+            setDiagnosticPracticeCompleted(localStorage.getItem('diagnostic-practice-completed') === 'true');
 
             const completed = window.sessionStorage.getItem('evaluationCompleted') === 'true';
             const score = Number(window.sessionStorage.getItem('evaluationScore') ?? 0);
@@ -177,6 +185,7 @@ export default function SlideControls() {
         window.addEventListener('algorithm-completed-change', readCheckedState);
         window.addEventListener('data-representation-completed-change', readCheckedState);
         window.addEventListener('data-processing-completed-change', readCheckedState);
+        window.addEventListener('diagnostic-practice-completed-change', readCheckedState);
         return () => {
             window.removeEventListener('solution-development-checked-change', readCheckedState);
             window.removeEventListener('evaluation-completed-change', readCheckedState);
@@ -186,6 +195,7 @@ export default function SlideControls() {
             window.removeEventListener('algorithm-completed-change', readCheckedState);
             window.removeEventListener('data-representation-completed-change', readCheckedState);
             window.removeEventListener('data-processing-completed-change', readCheckedState);
+            window.removeEventListener('diagnostic-practice-completed-change', readCheckedState);
         };
     }, [url]);
 
@@ -210,6 +220,17 @@ export default function SlideControls() {
         localStorage.setItem('bg-music-muted', String(!next));
     };
 
+    const toggleNarration = () => {
+        const next = !narrationOn;
+
+        setNarrationOn(next);
+        localStorage.setItem(NARRATION_STORAGE_KEY, String(next));
+
+        if (!next) {
+            stopSpeak();
+        }
+    };
+
     if (url === '/') {
         return null;
     }
@@ -222,6 +243,7 @@ export default function SlideControls() {
         (url !== '/investigation/algorithm' || algorithmCompleted) &&
         (url !== '/investigation/data-representation' || dataRepresentationCompleted) &&
         (url !== '/investigation/data-processing' || dataProcessingCompleted) &&
+        (url !== '/investigation/summary' || diagnosticPracticeCompleted) &&
         (url !== '/solution-development' || solutionDevelopmentChecked) &&
         (url !== '/evaluation' || evaluationCompleted) &&
         (url !== '/result' || evaluationScore >= 75);
@@ -243,6 +265,7 @@ export default function SlideControls() {
                         disabled={!prevSlide}
                         onClick={() => {
                             if (prevSlide) {
+                                stopSpeak();
                                 router.visit(prevSlide.path);
                             }
                         }}
@@ -316,6 +339,7 @@ export default function SlideControls() {
                         disabled={!nextEnabled}
                         onClick={() => {
                             if (nextEnabled) {
+                                stopSpeak();
                                 router.visit(nextSlide.path);
                             }
                         }}
@@ -327,17 +351,60 @@ export default function SlideControls() {
                     </button>
                     )}
 
-                    {/* AUDIO */}
-                    <button
-                        onClick={toggleAudio}
-                        className={`flex h-12 w-12 items-center justify-center rounded-xl transition-all ${
-                            audioOn
-                                ? 'bg-slate-800 hover:bg-cyan-400 hover:text-slate-950'
-                                : 'bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white'
-                        }`}
-                    >
-                        {audioOn ? <Volume2 size={20} /> : <VolumeX size={20} />}
-                    </button>
+                    {/* VOLUME */}
+                    <div className="relative">
+                        <button
+                            type="button"
+                            onClick={() => setShowAudioMenu((open) => !open)}
+                            aria-label="Pengaturan volume"
+                            aria-expanded={showAudioMenu}
+                            className={`flex h-12 w-12 items-center justify-center rounded-xl transition-all ${
+                                audioOn || narrationOn
+                                    ? 'bg-slate-800 hover:bg-cyan-400 hover:text-slate-950'
+                                    : 'bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white'
+                            }`}
+                        >
+                            {audioOn || narrationOn ? <Volume2 size={20} /> : <VolumeX size={20} />}
+                        </button>
+
+                        {showAudioMenu && (
+                            <div className="absolute right-0 bottom-14 w-64 rounded-xl border border-white/10 bg-slate-900 p-3 shadow-2xl">
+                                <p className="px-2 pb-2 text-xs font-semibold tracking-wide text-slate-400 uppercase">Pengaturan volume</p>
+
+                                <div className="flex items-center justify-between gap-3 rounded-lg px-2 py-2">
+                                    <div>
+                                        <p className="text-sm font-semibold text-white">Musik</p>
+                                        <p className="text-xs text-slate-400">Musik latar</p>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={toggleAudio}
+                                        className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${
+                                            audioOn ? 'bg-cyan-400 text-slate-950' : 'bg-slate-800 text-slate-400'
+                                        }`}
+                                    >
+                                        {audioOn ? 'Aktif' : 'Nonaktif'}
+                                    </button>
+                                </div>
+
+                                <div className="mt-1 flex items-center justify-between gap-3 rounded-lg px-2 py-2">
+                                    <div>
+                                        <p className="text-sm font-semibold text-white">Narasi</p>
+                                        <p className="text-xs text-slate-400">Nonaktif secara bawaan</p>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={toggleNarration}
+                                        className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${
+                                            narrationOn ? 'bg-cyan-400 text-slate-950' : 'bg-slate-800 text-slate-400'
+                                        }`}
+                                    >
+                                        {narrationOn ? 'Aktif' : 'Nonaktif'}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
 
                     {/* EXIT */}
                     <button

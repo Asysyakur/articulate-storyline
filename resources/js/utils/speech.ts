@@ -1,9 +1,17 @@
+export const NARRATION_STORAGE_KEY = 'vNarasi';
+
+export const isNarrationEnabled = () => typeof window !== 'undefined' && window.localStorage.getItem(NARRATION_STORAGE_KEY) === 'true';
+
 export const speak = (text: string) => {
     if (typeof window === 'undefined') {
         return;
     }
 
     window.speechSynthesis.cancel();
+
+    if (!isNarrationEnabled()) {
+        return;
+    }
 
     const utterance = new SpeechSynthesisUtterance(text);
 

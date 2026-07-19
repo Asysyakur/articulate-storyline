@@ -1,4 +1,5 @@
 import SlideControls from '@/components/SlideControls';
+import { stopSpeak } from '@/utils/speech';
 import { ReactNode, useEffect } from 'react';
 
 interface Props {
@@ -37,6 +38,7 @@ export default function LearningLayout({ children, fullscreen = false }: Props) 
 
         return () => {
             document.removeEventListener('click', startMusic);
+            stopSpeak();
         };
     }, []);
 

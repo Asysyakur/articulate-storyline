@@ -7,7 +7,8 @@ import { speak } from '@/utils/speech';
 import { useState } from 'react';
 
 export default function Instruction() {
-    const [audioOn, setAudioOn] = useState(true);
+    const [musicOn, setMusicOn] = useState(true);
+    const [narrationOn, setNarrationOn] = useState(false);
 
     const [activePreview, setActivePreview] = useState<string | null>(null);
 
@@ -37,9 +38,9 @@ export default function Instruction() {
 
         {
             id: 'audio',
-            title: 'Audio',
-            icon: audioOn ? Volume2 : VolumeX,
-            desc: 'Mengaktifkan atau mematikan audio.',
+            title: 'Volume',
+            icon: musicOn || narrationOn ? Volume2 : VolumeX,
+            desc: 'Membuka pengaturan musik dan narasi.',
         },
 
         {
@@ -66,7 +67,7 @@ export default function Instruction() {
         }
 
         if (id === 'audio') {
-            speak('Tombol Audio digunakan untuk mengaktifkan atau mematikan audio.');
+            speak('Tombol Volume membuka pengaturan musik dan narasi. Narasi dalam keadaan nonaktif secara bawaan.');
         }
 
         if (id === 'exit') {
@@ -259,32 +260,33 @@ export default function Instruction() {
                                         {/* AUDIO */}
                                         {activePreview === 'audio' && (
                                             <div className="text-center">
-                                                <motion.div
-                                                    animate={{ scale: audioOn ? [1, 1.08, 1] : [1, 0.94, 1] }}
-                                                    transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
-                                                    className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-cyan-400/10"
-                                                >
-                                                    {audioOn ? (
-                                                        <Volume2 size={42} className="text-cyan-400" />
-                                                    ) : (
-                                                        <VolumeX size={42} className="text-red-400" />
-                                                    )}
-                                                </motion.div>
+                                                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-cyan-400/10">
+                                                    <Volume2 size={38} className="text-cyan-400" />
+                                                </div>
 
-                                                <h3 className="mt-6 text-3xl font-black">{audioOn ? 'Audio Aktif' : 'Audio Dimatikan'}</h3>
+                                                <h3 className="mt-5 text-3xl font-black">Pengaturan Volume</h3>
 
-                                                <p className="mt-3 text-slate-400">Tombol audio digunakan untuk mengatur musik latar media.</p>
+                                                <p className="mt-3 text-slate-400">Klik tombol volume pada player untuk membuka pengaturan berikut.</p>
 
-                                                <div className="mt-5 flex items-center justify-center gap-2">
-                                                    {[0, 1, 2, 3].map((bar) => (
-                                                        <motion.span
-                                                            key={bar}
-                                                            animate={{ scaleY: audioOn ? [0.6, 1, 0.6] : [0.4, 0.7, 0.4] }}
-                                                            transition={{ duration: 0.9 + bar * 0.12, repeat: Infinity, ease: 'easeInOut' }}
-                                                            className={`w-2 rounded-full ${audioOn ? 'bg-cyan-400' : 'bg-red-400'}`}
-                                                            style={{ height: 18 + bar * 8 }}
-                                                        />
-                                                    ))}
+                                                <div className="mx-auto mt-5 max-w-sm rounded-2xl border border-white/10 bg-slate-950 p-3 text-left">
+                                                    <div className="flex items-center justify-between gap-4 rounded-xl px-3 py-2">
+                                                        <div>
+                                                            <p className="font-semibold">Musik</p>
+                                                            <p className="text-xs text-slate-400">Musik latar</p>
+                                                        </div>
+                                                        <button onClick={() => setMusicOn((on) => !on)} className={`rounded-lg px-3 py-1.5 text-xs font-bold ${musicOn ? 'bg-cyan-400 text-slate-950' : 'bg-slate-800 text-slate-400'}`}>
+                                                            {musicOn ? 'Aktif' : 'Nonaktif'}
+                                                        </button>
+                                                    </div>
+                                                    <div className="mt-1 flex items-center justify-between gap-4 rounded-xl px-3 py-2">
+                                                        <div>
+                                                            <p className="font-semibold">Narasi</p>
+                                                            <p className="text-xs text-slate-400">Nonaktif secara bawaan</p>
+                                                        </div>
+                                                        <button onClick={() => setNarrationOn((on) => !on)} className={`rounded-lg px-3 py-1.5 text-xs font-bold ${narrationOn ? 'bg-cyan-400 text-slate-950' : 'bg-slate-800 text-slate-400'}`}>
+                                                            {narrationOn ? 'Aktif' : 'Nonaktif'}
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         )}
