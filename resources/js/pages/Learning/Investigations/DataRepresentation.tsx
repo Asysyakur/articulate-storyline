@@ -5,7 +5,7 @@ export default function DataRepresentation() {
         <InvestigationSlide
             storageKey="data-representation-completed"
             slideNumber={13}
-            title="Gateway & DNS"
+            title="Gateway dan DNS"
             description="Analisis konfigurasi jaringan untuk menemukan penyebab komputer tidak dapat mengakses internet meskipun masih terhubung ke jaringan lokal."
             image="/images/pengaturan-jaringan.png"
             note="Jika komputer dapat terhubung ke LAN tetapi tidak dapat mengakses internet, kemungkinan masalah berada pada konfigurasi Default Gateway atau DNS."
@@ -49,14 +49,14 @@ export default function DataRepresentation() {
                 {
                     id: 'status',
 
-                    title: 'LAN Connected, No Internet',
+                    title: 'Terhubung ke LAN, Tidak Ada Akses Internet',
 
                     icon: 'lost',
 
                     x: '55%',
                     y: '55%',
 
-                    problem: 'Status jaringan menunjukkan Connected tetapi internet tidak dapat diakses.',
+                    problem: 'Status jaringan menunjukkan terhubung, tetapi internet tidak dapat diakses.',
 
                     analysis: 'Koneksi LAN berfungsi normal, namun gateway atau DNS bermasalah sehingga akses ke internet gagal.',
 

@@ -59,14 +59,14 @@ export default function ComputationalThinking() {
     return (
         <LearningLayout>
             <div className="min-h-screen pb-24">
-                <div className="mx-auto max-w-7xl px-6 py-8">
+                <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
                     {/* LABEL */}
                     <div className="inline-flex rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
                         Slide 11 — Investigasi
                     </div>
 
                     {/* TITLE */}
-                    <h1 className="mt-4 text-5xl font-black">
+                    <h1 className="mt-4 text-3xl font-black sm:text-5xl">
                         Topologi &<span className="block text-cyan-400">Perangkat Jaringan</span>
                     </h1>
 
@@ -77,7 +77,7 @@ export default function ComputationalThinking() {
                     <div className="mt-8 grid gap-6 lg:grid-cols-[1.55fr_1fr]">
                         {/* LEFT */}
                         <div className="rounded-3xl border border-white/10 bg-slate-900/70 p-8">
-                            <div className="relative h-[560px] overflow-hidden rounded-3xl border border-white/10 bg-slate-950">
+                            <div className="relative h-[430px] overflow-hidden rounded-3xl border border-white/10 bg-slate-950 sm:h-[560px]">
                                 {/* INTERNET */}
                                 <div className="absolute top-5 left-1/2 -translate-x-1/2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-6 py-2 text-sm font-semibold text-cyan-300">
                                     INTERNET
@@ -230,7 +230,7 @@ export default function ComputationalThinking() {
                                         <h3 className="font-bold">Catatan Penting</h3>
 
                                         <p className="mt-2 text-sm text-slate-300">
-                                            Pada topologi star, jika satu kabel client bermasalah maka hanya PC tersebut yang terganggu. Pusat
+                                            Pada topologi star, jika satu kabel klien bermasalah maka hanya PC tersebut yang terganggu. Pusat
                                             jaringan berada pada switch.
                                         </p>
                                     </div>

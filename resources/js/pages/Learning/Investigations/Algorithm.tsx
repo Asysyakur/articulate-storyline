@@ -5,14 +5,14 @@ export default function Algorithm() {
         <InvestigationSlide
             storageKey="algorithm-completed"
             slideNumber={12}
-            title="IP Addressing"
-            description="Identifikasi masalah konfigurasi IP Address."
+            title="Pengalamatan IP"
+            description="Identifikasi masalah konfigurasi alamat IP."
             image="/images/konfigurasi-ip.png"
-            note="IP conflict menyebabkan koneksi jaringan terganggu."
+            note="Konflik alamat IP menyebabkan koneksi jaringan terganggu."
             hotspots={[
                 {
                     id: 'ip',
-                    title: 'IP Address',
+                    title: 'Alamat IP',
                     x: '2%',
                     y: '50%',
                     icon: 'search',

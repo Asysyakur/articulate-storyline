@@ -89,14 +89,14 @@ export default function InvestigationSlide({ storageKey, slideNumber, title, des
     return (
         <LearningLayout>
             <div className="min-h-screen pb-24">
-                <div className="mx-auto max-w-7xl px-6 py-8">
+                <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
                     {/* LABEL */}
                     <div className="inline-flex rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
                         Slide {slideNumber} — Investigasi
                     </div>
 
                     {/* TITLE */}
-                    <h1 className="mt-4 text-5xl font-black">{title}</h1>
+                    <h1 className="mt-4 text-3xl font-black sm:text-5xl">{title}</h1>
 
                     {/* DESC */}
                     <p className="mt-4 max-w-3xl text-slate-300">{description}</p>

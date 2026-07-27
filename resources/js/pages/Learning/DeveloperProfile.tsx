@@ -33,7 +33,7 @@ export default function DeveloperProfile() {
                 </div>
 
                 {/* CONTENT */}
-                <div className="mx-auto flex min-h-screen max-w-6xl items-center px-6 py-8 pb-24">
+                <div className="mx-auto flex min-h-screen max-w-6xl items-center px-4 py-6 pb-24 sm:px-6 sm:py-8">
                     <div className="grid w-full items-center gap-10 lg:grid-cols-[0.82fr_1fr]">
                         {/* LEFT */}
                         <div className="flex justify-center lg:justify-start">
@@ -76,7 +76,7 @@ export default function DeveloperProfile() {
                             </div>
 
                             {/* TITLE */}
-                            <h1 className="mt-4 text-4xl leading-[0.95] font-black tracking-tight lg:text-5xl">
+                            <h1 className="mt-4 text-3xl leading-[0.95] font-black tracking-tight sm:text-4xl lg:text-5xl">
                                 Profil
                                 <span className="block text-cyan-400">Pengembang</span>
                             </h1>
@@ -156,7 +156,7 @@ export default function DeveloperProfile() {
                                                 href="/"
                                                 className="inline-flex items-center gap-2 rounded-2xl bg-emerald-400 px-4 py-2 text-sm font-bold text-slate-950 transition hover:scale-105"
                                             >
-                                                Exit course
+                                                Keluar dari media
                                                 <ArrowRight size={16} />
                                             </Link>
                                         </div>

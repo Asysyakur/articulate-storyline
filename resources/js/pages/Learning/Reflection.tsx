@@ -114,7 +114,7 @@ export default function Reflection() {
                 </div>
 
                 {/* CONTENT */}
-                <div className="mx-auto max-w-6xl px-6 py-8 pb-24">
+                <div className="mx-auto max-w-6xl px-4 py-6 pb-24 sm:px-6 sm:py-8">
                     {/* HEADER */}
                     <div className="text-center">
                         {/* LABEL */}
@@ -124,7 +124,7 @@ export default function Reflection() {
                         </div>
 
                         {/* TITLE */}
-                        <h1 className="mt-4 text-4xl leading-[0.95] font-black tracking-tight lg:text-5xl">
+                        <h1 className="mt-4 text-3xl leading-[0.95] font-black tracking-tight sm:text-4xl lg:text-5xl">
                             Refleksi
                             <span className="block text-cyan-400">Pembelajaran</span>
                         </h1>
@@ -215,7 +215,7 @@ export default function Reflection() {
                                 </div>
 
                                 <div>
-                                    <p className="text-sm font-semibold text-cyan-300">Show layer</p>
+                                    <p className="text-sm font-semibold text-cyan-300">Refleksi</p>
                                     <h2 className="mt-1 text-2xl font-black">{activeReflection.title}</h2>
                                 </div>
                             </div>

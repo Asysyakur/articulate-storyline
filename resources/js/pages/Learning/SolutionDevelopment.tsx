@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { CheckCircle2, CheckSquare, GripVertical, RotateCcw, ShieldCheck, XCircle } from 'lucide-react';
 
-import { closestCenter, DndContext, type DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { closestCenter, DndContext, type DragEndEvent, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
@@ -58,13 +58,13 @@ function SortableItem({ id, index, hint, disabled }: { id: string; index: number
                     : 'border-white/10 bg-white/5 hover:border-cyan-400/30 hover:bg-cyan-400/5'
             }`}
         >
-            <div className="flex items-center gap-4">
+            <div className="min-w-0 flex items-start gap-3 sm:items-center sm:gap-4">
                 <button
                     {...attributes}
                     {...listeners}
                     disabled={disabled}
                     aria-label={`Pindahkan langkah ${index + 1}`}
-                    className={`flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300 ${
+                    className={`flex h-10 w-10 shrink-0 touch-none items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-300 ${
                         disabled ? 'cursor-not-allowed opacity-60' : 'cursor-grab active:cursor-grabbing'
                     }`}
                 >
@@ -90,7 +90,14 @@ export default function SolutionDevelopment() {
     const [vPenguji] = useState(() => (typeof window === 'undefined' ? '' : window.localStorage.getItem('vPenguji') ?? ''));
     const [vPencatat] = useState(() => (typeof window === 'undefined' ? '' : window.localStorage.getItem('vPencatat') ?? ''));
 
-    const sensors = useSensors(useSensor(PointerSensor));
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: { distance: 8 },
+        }),
+        useSensor(TouchSensor, {
+            activationConstraint: { delay: 180, tolerance: 6 },
+        }),
+    );
     const isLocked = hasChecked;
 
     useEffect(() => {
@@ -193,14 +200,14 @@ export default function SolutionDevelopment() {
                     <div className="absolute right-0 bottom-0 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
                 </div>
 
-                <div className="mx-auto max-w-6xl px-6 py-8 pb-24">
+                <div className="mx-auto max-w-6xl px-4 py-6 pb-24 sm:px-6 sm:py-8">
                     <div className="text-center">
                         <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-[0px]">
                             <span className="text-sm text-cyan-300">Indikator Facione: explanation</span>
                             Slide 16 — Penyusunan Solusi
                         </div>
 
-                        <h1 className="mt-4 text-4xl leading-[0.95] font-black tracking-tight lg:text-5xl">
+                        <h1 className="mt-4 text-3xl leading-[0.95] font-black tracking-tight sm:text-4xl lg:text-5xl">
                             Susun Langkah
                             <span className="block text-cyan-400">Troubleshooting</span>
                         </h1>
@@ -213,13 +220,13 @@ export default function SolutionDevelopment() {
 
                     <div className="mt-8 grid gap-6 xl:grid-cols-[1fr_0.55fr]">
                         <div className="rounded-[28px] border border-white/10 bg-slate-900/70 p-5 shadow-2xl shadow-cyan-950/10">
-                            <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-4">
-                                <div>
+                            <div className="flex flex-col gap-3 border-b border-white/10 pb-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                                <div className="min-w-0">
                                     <p className="text-sm font-semibold text-cyan-300">Convert to Freeform · Drag and Drop</p>
                                     <p className="mt-1 text-sm text-slate-400">Susun urutan langkah troubleshooting dari atas ke bawah.</p>
                                 </div>
 
-                                <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1.5 text-xs font-semibold text-cyan-300">
+                                <div className="inline-flex w-fit items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1.5 text-xs font-semibold text-cyan-300">
                                     <ShieldCheck size={14} />
                                     {isLocked ? 'Jawaban terkunci' : 'Jawaban belum dikunci'}
                                 </div>
@@ -294,7 +301,7 @@ export default function SolutionDevelopment() {
 
                                         <p className="mt-1 text-sm leading-relaxed text-slate-400">
                                             {feedback === 'correct'
-                                                ? 'Urutan sudah tepat. Next pada bar global kini aktif.'
+                                                ? 'Urutan sudah tepat. Tombol Berikutnya pada navigasi kini aktif.'
                                                 : feedback === 'wrong'
                                                   ? 'Urutan belum tepat. Coba lagi setelah melihat jawaban benar.'
                                                   : 'Susun langkah lalu tekan Periksa Jawaban.'}
@@ -309,7 +316,7 @@ export default function SolutionDevelopment() {
                                 <ul className="mt-3 space-y-2 text-sm leading-relaxed text-slate-300">
                                     <li>• Klik dan seret langkah untuk mengurutkan.</li>
                                     <li>• Tombol Periksa menampilkan layer Benar / Salah.</li>
-                                    <li>• Next aktif setelah jawaban diperiksa.</li>
+                                    <li>• Tombol Berikutnya aktif setelah jawaban diperiksa.</li>
                                 </ul>
                             </div>
 
@@ -359,15 +366,15 @@ export default function SolutionDevelopment() {
                 </div>
 
                 {showPresentationCard && (
-                    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/80 p-6 backdrop-blur-sm">
-                        <section className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-[28px] border border-cyan-400/30 bg-slate-900 p-6 shadow-2xl shadow-cyan-950/50">
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm sm:p-6">
+                        <section className="max-h-[85svh] w-[calc(100%-2rem)] max-w-2xl overflow-y-auto rounded-[28px] border border-cyan-400/30 bg-slate-900 p-4 shadow-2xl shadow-cyan-950/50 sm:max-h-[90vh] sm:w-full sm:p-6">
                             <div className="flex items-start gap-4">
                                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-400/20 text-emerald-300">
                                     <CheckCircle2 size={24} />
                                 </div>
                                 <div>
                                     <p className="text-sm font-semibold text-cyan-300">Fase 4 · Menyajikan Hasil Karya</p>
-                                    <h2 className="mt-1 text-3xl font-black text-white">Kartu Presentasi</h2>
+                                    <h2 className="mt-1 text-2xl font-black text-white sm:text-3xl">Kartu Presentasi</h2>
                                 </div>
                             </div>
 

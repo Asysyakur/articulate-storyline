@@ -68,18 +68,18 @@ export default function SlideControls() {
         '/': 'Login',
         '/beranda': 'Pembuka',
         '/instruction': 'Petunjuk',
-        '/learning-outcomes': 'Tujuan',
-        '/problem-orientation': 'Interpretation (Fase 1)',
-        '/information-gathering': 'Analysis (Fase 2)',
-        '/investigation/computational-thinking': 'Inference (Fase 3): Berpikir Komputasional',
-        '/investigation/algorithm': 'Inference (Fase 3): Algoritma',
-        '/investigation/data-representation': 'Inference (Fase 3): Representasi Data',
-        '/investigation/data-processing': 'Inference (Fase 3): Pengolahan Data',
+        '/learning-outcomes': 'Capaian Pembelajaran',
+        '/problem-orientation': 'Orientasi Masalah (Fase 1)',
+        '/information-gathering': 'Mengorganisasi Penyelidikan (Fase 2)',
+        '/investigation/computational-thinking': 'Investigasi (Fase 3): Berpikir Komputasional',
+        '/investigation/algorithm': 'Investigasi (Fase 3): Algoritma',
+        '/investigation/data-representation': 'Investigasi (Fase 3): Representasi Data',
+        '/investigation/data-processing': 'Investigasi (Fase 3): Pengolahan Data',
         '/investigation/summary': 'Praktik Diagnosis',
-        '/solution-development': 'Explanation (Fase 4)',
-        '/evaluation': 'Kuis',
-        '/result': 'Hasil Kuis',
-        '/reflection': 'Self Regulation (Fase 5)',
+        '/solution-development': 'Penyusunan Solusi (Fase 4)',
+        '/evaluation': 'Evaluasi',
+        '/result': 'Hasil Evaluasi',
+        '/reflection': 'Refleksi (Fase 5)',
         '/developer-profile': 'Profil',
     };
     /*
@@ -281,12 +281,12 @@ export default function SlideControls() {
 
     return (
         <>
-            <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2">
-                <div className="flex items-center gap-3 rounded-2xl border border-slate-800 bg-slate-900/80 px-4 py-3 shadow-2xl backdrop-blur-xl">
+            <div className="fixed right-2 bottom-2 left-2 z-50 flex justify-center sm:bottom-6 sm:left-1/2 sm:right-auto sm:-translate-x-1/2">
+                <div className="flex w-full max-w-max items-center justify-center gap-1 rounded-2xl border border-slate-800 bg-slate-900/90 px-2 py-2 shadow-2xl backdrop-blur-xl sm:gap-3 sm:px-4 sm:py-3">
                     {/* HOME */}
                     <Link
                         href="/"
-                        className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800 transition hover:bg-cyan-400 hover:text-slate-950"
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-800 transition hover:bg-cyan-400 hover:text-slate-950 sm:h-12 sm:w-12"
                     >
                         <Home size={20} />
                     </Link>
@@ -299,7 +299,7 @@ export default function SlideControls() {
                                 navigate(prevSlide.path);
                             }
                         }}
-                        className={`flex h-12 w-12 items-center justify-center rounded-xl transition-all ${
+                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all sm:h-12 sm:w-12 ${
                             prevSlide ? 'bg-slate-800 hover:bg-cyan-400 hover:text-slate-950' : 'cursor-not-allowed bg-slate-900 text-slate-600'
                         } `}
                     >
@@ -313,14 +313,14 @@ export default function SlideControls() {
                             onClick={() => setShowMaterialMenu((open) => !open)}
                             aria-label="Buka materi pendukung"
                             aria-expanded={showMaterialMenu}
-                            className="flex h-12 items-center gap-2 rounded-xl bg-slate-800 px-4 text-sm font-semibold transition hover:bg-cyan-400 hover:text-slate-950"
+                            className="flex h-10 shrink-0 items-center gap-1 rounded-xl bg-slate-800 px-2 text-xs font-semibold transition hover:bg-cyan-400 hover:text-slate-950 sm:h-12 sm:gap-2 sm:px-4 sm:text-sm"
                         >
                             <BookOpen size={20} />
                             Materi
                         </button>
 
                         {showMaterialMenu && (
-                            <div className="absolute bottom-14 left-1/2 w-72 -translate-x-1/2 rounded-xl border border-white/10 bg-slate-900 p-2 shadow-2xl">
+                            <div className="absolute bottom-12 left-1/2 w-64 -translate-x-1/2 rounded-xl border border-white/10 bg-slate-900 p-2 shadow-2xl sm:bottom-14 sm:w-72">
                                 <p className="px-3 py-2 text-xs font-semibold tracking-wide text-slate-400 uppercase">Materi pendukung</p>
                                 {materialSlides.map((slide) => (
                                     <button
@@ -338,19 +338,15 @@ export default function SlideControls() {
                     )}
 
                     {/* SLIDE INFO */}
-                    <div className="hidden min-w-[240px] rounded-xl border border-white/10 bg-slate-800/80 px-5 py-3 md:block">
-                        <p className="text-xs text-slate-400">Current Slide</p>
+                    <div className="hidden min-w-[240px] items-center gap-3 overflow-hidden rounded-xl border border-white/10 bg-slate-800/80 px-4 md:flex md:h-12">
+                        <div className="min-w-0 flex-1">
+                            <h3 className="truncate text-sm font-semibold text-white">{activeSlides[activeIndex]?.title}</h3>
 
-                        <div className="mt-2 flex items-center justify-between gap-4">
-                            <div>
-                                <h3 className="text-sm font-semibold text-white">{activeSlides[activeIndex]?.title}</h3>
+                            <p className="truncate text-xs text-slate-500">Slide Saat Ini</p>
+                        </div>
 
-                                <p className="mt-1 text-xs text-slate-500">Interactive Learning Media</p>
-                            </div>
-
-                            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400/10 text-sm font-bold text-cyan-400">
-                                {activeIndex + 1}/{activeSlides.length}
-                            </div>
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-400/10 text-xs font-bold text-cyan-400">
+                            {activeIndex + 1}/{activeSlides.length}
                         </div>
                     </div>
 
@@ -359,7 +355,7 @@ export default function SlideControls() {
                         <button
                             type="button"
                             onClick={returnFromMaterial}
-                            className="flex h-12 items-center gap-2 rounded-xl bg-cyan-400 px-4 text-sm font-bold text-slate-950 transition hover:scale-105"
+                            className="flex h-10 shrink-0 items-center gap-2 rounded-xl bg-cyan-400 px-3 text-xs font-bold text-slate-950 transition hover:scale-105 sm:h-12 sm:px-4 sm:text-sm"
                         >
                             <ChevronLeft size={18} />
                             Kembali
@@ -372,7 +368,7 @@ export default function SlideControls() {
                                 navigate(nextSlide.path);
                             }
                         }}
-                        className={`flex h-12 w-12 items-center justify-center rounded-xl transition-all ${
+                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all sm:h-12 sm:w-12 ${
                             nextEnabled ? 'bg-cyan-400 text-slate-950 hover:scale-105' : 'cursor-not-allowed bg-slate-900 text-slate-600'
                         } `}
                     >
@@ -387,7 +383,7 @@ export default function SlideControls() {
                             onClick={() => setShowAudioMenu((open) => !open)}
                             aria-label="Pengaturan volume"
                             aria-expanded={showAudioMenu}
-                            className={`flex h-12 w-12 items-center justify-center rounded-xl transition-all ${
+                            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all sm:h-12 sm:w-12 ${
                                 audioOn || narrationOn || sfxOn
                                     ? 'bg-slate-800 hover:bg-cyan-400 hover:text-slate-950'
                                     : 'bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white'
@@ -397,7 +393,7 @@ export default function SlideControls() {
                         </button>
 
                         {showAudioMenu && (
-                            <div className="absolute right-0 bottom-14 w-64 rounded-xl border border-white/10 bg-slate-900 p-3 shadow-2xl">
+                            <div className="absolute right-0 bottom-12 w-60 rounded-xl border border-white/10 bg-slate-900 p-3 shadow-2xl sm:bottom-14 sm:w-64">
                                 <p className="px-2 pb-2 text-xs font-semibold tracking-wide text-slate-400 uppercase">Pengaturan volume</p>
 
                                 <div className="flex items-center justify-between gap-3 rounded-lg px-2 py-2">
@@ -454,7 +450,7 @@ export default function SlideControls() {
                     {/* EXIT */}
                     <button
                         onClick={() => setShowExitModal(true)}
-                        className="flex h-12 w-12 items-center justify-center rounded-xl bg-red-500/20 text-red-400 transition-all hover:bg-red-500 hover:text-white"
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-500/20 text-red-400 transition-all hover:bg-red-500 hover:text-white sm:h-12 sm:w-12"
                     >
                         <LogOut size={20} />
                     </button>
@@ -486,7 +482,7 @@ export default function SlideControls() {
                                 y: 20,
                             }}
                             transition={{ duration: 0.2 }}
-                            className="w-full max-w-md rounded-[28px] border border-red-500/30 bg-gradient-to-b from-[#2b1422] to-[#211425] p-8 shadow-2xl"
+                            className="mx-4 w-full max-w-md rounded-[28px] border border-red-500/30 bg-gradient-to-b from-[#2b1422] to-[#211425] p-5 shadow-2xl sm:p-8"
                         >
                             <div className="flex items-start gap-4">
                                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/10 text-red-400">
@@ -496,7 +492,7 @@ export default function SlideControls() {
                                 <div>
                                     <p className="text-lg font-semibold text-red-400">Konfirmasi Keluar</p>
 
-                                    <h2 className="mt-1 text-4xl font-black text-white">Keluar dari Media?</h2>
+                                    <h2 className="mt-1 text-2xl font-black text-white sm:text-4xl">Keluar dari Media?</h2>
                                 </div>
                             </div>
 

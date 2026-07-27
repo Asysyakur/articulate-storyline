@@ -51,7 +51,7 @@ export default function LearningOutcomes() {
 
     const selected = outcomes.find((item) => item.id === active) ?? outcomes[0];
 
-    const panelLabel = selected.id === 'konsep' ? 'Change state of panel teks' : 'Show layer';
+    const panelLabel = 'Detail kompetensi';
     const SelectedIcon = selected.icon;
 
     useEffect(() => {
@@ -60,7 +60,7 @@ export default function LearningOutcomes() {
 
         Setelah mengikuti pembelajaran ini, Anda diharapkan mampu memahami konsep dasar jaringan komputer,
         mengenali topologi dan perangkat jaringan,
-        memahami pengalamatan IP Address, subnet mask, dan default gateway,
+        memahami pengalamatan IP, subnet mask, dan default gateway,
         serta melakukan troubleshooting dasar pada konektivitas jaringan.
 
         Silakan klik setiap kompetensi untuk mempelajari detail capaian pembelajaran.
@@ -68,14 +68,14 @@ export default function LearningOutcomes() {
     }, []);
 
     return (
-        <LearningLayout fullscreen>
-            <div className="relative flex min-h-screen items-center overflow-hidden">
+        <LearningLayout >
+            <div className="relative min-h-screen overflow-x-hidden py-6 md:flex md:items-center md:py-0">
                 <div className="pointer-events-none absolute inset-0">
                     <div className="absolute top-14 left-12 h-56 w-56 rounded-full bg-cyan-400/10 blur-3xl" />
                     <div className="absolute right-12 bottom-10 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
                 </div>
 
-                <div className="relative z-10 mx-auto w-full max-w-7xl px-6 py-6">
+                <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-6 sm:px-6">
                     <div className="grid items-start gap-8 xl:grid-cols-[0.92fr_1.08fr]">
                         <motion.section initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
                             <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
@@ -83,7 +83,7 @@ export default function LearningOutcomes() {
                                 Slide 4 — Capaian Pembelajaran
                             </div>
 
-                            <h1 className="mt-5 text-4xl leading-[1.02] font-black tracking-tight lg:text-5xl">
+                            <h1 className="mt-5 text-3xl leading-[1.02] font-black tracking-tight sm:text-4xl lg:text-5xl">
                                 Tujuan
                                 <span className="block text-cyan-400">Pembelajaran</span>
                             </h1>
@@ -151,7 +151,7 @@ export default function LearningOutcomes() {
                                                 currentVisited.includes(item.id) ? currentVisited : [...currentVisited, item.id],
                                             );
                                         }}
-                                        className={`flex h-full min-h-[185px] w-full flex-col rounded-3xl border p-5 text-left transition duration-300 ${
+                                        className={`flex h-full min-h-[150px] w-full flex-col rounded-3xl border p-4 text-left transition duration-300 sm:min-h-[185px] sm:p-5 ${
                                             isActive
                                                 ? 'border-cyan-400/70 bg-gradient-to-br from-cyan-400/14 to-slate-900 shadow-[0_0_0_1px_rgba(34,211,238,0.18)]'
                                                 : 'border-slate-800 bg-slate-900/70 hover:border-cyan-400/50 hover:bg-slate-900/90'

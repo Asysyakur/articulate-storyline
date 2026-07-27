@@ -143,7 +143,7 @@ export default function InformationGathering() {
                 </div>
 
                 {/* CONTENT */}
-                <div className="relative z-10 mx-auto flex max-w-5xl flex-col px-6 pt-6 pb-24">
+                <div className="relative z-10 mx-auto flex max-w-5xl flex-col px-4 pt-6 pb-24 sm:px-6">
                     {/* LABEL */}
                     <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-[0px]">
                         <span className="text-sm text-cyan-300">Indikator Facione: analysis</span>
@@ -151,7 +151,7 @@ export default function InformationGathering() {
                     </div>
 
                     {/* TITLE */}
-                    <h1 className="mt-4 text-4xl leading-[0.95] font-black tracking-tight lg:text-5xl">
+                    <h1 className="mt-4 text-3xl leading-[0.95] font-black tracking-tight sm:text-4xl lg:text-5xl">
                         Tentukan
                         <span className="block text-cyan-400">Informasi yang Dibutuhkan</span>
                     </h1>

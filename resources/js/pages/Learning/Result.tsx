@@ -64,7 +64,7 @@ export default function Result() {
                 </div>
 
                 {/* CONTENT */}
-                <div className="mx-auto flex min-h-screen max-w-4xl items-center px-6 py-8 pb-24">
+                <div className="mx-auto flex min-h-screen max-w-4xl items-center px-4 py-6 pb-24 sm:px-6 sm:py-8">
                     <div className="w-full rounded-[28px] border border-white/10 bg-slate-900/70 p-8 text-center shadow-2xl">
                         {/* LABEL */}
                         <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
@@ -81,7 +81,7 @@ export default function Result() {
                         </div>
 
                         {/* TITLE */}
-                        <h1 className="mt-6 text-4xl leading-[0.95] font-black tracking-tight lg:text-5xl">
+                        <h1 className="mt-6 text-3xl leading-[0.95] font-black tracking-tight sm:text-4xl lg:text-5xl">
                             <span className="block text-cyan-400">Hasil Evaluasi</span>
                         </h1>
 
@@ -91,7 +91,7 @@ export default function Result() {
                                 Nilai Akhir: <span className="text-white">{percentage}%</span>
                             </p>
 
-                            <h2 className="mt-2 text-6xl font-black">{score}</h2>
+                            <h2 className="mt-2 text-5xl font-black sm:text-6xl">{score}</h2>
 
                             <p className="mt-3 text-sm font-medium text-slate-400">Passing score: {passingScore}%</p>
                         </div>

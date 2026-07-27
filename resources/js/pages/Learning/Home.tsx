@@ -5,11 +5,11 @@ import { ArrowRight, BookOpen, Clock3, Cpu, GraduationCap, Monitor, Network, Rou
 
 export default function Home() {
     return (
-        <LearningLayout fullscreen>
+        <LearningLayout>
             <div className="relative min-h-screen text-white">
                 <div className="relative z-10 flex min-h-screen items-center">
-                    <div className="mx-auto w-full max-w-7xl px-6 py-12">
-                        <div className="grid items-center gap-16 lg:grid-cols-2">
+                    <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
+                        <div className="grid items-center gap-10 lg:gap-16 lg:grid-cols-2">
                             {/* LEFT SIDE */}
                             <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
                                 {/* BADGE */}
@@ -19,15 +19,15 @@ export default function Home() {
                                 </div>
 
                                 {/* TITLE */}
-                                <h1 className="mt-6 text-5xl leading-tight font-black lg:text-6xl">
+                                <h1 className="mt-6 text-4xl leading-tight font-black sm:text-5xl lg:text-6xl">
                                     Jaringan Komputer
                                     <span className="block text-cyan-400">& Internet</span>
                                 </h1>
 
-                                <h2 className="mt-4 text-2xl font-semibold text-slate-300">Memahami & Mengatasi Masalah Jaringan Komputer</h2>
+                                <h2 className="mt-4 text-xl font-semibold text-slate-300 sm:text-2xl">Memahami & Mengatasi Masalah Jaringan Komputer</h2>
 
                                 {/* DESCRIPTION */}
-                                <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-400">
+                                <p className="mt-6 max-w-2xl text-base leading-relaxed text-slate-400 sm:text-lg">
                                     Media pembelajaran berbasis
                                     <span className="font-semibold text-cyan-300"> Problem Based Learning (PBL)</span> untuk melatih kemampuan
                                     berpikir kritis peserta didik melalui studi kasus troubleshooting jaringan komputer.

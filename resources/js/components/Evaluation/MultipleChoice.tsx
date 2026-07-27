@@ -53,7 +53,7 @@ export default function MultipleChoice({ question, questionNumber, totalQuestion
     }, [shuffledOptions]);
 
     return (
-        <div className="mt-8 rounded-[24px] border border-white/10 bg-slate-900/70 p-5 shadow-2xl shadow-cyan-950/10">
+        <div className="mt-6 rounded-[24px] border border-white/10 bg-slate-900/70 p-4 shadow-2xl shadow-cyan-950/10 sm:mt-8 sm:p-5">
             {/* TOP */}
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 {/* LEFT */}
@@ -82,7 +82,7 @@ export default function MultipleChoice({ question, questionNumber, totalQuestion
 
             {/* QUESTION */}
             <div className="mt-6 rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-5">
-                <h2 className="text-2xl leading-snug font-black">{question.question}</h2>
+                <h2 className="text-xl leading-snug font-black sm:text-2xl">{question.question}</h2>
             </div>
 
             {/* OPTIONS */}
@@ -105,7 +105,7 @@ export default function MultipleChoice({ question, questionNumber, totalQuestion
                                 active ? 'border-cyan-400 bg-cyan-400/10' : 'border-white/10 bg-white/5 hover:border-cyan-400/40'
                             } ${isLocked ? 'cursor-not-allowed opacity-80' : ''}`}
                         >
-                            <div className="flex items-center gap-4">
+                            <div className="flex items-start gap-3 sm:items-center sm:gap-4">
                                 {/* LETTER */}
                                 <div
                                     className={`flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold ${

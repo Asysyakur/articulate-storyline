@@ -56,7 +56,7 @@ export default function LearningLayout({ children, fullscreen = false }: Props) 
     }
 
     return (
-        <div className="relative min-h-screen overflow-hidden text-white">
+        <div className="learning-shell relative min-h-screen overflow-x-hidden text-white">
             {/* BACKGROUND */}
             <div className="fixed inset-0 -z-10">
                 {/* Gradient */}
@@ -81,7 +81,7 @@ export default function LearningLayout({ children, fullscreen = false }: Props) 
                 <div className="absolute right-0 bottom-0 h-[400px] w-[400px] bg-blue-500/10 blur-[160px]" />
             </div>
 
-            <main className={`relative z-10 ${fullscreen ? 'h-screen overflow-hidden' : 'min-h-screen px-6 py-10'}`}>
+            <main className={`relative z-10 ${fullscreen ? 'min-h-screen overflow-x-hidden md:h-screen md:overflow-hidden' : 'min-h-screen px-4 py-6 sm:px-6 sm:py-10'}`}>
                 {fullscreen ? children : <div className="mx-auto max-w-7xl">{children}</div>}
             </main>
 

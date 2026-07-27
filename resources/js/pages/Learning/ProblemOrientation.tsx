@@ -104,7 +104,7 @@ export default function ProblemOrientation() {
                 </div>
 
                 {/* CONTENT */}
-                <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 pb-32 lg:px-8">
+                <div className="relative z-10 mx-auto w-full max-w-[1400px] px-4 pb-28 sm:px-6 sm:pb-32 lg:px-8">
                     {/* LABEL */}
                     <div className="inline-flex items-center gap-2 rounded-full border border-red-400/20 bg-red-500/10 px-4 py-2 text-[0px]">
                         <AlertTriangle size={15} />
@@ -113,13 +113,13 @@ export default function ProblemOrientation() {
                     </div>
 
                     {/* TITLE */}
-                    <h1 className="mt-5 text-4xl leading-[1] font-black tracking-tight lg:text-6xl">
+                    <h1 className="mt-5 text-3xl leading-[1] font-black tracking-tight sm:text-4xl lg:text-6xl">
                         Masalah Jaringan di
                         <span className="block text-cyan-400">Laboratorium Komputer</span>
                     </h1>
 
                     {/* DESCRIPTION */}
-                    <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-300">
+                    <p className="mt-5 max-w-3xl text-base leading-relaxed text-slate-300 sm:text-lg">
                         Klik seluruh hotspot pada ilustrasi laboratorium untuk mengidentifikasi gejala masalah jaringan yang ditemukan.
                     </p>
 
@@ -139,9 +139,9 @@ export default function ProblemOrientation() {
 
                     {/* LAB AREA */}
                     <div className="relative mt-8 overflow-hidden rounded-[32px] border border-white/10 bg-slate-900 shadow-2xl">
-                        <div className="relative h-[520px]">
+                        <div className="relative h-[420px] sm:h-[520px]">
                             {/* LAB IMAGE */}
-                            <div className="relative h-[520px] bg-slate-950">
+                            <div className="relative h-[420px] bg-slate-950 sm:h-[520px]">
                                 {/* INTERNET */}
                                 <div className="absolute top-8 left-1/2 -translate-x-1/2">
                                     <div className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-6 py-3 font-semibold text-cyan-300">

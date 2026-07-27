@@ -18,21 +18,21 @@ export default function Instruction() {
     const buttons = [
         {
             id: 'home',
-            title: 'Home',
+            title: 'Beranda',
             icon: Home,
             desc: 'Kembali ke halaman utama.',
         },
 
         {
             id: 'next',
-            title: 'Next',
+            title: 'Berikutnya',
             icon: ChevronRight,
             desc: 'Menuju slide berikutnya.',
         },
 
         {
             id: 'previous',
-            title: 'Previous',
+            title: 'Sebelumnya',
             icon: ChevronLeft,
             desc: 'Kembali ke slide sebelumnya.',
         },
@@ -46,7 +46,7 @@ export default function Instruction() {
 
         {
             id: 'exit',
-            title: 'Exit',
+            title: 'Keluar',
             icon: LogOut,
             desc: 'Keluar dari media pembelajaran.',
         },
@@ -56,15 +56,15 @@ export default function Instruction() {
         setActivePreview(id);
 
         if (id === 'home') {
-            speak('Tombol Home digunakan untuk kembali ke halaman utama.');
+            speak('Tombol Beranda digunakan untuk kembali ke halaman utama.');
         }
 
         if (id === 'next') {
-            speak('Tombol Next digunakan untuk menuju slide berikutnya.');
+            speak('Tombol Berikutnya digunakan untuk menuju slide berikutnya.');
         }
 
         if (id === 'previous') {
-            speak('Tombol Previous digunakan untuk kembali ke slide sebelumnya.');
+            speak('Tombol Sebelumnya digunakan untuk kembali ke slide sebelumnya.');
         }
 
         if (id === 'audio') {
@@ -72,17 +72,17 @@ export default function Instruction() {
         }
 
         if (id === 'exit') {
-            speak('Tombol Exit digunakan untuk keluar dari media pembelajaran.');
+            speak('Tombol Keluar digunakan untuk keluar dari media pembelajaran.');
         }
 
         setVisitedButtons((currentVisited) => (currentVisited.includes(id) ? currentVisited : [...currentVisited, id]));
     };
 
     return (
-        <LearningLayout fullscreen={true}>
-            <div className="flex h-screen items-center overflow-hidden">
-                <div className="mx-auto w-full max-w-7xl px-6">
-                    <div className="grid items-center gap-12 lg:grid-cols-2">
+        <LearningLayout>
+            <div className="flex min-h-screen items-center py-6 md:h-screen md:overflow-hidden md:py-0">
+                <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
+                    <div className="grid items-center gap-8 lg:gap-12 lg:grid-cols-2">
                         {/* LEFT */}
                         <div>
                             {/* LABEL */}
@@ -92,7 +92,7 @@ export default function Instruction() {
                             </div>
 
                             {/* TITLE */}
-                            <h1 className="mt-6 text-5xl leading-[1.05] font-black tracking-tight lg:text-6xl">
+                            <h1 className="mt-6 text-4xl leading-[1.05] font-black tracking-tight sm:text-5xl lg:text-6xl">
                                 Kenali Tombol
                                 <span className="block text-cyan-400">Navigasi</span>
                             </h1>
@@ -122,7 +122,7 @@ export default function Instruction() {
                                         initial={{ opacity: 0, scale: 0.98, y: 8 }}
                                         animate={{ opacity: 1, scale: 1, y: 0 }}
                                         transition={{ duration: 0.28 }}
-                                        className="flex min-h-[300px] flex-col justify-center p-8"
+                                        className="flex min-h-[260px] flex-col justify-center p-5 sm:min-h-[300px] sm:p-8"
                                     >
                                         {/* DEFAULT */}
                                         {!activePreview && (
@@ -151,7 +151,7 @@ export default function Instruction() {
 
                                                     <div className="relative flex items-center justify-between gap-6">
                                                         <div className="flex-1">
-                                                            <p className="text-sm text-cyan-400">Klik Home</p>
+                                                            <p className="text-sm text-cyan-400">Klik Beranda</p>
 
                                                             <h3 className="mt-2 text-3xl font-black">Kembali ke Beranda</h3>
                                                         </div>
@@ -196,7 +196,7 @@ export default function Instruction() {
                                         {activePreview === 'next' && (
                                             <div className="flex flex-col items-center gap-4">
                                                 <div className="rounded-2xl border border-amber-400/30 bg-amber-400/10 px-4 py-2 text-center text-sm text-amber-300">
-                                                    Pada slide aktivitas, tombol Next aktif setelah aktivitas diselesaikan.
+                                                    Pada slide aktivitas, tombol Berikutnya aktif setelah aktivitas diselesaikan.
                                                 </div>
 
                                                 <div className="relative flex w-full max-w-md items-center gap-4 rounded-3xl border border-slate-800 bg-slate-950 p-5">
@@ -229,7 +229,7 @@ export default function Instruction() {
                                         {activePreview === 'previous' && (
                                             <div className="flex flex-col items-center gap-4">
                                                 <div className="rounded-2xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-center text-sm text-cyan-300">
-                                                    Tombol Previous mengembalikan pengguna ke slide sebelumnya.
+                                                    Tombol Sebelumnya mengembalikan pengguna ke slide sebelumnya.
                                                 </div>
 
                                                 <div className="relative flex w-full max-w-md items-center gap-4 rounded-3xl border border-slate-800 bg-slate-950 p-5">
@@ -338,7 +338,7 @@ export default function Instruction() {
                         </div>
 
                         {/* RIGHT */}
-                        <div className="grid grid-cols-2 gap-5">
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
                             {buttons.map((button) => {
                                 const Icon = button.icon;
 

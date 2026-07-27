@@ -97,16 +97,16 @@ export default function Evaluation() {
                 </div>
 
                 {/* CONTENT */}
-                <div className="mx-auto max-w-4xl px-6 py-8 pb-24">
+                <div className="mx-auto max-w-4xl px-4 py-6 pb-24 sm:px-6 sm:py-8">
                     {/* HEADER */}
                     <div className="text-center">
                         {/* LABEL */}
                         <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
-                            Slide 17 — Kuis Graded
+                            Slide 17 — Kuis Evaluasi
                         </div>
 
                         {/* TITLE */}
-                        <h1 className="mt-4 text-4xl leading-[0.95] font-black tracking-tight lg:text-5xl">
+                        <h1 className="mt-4 text-3xl leading-[0.95] font-black tracking-tight sm:text-4xl lg:text-5xl">
                             Evaluasi
                             <span className="block text-cyan-400">Pembelajaran</span>
                         </h1>
@@ -146,7 +146,7 @@ export default function Evaluation() {
 
                             {/* DESC */}
                             <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-slate-300">
-                                Selamat! Anda telah menyelesaikan kuis graded dan siap melihat hasil pada Result Slide 18.
+                                Selamat! Anda telah menyelesaikan kuis evaluasi dan siap melihat hasil evaluasi pada Slide 18.
                             </p>
 
                             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -162,7 +162,7 @@ export default function Evaluation() {
                                     href="/result"
                                     className="inline-flex items-center gap-3 rounded-2xl bg-cyan-400 px-6 py-3 font-bold text-slate-950 transition hover:scale-105"
                                 >
-                                    Lihat Result Slide
+                                    Lihat Hasil Evaluasi
                                 </Link>
                             </div>
                         </div>
