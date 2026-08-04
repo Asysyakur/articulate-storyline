@@ -1,4 +1,5 @@
 import MateriStepIndicator from '@/components/MateriStepIndicator';
+import MateriTujuan from '@/components/MateriTujuan';
 import LearningLayout from '@/layouts/LearningLayout';
 
 import { speak } from '@/utils/speech';
@@ -59,6 +60,14 @@ export default function DasarPengalamatan() {
                         Dasar Pengalamatan &amp;
                         <span className="block text-cyan-400">Pertukaran Data</span>
                     </h1>
+
+                    <MateriTujuan
+                        items={[
+                            'Memahami fungsi alamat IP dan subnet.',
+                            'Mengenal peran protokol TCP/IP.',
+                            'Memahami mekanisme pertukaran paket data.',
+                        ]}
+                    />
 
                     <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
                         {/* MATERI */}

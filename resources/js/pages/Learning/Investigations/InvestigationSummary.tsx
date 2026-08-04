@@ -111,7 +111,7 @@ export default function InvestigationSummary() {
                     <div className="max-w-3xl">
                         <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-[0px]">
                             <Terminal size={16} />
-                            <span className="text-sm text-cyan-300">Indikator PBL: membimbing penyelidikan</span>
+                            <span className="text-sm text-cyan-300">Sintaks PBL: membimbing penyelidikan</span>
                             Slide 15 — Praktik Diagnosis
                         </div>
                         <h1 className="mt-4 text-4xl font-black tracking-tight lg:text-5xl">

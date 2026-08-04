@@ -108,7 +108,7 @@ export default function ProblemOrientation() {
                     {/* LABEL */}
                     <div className="inline-flex items-center gap-2 rounded-full border border-red-400/20 bg-red-500/10 px-4 py-2 text-[0px]">
                         <AlertTriangle size={15} />
-                        <span className="text-sm text-red-300">Indikator PBL: orientasi pada masalah</span>
+                        <span className="text-sm text-red-300">Sintaks PBL: orientasi pada masalah</span>
                         Slide 5 — Orientasi Masalah (Fase 1)
                     </div>
 

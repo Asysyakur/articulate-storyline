@@ -1,4 +1,5 @@
 import MateriStepIndicator from '@/components/MateriStepIndicator';
+import MateriTujuan from '@/components/MateriTujuan';
 import LearningLayout from '@/layouts/LearningLayout';
 
 import { speak } from '@/utils/speech';
@@ -104,6 +105,14 @@ export default function MediaKomponenJaringan() {
                         Media &amp; Komponen
                         <span className="block text-cyan-400">Jaringan</span>
                     </h1>
+
+                    <MateriTujuan
+                        items={[
+                            'Membedakan media transmisi kabel dan nirkabel.',
+                            'Mengenali komponen pembentuk jaringan.',
+                            'Menjelaskan fungsi NIC, hub, switch, router, dan access point.',
+                        ]}
+                    />
 
                     {/* ILUSTRASI */}
                     <motion.div

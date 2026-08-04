@@ -1,4 +1,5 @@
 import MateriStepIndicator from '@/components/MateriStepIndicator';
+import MateriTujuan from '@/components/MateriTujuan';
 import LearningLayout from '@/layouts/LearningLayout';
 
 import { speak } from '@/utils/speech';
@@ -77,6 +78,14 @@ export default function TopologiJaringan() {
                         Topologi
                         <span className="block text-cyan-400">Jaringan</span>
                     </h1>
+
+                    <MateriTujuan
+                        items={[
+                            'Memahami pengertian topologi jaringan.',
+                            'Membedakan jenis-jenis topologi jaringan.',
+                            'Mempertimbangkan pemilihan topologi sesuai kebutuhan.',
+                        ]}
+                    />
 
                     {/* PENGERTIAN */}
                     <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 p-6">

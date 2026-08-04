@@ -1,4 +1,5 @@
 import MateriStepIndicator from '@/components/MateriStepIndicator';
+import MateriTujuan from '@/components/MateriTujuan';
 import LearningLayout from '@/layouts/LearningLayout';
 import { type SharedData } from '@/types';
 
@@ -81,6 +82,14 @@ export default function NetworkIntroduction() {
                         Mengenal
                         <span className="block text-cyan-400">Jaringan Komputer</span>
                     </h1>
+
+                    <MateriTujuan
+                        items={[
+                            'Memahami pengertian jaringan komputer.',
+                            'Mengenali manfaat jaringan komputer.',
+                            'Membedakan PAN, LAN, MAN, dan WAN.',
+                        ]}
+                    />
 
                     {/* PENGERTIAN & ILUSTRASI */}
                     <div className="mt-6 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
