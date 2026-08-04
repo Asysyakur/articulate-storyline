@@ -1,5 +1,7 @@
 import LearningLayout from '@/layouts/LearningLayout';
 import { saveLearningProgress } from '@/utils/learningState';
+import { type SharedData } from '@/types';
+import { usePage } from '@inertiajs/react';
 
 import { CheckCircle2, Clock3, Lightbulb, Search, ShieldAlert } from 'lucide-react';
 
@@ -43,11 +45,14 @@ interface Props {
 }
 
 export default function InvestigationSlide({ storageKey, slideNumber, title, description, image, visual, note, hotspots, compactWorkflow = false }: Props) {
+    const { props } = usePage<SharedData>();
+    const savedProgress = props.learning?.progress ?? [];
     const [activeHotspot, setActiveHotspot] = useState<Hotspot | null>(null);
     const [problemIdentification, setProblemIdentification] = useState('');
     const [analysisAndSolution, setAnalysisAndSolution] = useState('');
     const [discussionShown, setDiscussionShown] = useState(false);
     const [isWorkflowOpen, setIsWorkflowOpen] = useState(false);
+    const [isHydrated, setIsHydrated] = useState(false);
 
     const [visited, setVisited] = useState<Record<string, boolean>>(
         hotspots.reduce(
@@ -90,9 +95,64 @@ export default function InvestigationSlide({ storageKey, slideNumber, title, des
     const canCompare = allEvidenceFound && inputsComplete;
     const completed = discussionShown;
 
+    const canonicalActivityKey = storageKey.endsWith('-completed') ? storageKey.replace(/-completed$/, '') : storageKey;
+
     useEffect(() => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        const fallbackKey = storageKey.endsWith('-completed') ? storageKey.replace(/-completed$/, '') : null;
+        const progressEntry = savedProgress.find((item) => item.activity_key === storageKey || (fallbackKey !== null && item.activity_key === fallbackKey));
+        const payload = progressEntry?.payload;
+
+        if (payload && typeof payload === 'object') {
+            const visitedPayload = payload.visited;
+            if (visitedPayload && typeof visitedPayload === 'object') {
+                setVisited((prev) =>
+                    Object.keys(prev).reduce<Record<string, boolean>>((acc, key) => {
+                        const value = (visitedPayload as Record<string, unknown>)[key];
+
+                        acc[key] = typeof value === 'boolean' ? value : prev[key];
+
+                        return acc;
+                    }, {}),
+                );
+            }
+
+            const studentAnswers = payload.student_answers;
+            if (studentAnswers && typeof studentAnswers === 'object') {
+                const problemAnswer = (studentAnswers as Record<string, unknown>).problem_identification;
+                const analysisAnswer = (studentAnswers as Record<string, unknown>).analysis_and_solution;
+
+                if (typeof problemAnswer === 'string') {
+                    setProblemIdentification(problemAnswer);
+                }
+
+                if (typeof analysisAnswer === 'string') {
+                    setAnalysisAndSolution(analysisAnswer);
+                }
+            }
+
+            if (typeof payload.discussionShown === 'boolean') {
+                setDiscussionShown(payload.discussionShown);
+            } else if (progressEntry?.completed) {
+                setDiscussionShown(true);
+            }
+        } else if (progressEntry?.completed || localStorage.getItem(storageKey) === 'true') {
+            setDiscussionShown(true);
+        }
+
+        setIsHydrated(true);
+    }, [savedProgress, storageKey]);
+
+    useEffect(() => {
+        if (!isHydrated) {
+            return;
+        }
+
         localStorage.setItem(storageKey, completed ? 'true' : 'false');
-        void saveLearningProgress(storageKey, completed, {
+        void saveLearningProgress(canonicalActivityKey, completed, {
             visited,
             discussionShown,
             student_answers: {
@@ -102,7 +162,7 @@ export default function InvestigationSlide({ storageKey, slideNumber, title, des
         });
 
         window.dispatchEvent(new Event(`${storageKey}-change`));
-    }, [completed, storageKey, visited]);
+    }, [analysisAndSolution, canonicalActivityKey, completed, discussionShown, isHydrated, problemIdentification, storageKey, visited]);
 
     return (
         <LearningLayout>

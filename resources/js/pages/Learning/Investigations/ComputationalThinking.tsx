@@ -1,16 +1,21 @@
 import LearningLayout from '@/layouts/LearningLayout';
 import { saveLearningProgress } from '@/utils/learningState';
+import { type SharedData } from '@/types';
+import { usePage } from '@inertiajs/react';
 import { Cable, CheckCircle2, Info, Network, Router, Search, ShieldAlert } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
 type HotspotType = 'router' | 'switch' | 'cable';
 
 export default function ComputationalThinking() {
+    const { props } = usePage<SharedData>();
+    const savedProgress = props.learning?.progress ?? [];
     const [active, setActive] = useState<HotspotType | null>(null);
     const [problemIdentification, setProblemIdentification] = useState('');
     const [analysisAndSolution, setAnalysisAndSolution] = useState('');
     const [discussionShown, setDiscussionShown] = useState(false);
     const [isWorkflowOpen, setIsWorkflowOpen] = useState(false);
+    const [isHydrated, setIsHydrated] = useState(false);
 
     const [visited, setVisited] = useState({
         router: false,
@@ -57,6 +62,54 @@ export default function ComputationalThinking() {
     const completed = discussionShown;
 
     useEffect(() => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        const progressEntry = savedProgress.find((item) => item.activity_key === 'computational-thinking');
+        const payload = progressEntry?.payload;
+
+        if (payload && typeof payload === 'object') {
+            const visitedPayload = payload.visited;
+            if (visitedPayload && typeof visitedPayload === 'object') {
+                setVisited((prev) => ({
+                    router: typeof (visitedPayload as Record<string, unknown>).router === 'boolean' ? ((visitedPayload as Record<string, unknown>).router as boolean) : prev.router,
+                    switch: typeof (visitedPayload as Record<string, unknown>).switch === 'boolean' ? ((visitedPayload as Record<string, unknown>).switch as boolean) : prev.switch,
+                    cable: typeof (visitedPayload as Record<string, unknown>).cable === 'boolean' ? ((visitedPayload as Record<string, unknown>).cable as boolean) : prev.cable,
+                }));
+            }
+
+            const studentAnswers = payload.student_answers;
+            if (studentAnswers && typeof studentAnswers === 'object') {
+                const problemAnswer = (studentAnswers as Record<string, unknown>).problem_identification;
+                const analysisAnswer = (studentAnswers as Record<string, unknown>).analysis_and_solution;
+
+                if (typeof problemAnswer === 'string') {
+                    setProblemIdentification(problemAnswer);
+                }
+
+                if (typeof analysisAnswer === 'string') {
+                    setAnalysisAndSolution(analysisAnswer);
+                }
+            }
+
+            if (typeof payload.discussionShown === 'boolean') {
+                setDiscussionShown(payload.discussionShown);
+            } else if (progressEntry?.completed) {
+                setDiscussionShown(true);
+            }
+        } else if (progressEntry?.completed || localStorage.getItem('computational-thinking-completed') === 'true') {
+            setDiscussionShown(true);
+        }
+
+        setIsHydrated(true);
+    }, [savedProgress]);
+
+    useEffect(() => {
+        if (!isHydrated) {
+            return;
+        }
+
         localStorage.setItem('computational-thinking-completed', completed ? 'true' : 'false');
         void saveLearningProgress('computational-thinking', completed, {
             visited,
@@ -68,7 +121,7 @@ export default function ComputationalThinking() {
         });
 
         window.dispatchEvent(new Event('computational-thinking-completed-change'));
-    }, [completed, visited]);
+    }, [analysisAndSolution, completed, discussionShown, isHydrated, problemIdentification, visited]);
 
     return (
         <LearningLayout>

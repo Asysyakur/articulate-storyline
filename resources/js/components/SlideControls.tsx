@@ -174,12 +174,13 @@ export default function SlideControls() {
             }
 
             const isSaved = (activity: string) => savedProgress.some((item) => item.activity_key === activity && item.completed);
+            const isSavedAny = (activities: string[]) => activities.some((activity) => isSaved(activity));
             setSolutionDevelopmentChecked(isSaved('solution-development') || window.localStorage.getItem('solution-development-checked') === 'true');
             setProblemOrientationCompleted(isSaved('problem-orientation') || localStorage.getItem('problem-orientation-completed') === 'true');
             setInformationGatheringCompleted(isSaved('information-gathering') || localStorage.getItem('information-gathering-completed') === 'true');
             setComputationalThinkingCompleted(isSaved('computational-thinking') || localStorage.getItem('computational-thinking-completed') === 'true');
-            setAlgorithmCompleted(isSaved('algorithm') || localStorage.getItem('algorithm-completed') === 'true');
-            setDataRepresentationCompleted(isSaved('data-representation') || localStorage.getItem('data-representation-completed') === 'true');
+            setAlgorithmCompleted(isSavedAny(['algorithm', 'algorithm-completed']) || localStorage.getItem('algorithm-completed') === 'true');
+            setDataRepresentationCompleted(isSavedAny(['data-representation', 'data-representation-completed']) || localStorage.getItem('data-representation-completed') === 'true');
             setDataProcessingCompleted(isSaved('data-processing') || localStorage.getItem('data-processing-completed') === 'true');
             setDiagnosticPracticeCompleted(isSaved('diagnostic-practice') || localStorage.getItem('diagnostic-practice-completed') === 'true');
 
