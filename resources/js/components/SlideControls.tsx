@@ -151,7 +151,9 @@ export default function SlideControls() {
 
     const navigate = (path: string) => {
         stopSpeak();
-        window.location.assign(path);
+        router.visit(path, {
+            preserveScroll: true,
+        });
     };
 
     const returnFromMaterial = () => {

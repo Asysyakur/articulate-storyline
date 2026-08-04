@@ -7,6 +7,12 @@ export const speak = (text: string) => {
         return;
     }
 
+    const speechKey = `spoken:${window.location.pathname}`;
+
+    if (window.sessionStorage.getItem(speechKey) === 'true') {
+        return;
+    }
+
     window.speechSynthesis.cancel();
 
     if (!isNarrationEnabled()) {
@@ -28,6 +34,7 @@ export const speak = (text: string) => {
     utterance.pitch = 1;
     utterance.volume = 1;
 
+    window.sessionStorage.setItem(speechKey, 'true');
     window.speechSynthesis.speak(utterance);
 };
 

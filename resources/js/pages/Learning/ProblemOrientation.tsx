@@ -1,4 +1,5 @@
 import LearningLayout from '@/layouts/LearningLayout';
+import { type SharedData } from '@/types';
 import { saveLearningProgress } from '@/utils/learningState';
 import { playClickSound } from '@/utils/sound';
 import { speak } from '@/utils/speech';
@@ -7,13 +8,17 @@ import { router } from '@inertiajs/react';
 import { AlertTriangle, BookOpen, CheckCircle2, Gauge, PlayCircle, Printer, WifiOff } from 'lucide-react';
 
 import { useEffect, useMemo, useState } from 'react';
+import { usePage } from '@inertiajs/react';
 
 export default function ProblemOrientation() {
+    const { props } = usePage<SharedData>();
+    const savedProgress = props.learning?.progress ?? [];
     const [visited, setVisited] = useState({
         internet: false,
         slow: false,
         printer: false,
     });
+    const [isHydrated, setIsHydrated] = useState(false);
 
     const tickets = [
         {
@@ -87,11 +92,38 @@ export default function ProblemOrientation() {
     }, []);
 
     useEffect(() => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        const progressEntry = savedProgress.find((item) => item.activity_key === 'problem-orientation');
+        const payload = progressEntry?.payload;
+
+        if (payload && typeof payload === 'object' && payload.visited && typeof payload.visited === 'object') {
+            const visitedPayload = payload.visited as Record<string, unknown>;
+
+            setVisited((prev) => ({
+                internet: typeof visitedPayload.internet === 'boolean' ? visitedPayload.internet : prev.internet,
+                slow: typeof visitedPayload.slow === 'boolean' ? visitedPayload.slow : prev.slow,
+                printer: typeof visitedPayload.printer === 'boolean' ? visitedPayload.printer : prev.printer,
+            }));
+        } else if (progressEntry?.completed) {
+            setVisited({ internet: true, slow: true, printer: true });
+        }
+
+        setIsHydrated(true);
+    }, [savedProgress]);
+
+    useEffect(() => {
+        if (!isHydrated) {
+            return;
+        }
+
         localStorage.setItem('problem-orientation-completed', completed ? 'true' : 'false');
-        void saveLearningProgress('problem-orientation', completed, { visited });
+        void saveLearningProgress('problem-orientation', completed, { visited, completed });
 
         window.dispatchEvent(new Event('problem-orientation-completed-change'));
-    }, [completed, visited]);
+    }, [completed, isHydrated, visited]);
 
     return (
         <LearningLayout>

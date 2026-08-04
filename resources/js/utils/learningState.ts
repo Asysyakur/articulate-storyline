@@ -1,5 +1,11 @@
 type LearningValue = Record<string, unknown>;
 
+type LearningProgressSavedDetail = {
+    activity: string;
+    completed: boolean;
+    payload: LearningValue;
+};
+
 const csrfToken = () => document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content ?? '';
 
 const request = async (url: string, body: LearningValue) => {
@@ -17,5 +23,18 @@ const request = async (url: string, body: LearningValue) => {
 
 export const saveLearningState = (key: string, value: LearningValue) => request('/learning/state', { key, value });
 
-export const saveLearningProgress = (activity: string, completed: boolean, payload: LearningValue = {}) =>
-    request(`/learning/progress/${activity}`, { completed, payload });
+export const saveLearningProgress = async (activity: string, completed: boolean, payload: LearningValue = {}) => {
+    await request(`/learning/progress/${activity}`, { completed, payload });
+
+    if (typeof window !== 'undefined') {
+        window.dispatchEvent(
+            new CustomEvent<LearningProgressSavedDetail>('learning-progress-saved', {
+                detail: {
+                    activity,
+                    completed,
+                    payload,
+                },
+            }),
+        );
+    }
+};
