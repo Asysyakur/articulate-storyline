@@ -1,7 +1,7 @@
 import { ArrowRight, CheckCircle2, XCircle } from 'lucide-react';
 
 import { playCorrectSound, playWrongSound } from '@/utils/sound';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Question {
     id: number;
@@ -32,25 +32,14 @@ export default function MultipleChoice({ question, questionNumber, totalQuestion
 
     const [checked, setChecked] = useState(false);
 
-    const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
-
     useEffect(() => {
-        const shuffled = [...question.options].sort(() => Math.random() - 0.5);
-
-        setShuffledOptions(shuffled);
-
         setSelected(null);
-
         setChecked(false);
-    }, [question.id, question.options]);
+    }, [question.id]);
 
     const isLocked = checked;
 
     const isCorrect = selected === question.answer;
-
-    const optionLabel = useMemo(() => {
-        return (option: string) => String.fromCharCode(65 + shuffledOptions.indexOf(option));
-    }, [shuffledOptions]);
 
     return (
         <div className="mt-6 rounded-[24px] border border-white/10 bg-slate-900/70 p-4 shadow-2xl shadow-cyan-950/10 sm:mt-8 sm:p-5">
@@ -87,7 +76,7 @@ export default function MultipleChoice({ question, questionNumber, totalQuestion
 
             {/* OPTIONS */}
             <div className="mt-6 space-y-3">
-                {shuffledOptions.map((option) => {
+                {question.options.map((option, index) => {
                     const active = selected === option;
 
                     return (
@@ -112,7 +101,7 @@ export default function MultipleChoice({ question, questionNumber, totalQuestion
                                         active ? 'bg-cyan-400 text-slate-950' : 'bg-slate-800 text-slate-300'
                                     }`}
                                 >
-                                    {optionLabel(option)}
+                                    {String.fromCharCode(65 + index)}
                                 </div>
 
                                 {/* TEXT */}

@@ -113,7 +113,7 @@ export default function Evaluation() {
 
                         {/* DESC */}
                         <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-300">
-                            Jawablah pertanyaan berikut berdasarkan materi yang telah dipelajari.
+                            Kuis singkat untuk menguatkan pemahaman dari hasil penyelidikan Problem Based Learning.
                         </p>
                     </div>
 

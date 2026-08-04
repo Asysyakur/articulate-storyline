@@ -28,14 +28,30 @@ type PaginatedSessions = {
     next_page_url: string | null;
 };
 
+type InvestigationModal = {
+    learnerName: string;
+    activity: string;
+    answers: { problem_identification?: string; analysis_and_solution?: string };
+};
+
+const investigationActivityKeys = [
+    'computational-thinking',
+    'algorithm',
+    'algorithm-completed',
+    'data-representation',
+    'data-representation-completed',
+] as const;
+
+const interactiveActivityKeys = ['reflection', ...investigationActivityKeys] as const;
+
 const activityLabels: Record<string, string> = {
     'problem-orientation': 'Interpretation (Fase 1)',
     'information-gathering': 'Analysis (Fase 2)',
-    'computational-thinking': 'Inference: Berpikir Komputasional',
-    'algorithm-completed': 'Inference: Algoritma',
-    algorithm: 'Inference: Algoritma',
-    'data-representation-completed': 'Inference: Representasi Data',
-    'data-representation': 'Inference: Representasi Data',
+    'computational-thinking': 'Membimbing Penyelidikan: Topologi',
+    'algorithm-completed': 'Membimbing Penyelidikan: IP Address',
+    algorithm: 'Membimbing Penyelidikan: IP Address',
+    'data-representation-completed': 'Membimbing Penyelidikan: Gateway & DNS',
+    'data-representation': 'Membimbing Penyelidikan: Gateway & DNS',
     'data-processing-completed': 'Inference: Pengolahan Data',
     'data-processing': 'Inference: Pengolahan Data',
     'diagnostic-practice': 'Praktik Diagnosis',
@@ -66,6 +82,7 @@ export default function LearningData({
     sessions: PaginatedSessions;
 }) {
     const [reflectionModal, setReflectionModal] = useState<{ learnerName: string; answers: Record<string, unknown> } | null>(null);
+    const [investigationModal, setInvestigationModal] = useState<InvestigationModal | null>(null);
 
     return (
         <AdminLayout>
@@ -160,9 +177,20 @@ export default function LearningData({
                                                                 if (item.activity_key === 'reflection' && answers && typeof answers === 'object') {
                                                                     setReflectionModal({ learnerName: session.learner.name, answers: answers as Record<string, unknown> });
                                                                 }
+
+                                                                const studentAnswers = item.payload?.student_answers;
+                                                                if (investigationActivityKeys.includes(item.activity_key as (typeof investigationActivityKeys)[number]) && studentAnswers && typeof studentAnswers === 'object') {
+                                                                    setInvestigationModal({
+                                                                        learnerName: session.learner.name,
+                                                                        activity: activityLabels[item.activity_key] ?? item.activity_key,
+                                                                        answers: studentAnswers as InvestigationModal['answers'],
+                                                                    });
+                                                                }
                                                             }}
                                                             className={`w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-left ${
-                                                                item.activity_key === 'reflection' ? 'cursor-pointer transition hover:border-cyan-400/60 hover:bg-cyan-400/10' : 'cursor-default'
+                                                                interactiveActivityKeys.includes(item.activity_key as (typeof interactiveActivityKeys)[number])
+                                                                    ? 'cursor-pointer transition hover:border-cyan-400/60 hover:bg-cyan-400/10'
+                                                                    : 'cursor-default'
                                                             }`}
                                                         >
                                                             <div className="flex items-start justify-between gap-3">
@@ -236,6 +264,34 @@ export default function LearningData({
                                     </div>
                                 )
                             ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {investigationModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-5 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Jawaban penyelidikan peserta">
+                    <div className="w-full max-w-2xl rounded-3xl border border-cyan-400/20 bg-slate-900 p-6 shadow-2xl shadow-cyan-950/50">
+                        <div className="flex items-start justify-between gap-4">
+                            <div>
+                                <p className="text-sm font-semibold text-cyan-300">DATA PENYELIDIKAN</p>
+                                <h2 className="mt-1 text-2xl font-black">{investigationModal.activity}</h2>
+                                <p className="mt-1 text-sm text-slate-400">Jawaban {investigationModal.learnerName}</p>
+                            </div>
+                            <button type="button" onClick={() => setInvestigationModal(null)} className="rounded-xl bg-white/5 p-2 text-slate-300 transition hover:bg-white/10 hover:text-white" aria-label="Tutup modal">
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                            <div className="rounded-2xl border border-white/10 bg-slate-950/50 p-4">
+                                <p className="text-sm font-semibold text-cyan-200">Identifikasi Masalah</p>
+                                <p className="mt-2 text-sm leading-relaxed text-slate-300">{investigationModal.answers.problem_identification || 'Belum diisi'}</p>
+                            </div>
+                            <div className="rounded-2xl border border-white/10 bg-slate-950/50 p-4">
+                                <p className="text-sm font-semibold text-cyan-200">Analisis &amp; Solusi</p>
+                                <p className="mt-2 text-sm leading-relaxed text-slate-300">{investigationModal.answers.analysis_and_solution || 'Belum diisi'}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

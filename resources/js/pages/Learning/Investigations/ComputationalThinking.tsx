@@ -7,6 +7,10 @@ type HotspotType = 'router' | 'switch' | 'cable';
 
 export default function ComputationalThinking() {
     const [active, setActive] = useState<HotspotType | null>(null);
+    const [problemIdentification, setProblemIdentification] = useState('');
+    const [analysisAndSolution, setAnalysisAndSolution] = useState('');
+    const [discussionShown, setDiscussionShown] = useState(false);
+    const [isWorkflowOpen, setIsWorkflowOpen] = useState(false);
 
     const [visited, setVisited] = useState({
         router: false,
@@ -18,19 +22,19 @@ export default function ComputationalThinking() {
         router: {
             title: 'Router',
             icon: <Router size={18} />,
-            description: 'Router berfungsi sebagai penghubung jaringan lokal laboratorium menuju jaringan internet.',
+            description: 'Router dan switch normal.',
         },
 
         switch: {
             title: 'Switch',
             icon: <Network size={18} />,
-            description: 'Lampu indikator port switch yang mati menandakan tidak ada koneksi fisik yang aktif pada port tersebut.',
+            description: 'Satu port switch mati/merah.',
         },
 
         cable: {
-            title: 'Kabel UTP / RJ-45',
+            title: 'Kabel PC-12',
             icon: <Cable size={18} />,
-            description: 'Konektor RJ-45 yang longgar dapat menyebabkan komputer tidak terhubung ke jaringan.',
+            description: 'Konektor RJ-45 PC-12 longgar.',
         },
     };
 
@@ -47,11 +51,21 @@ export default function ComputationalThinking() {
         return Number(visited.router) + Number(visited.switch) + Number(visited.cable);
     }, [visited]);
 
-    const completed = visited.router && visited.switch && visited.cable;
+    const allEvidenceFound = visited.router && visited.switch && visited.cable;
+    const inputsComplete = problemIdentification.trim().length > 0 && analysisAndSolution.trim().length > 0;
+    const canCompare = allEvidenceFound && inputsComplete;
+    const completed = discussionShown;
 
     useEffect(() => {
         localStorage.setItem('computational-thinking-completed', completed ? 'true' : 'false');
-        void saveLearningProgress('computational-thinking', completed, { visited });
+        void saveLearningProgress('computational-thinking', completed, {
+            visited,
+            discussionShown,
+            student_answers: {
+                problem_identification: problemIdentification,
+                analysis_and_solution: analysisAndSolution,
+            },
+        });
 
         window.dispatchEvent(new Event('computational-thinking-completed-change'));
     }, [completed, visited]);
@@ -166,7 +180,7 @@ export default function ComputationalThinking() {
                                             )}
                                             <div className="text-5xl">🖥️</div>
 
-                                            <p className="mt-2 text-sm">{index === 3 ? 'PC-04' : `PC ${index + 1}`}</p>
+                                            <p className="mt-2 text-sm">{index === 3 ? 'PC-12' : `PC ${index + 1}`}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -175,9 +189,111 @@ export default function ComputationalThinking() {
 
                         {/* RIGHT */}
                         <div className="space-y-4">
-                            {/* PROBLEM ANALYSIS SOLUTION */}
+                            {/* EVIDENCE LIST */}
                             <div className="rounded-3xl border border-white/10 bg-slate-900/70 p-6">
-                                <h2 className="text-2xl font-black">Investigasi Kasus</h2>
+                                <h2 className="text-2xl font-black">Bukti yang kamu temukan ({progress}/3)</h2>
+                                <p className="mt-2 text-sm text-slate-400">Eksplorasi semua penanda pada topologi. Bukti yang ditemukan dicatat di sini.</p>
+                                <div className="mt-5 space-y-3">
+                                    {(['router', 'switch', 'cable'] as HotspotType[]).map((key) => (
+                                        <div
+                                            key={key}
+                                            className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-sm ${
+                                                visited[key]
+                                                    ? 'border-emerald-400/30 bg-emerald-400/10 text-emerald-100'
+                                                    : 'border-white/10 bg-white/5 text-slate-500'
+                                            }`}
+                                        >
+                                            <CheckCircle2 size={17} className={visited[key] ? 'text-emerald-300' : 'text-slate-600'} />
+                                            <span>{visited[key] ? hotspotDetail[key].description : 'Bukti belum ditemukan'}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                                {active && (
+                                    <p className="mt-4 text-sm text-cyan-200">
+                                        Bukti “{hotspotDetail[active].title}” telah dicatat. Gunakan seluruh bukti untuk menyusun analisismu.
+                                    </p>
+                                )}
+                            </div>
+
+                            <div className="rounded-3xl border border-cyan-400/20 bg-cyan-400/10 p-5">
+                                <h2 className="text-lg font-black">Analisis &amp; Pembahasan</h2>
+                                <p className="mt-2 text-sm text-slate-300">
+                                    {allEvidenceFound
+                                        ? 'Seluruh bukti sudah terkumpul. Buka lembar analisis untuk menuliskan kesimpulanmu.'
+                                        : 'Lembar analisis akan terbuka setelah semua bukti ditemukan.'}
+                                </p>
+                                <button
+                                    type="button"
+                                    disabled={!allEvidenceFound}
+                                    onClick={() => setIsWorkflowOpen(true)}
+                                    className="mt-4 rounded-xl bg-cyan-400 px-4 py-2.5 text-sm font-bold text-slate-950 transition enabled:hover:bg-cyan-300 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400"
+                                >
+                                    {discussionShown ? 'Lihat Analisis & Pembahasan' : 'Buka Analisis Peserta Didik'}
+                                </button>
+                            </div>
+
+                            {/* STUDENT ANALYSIS */}
+                            {isWorkflowOpen && (
+                                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
+                                    <div role="dialog" aria-modal="true" aria-labelledby="topologi-workflow-title" className="max-h-[90vh] w-full max-w-5xl space-y-4 overflow-y-auto rounded-3xl border border-cyan-400/30 bg-slate-900 p-5 shadow-2xl sm:p-6">
+                                        <div className="flex items-start justify-between gap-4">
+                                            <div>
+                                                <p className="text-sm font-semibold text-cyan-300">Membimbing Penyelidikan</p>
+                                                <h2 id="topologi-workflow-title" className="text-2xl font-black">Analisis &amp; Pembahasan</h2>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => setIsWorkflowOpen(false)}
+                                                className="rounded-lg border border-white/10 px-3 py-1.5 text-sm text-slate-300 hover:bg-white/10"
+                                            >
+                                                Tutup
+                                            </button>
+                                        </div>
+
+                                        <div className={discussionShown ? 'grid gap-4 lg:grid-cols-2' : ''}>
+                            <div className="rounded-3xl border border-white/10 bg-slate-900/70 p-6">
+                                <h2 className="text-xl font-black">Analisis Peserta Didik</h2>
+                                <p className="mt-2 text-sm text-slate-400">Tuliskan jawabanmu berdasarkan bukti yang telah ditemukan.</p>
+                                <label className="mt-5 block text-xs text-cyan-300 uppercase" htmlFor="topologi-problem">
+                                    Identifikasi Masalah
+                                </label>
+                                <textarea
+                                    id="topologi-problem"
+                                    value={problemIdentification}
+                                    onChange={(event) => setProblemIdentification(event.target.value)}
+                                    rows={3}
+                                    placeholder="Tuliskan masalah yang kamu temukan..."
+                                    className="mt-2 w-full resize-y rounded-xl border border-white/10 bg-slate-950/70 p-3 text-sm text-slate-200 outline-none transition focus:border-cyan-400"
+                                />
+                                <label className="mt-4 block text-xs text-cyan-300 uppercase" htmlFor="topologi-analysis">
+                                    Analisis &amp; Solusi
+                                </label>
+                                <textarea
+                                    id="topologi-analysis"
+                                    value={analysisAndSolution}
+                                    onChange={(event) => setAnalysisAndSolution(event.target.value)}
+                                    rows={4}
+                                    placeholder="Jelaskan analisis dan solusi yang kamu usulkan..."
+                                    className="mt-2 w-full resize-y rounded-xl border border-white/10 bg-slate-950/70 p-3 text-sm text-slate-200 outline-none transition focus:border-cyan-400"
+                                />
+                                <button
+                                    type="button"
+                                    disabled={!canCompare || discussionShown}
+                                    onClick={() => setDiscussionShown(true)}
+                                    className="mt-5 rounded-xl bg-cyan-400 px-4 py-2.5 text-sm font-bold text-slate-950 transition enabled:hover:bg-cyan-300 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400"
+                                >
+                                    {discussionShown ? 'Pembahasan Ditampilkan' : 'Bandingkan Pembahasan'}
+                                </button>
+                                {!discussionShown && !canCompare && (
+                                    <p className="mt-3 text-xs text-slate-400">Tombol aktif setelah semua bukti ditemukan dan kedua isian diisi.</p>
+                                )}
+                            </div>
+
+                            {/* PROBLEM ANALYSIS SOLUTION */}
+                            <div className="space-y-4">
+                            {discussionShown && (
+                                <div className="rounded-3xl border border-cyan-400/30 bg-cyan-400/10 p-6">
+                                <h2 className="text-2xl font-black">Pembahasan Resmi</h2>
 
                                 <div className="mt-5 space-y-5">
                                     <div>
@@ -206,10 +322,11 @@ export default function ComputationalThinking() {
                                         </p>
                                     </div>
                                 </div>
-                            </div>
+                                </div>
+                            )}
 
                             {/* HOTSPOT DETAIL */}
-                            {active && (
+                            {active && !discussionShown && (
                                 <div className="rounded-3xl border border-cyan-400/20 bg-cyan-400/10 p-5">
                                     <div className="flex items-center gap-3">
                                         {hotspotDetail[active].icon}
@@ -217,12 +334,13 @@ export default function ComputationalThinking() {
                                         <h3 className="font-bold">{hotspotDetail[active].title}</h3>
                                     </div>
 
-                                    <p className="mt-3 text-sm text-slate-300">{hotspotDetail[active].description}</p>
+                                    <p className="mt-3 text-sm text-slate-300">Bukti telah dicatat pada daftar bukti.</p>
                                 </div>
                             )}
 
                             {/* NOTE */}
-                            <div className="rounded-3xl border border-cyan-400/20 bg-cyan-400/10 p-5">
+                            {discussionShown && (
+                                <div className="rounded-3xl border border-cyan-400/20 bg-cyan-400/10 p-5">
                                 <div className="flex gap-3">
                                     <Info />
 
@@ -235,7 +353,13 @@ export default function ComputationalThinking() {
                                         </p>
                                     </div>
                                 </div>
+                                </div>
+                            )}
                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
 
                             {/* PROGRESS */}
                             <div className="rounded-3xl border border-emerald-400/20 bg-emerald-400/10 p-5">
@@ -254,12 +378,16 @@ export default function ComputationalThinking() {
                                     />
                                 </div>
 
-                                {!completed && <p className="mt-3 text-sm text-slate-300">Klik semua hotspot untuk melanjutkan.</p>}
+                                {!allEvidenceFound && <p className="mt-3 text-sm text-slate-300">Temukan semua bukti terlebih dahulu.</p>}
+
+                                {allEvidenceFound && !completed && (
+                                    <p className="mt-3 text-sm text-slate-300">Isi analisis, lalu bandingkan dengan pembahasan resmi untuk melanjutkan.</p>
+                                )}
 
                                 {completed && (
                                     <div className="mt-4 flex items-center gap-2 text-emerald-300">
                                         <CheckCircle2 size={18} />
-                                        Semua hotspot telah dibuka. Anda dapat melanjutkan.
+                                        Pembahasan resmi telah dibuka. Anda dapat melanjutkan.
                                     </div>
                                 )}
                             </div>
