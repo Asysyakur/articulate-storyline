@@ -4,15 +4,17 @@ import { saveLearningProgress } from '@/utils/learningState';
 import { playClickSound } from '@/utils/sound';
 import { speak } from '@/utils/speech';
 
-import { router } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { AlertTriangle, BookOpen, CheckCircle2, Gauge, PlayCircle, Printer, WifiOff } from 'lucide-react';
 
 import { useEffect, useMemo, useState } from 'react';
-import { usePage } from '@inertiajs/react';
 
 export default function ProblemOrientation() {
     const { props } = usePage<SharedData>();
     const savedProgress = props.learning?.progress ?? [];
+    const storageKey = 'problem-orientation';
+    const stateKey = `${storageKey}-state`;
+
     const [visited, setVisited] = useState({
         internet: false,
         slow: false,
@@ -96,23 +98,41 @@ export default function ProblemOrientation() {
             return;
         }
 
-        const progressEntry = savedProgress.find((item) => item.activity_key === 'problem-orientation');
+        const progressEntry = savedProgress.find((item) => item.activity_key === storageKey);
         const payload = progressEntry?.payload;
+        const storedState = window.localStorage.getItem(stateKey);
 
         if (payload && typeof payload === 'object' && payload.visited && typeof payload.visited === 'object') {
-            const visitedPayload = payload.visited as Record<string, unknown>;
+            const savedVisited = payload.visited as Record<string, unknown>;
 
             setVisited((prev) => ({
-                internet: typeof visitedPayload.internet === 'boolean' ? visitedPayload.internet : prev.internet,
-                slow: typeof visitedPayload.slow === 'boolean' ? visitedPayload.slow : prev.slow,
-                printer: typeof visitedPayload.printer === 'boolean' ? visitedPayload.printer : prev.printer,
+                ...prev,
+                internet: typeof savedVisited.internet === 'boolean' ? savedVisited.internet : prev.internet,
+                slow: typeof savedVisited.slow === 'boolean' ? savedVisited.slow : prev.slow,
+                printer: typeof savedVisited.printer === 'boolean' ? savedVisited.printer : prev.printer,
             }));
         } else if (progressEntry?.completed) {
-            setVisited({ internet: true, slow: true, printer: true });
+            setVisited({
+                internet: true,
+                slow: true,
+                printer: true,
+            });
+        } else if (storedState) {
+            try {
+                const parsedState = JSON.parse(storedState) as Partial<typeof visited>;
+
+                setVisited({
+                    internet: typeof parsedState.internet === 'boolean' ? parsedState.internet : false,
+                    slow: typeof parsedState.slow === 'boolean' ? parsedState.slow : false,
+                    printer: typeof parsedState.printer === 'boolean' ? parsedState.printer : false,
+                });
+            } catch {
+                window.localStorage.removeItem(stateKey);
+            }
         }
 
         setIsHydrated(true);
-    }, [savedProgress]);
+    }, [savedProgress, stateKey]);
 
     useEffect(() => {
         if (!isHydrated) {
@@ -120,10 +140,11 @@ export default function ProblemOrientation() {
         }
 
         localStorage.setItem('problem-orientation-completed', completed ? 'true' : 'false');
-        void saveLearningProgress('problem-orientation', completed, { visited, completed });
+        window.localStorage.setItem(stateKey, JSON.stringify(visited));
+        void saveLearningProgress('problem-orientation', completed, { visited });
 
         window.dispatchEvent(new Event('problem-orientation-completed-change'));
-    }, [completed, isHydrated, visited]);
+    }, [completed, isHydrated, stateKey, visited]);
 
     return (
         <LearningLayout>

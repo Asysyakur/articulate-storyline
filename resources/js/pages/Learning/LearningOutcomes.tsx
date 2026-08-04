@@ -1,5 +1,8 @@
 import LearningLayout from '@/layouts/LearningLayout';
+import { type SharedData } from '@/types';
+import { saveLearningProgress } from '@/utils/learningState';
 
+import { usePage } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { BookOpen, Brain, CheckCircle2, Database, Lightbulb, Target, Wifi } from 'lucide-react';
 
@@ -46,13 +49,26 @@ const outcomes: Outcome[] = [
 ];
 
 export default function LearningOutcomes() {
-    const [active, setActive] = useState('konsep');
-    const [visited, setVisited] = useState<string[]>(['konsep']);
+    const { props } = usePage<SharedData>();
+    const savedProgress = props.learning?.progress ?? [];
+    const storageKey = 'learning-outcomes';
+
+    const savedState = savedProgress.find((item) => item.activity_key === storageKey)?.payload;
+    const initialActive = typeof savedState?.active === 'string' && outcomes.some((item) => item.id === savedState.active) ? savedState.active : 'konsep';
+    const initialVisited = Array.isArray(savedState?.visited)
+        ? savedState.visited.filter((value): value is string => typeof value === 'string' && outcomes.some((item) => item.id === value))
+        : ['konsep'];
+
+    const [active, setActive] = useState(initialActive);
+    const [visited, setVisited] = useState<string[]>(initialVisited.length > 0 ? initialVisited : ['konsep']);
+    const [isHydrated, setIsHydrated] = useState(false);
 
     const selected = outcomes.find((item) => item.id === active) ?? outcomes[0];
 
     const panelLabel = 'Detail kompetensi';
     const SelectedIcon = selected.icon;
+
+    const completed = outcomes.every((item) => visited.includes(item.id));
 
     useEffect(() => {
         speak(`
@@ -63,9 +79,85 @@ export default function LearningOutcomes() {
         memahami pengalamatan IP, subnet mask, dan default gateway,
         serta melakukan troubleshooting dasar pada konektivitas jaringan.
 
-        Silakan klik setiap kompetensi untuk mempelajari detail capaian pembelajaran.
+        Detail kompetensi akan terbuka sesuai pilihan terakhir yang tersimpan.
     `);
     }, []);
+
+    useEffect(() => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        const progressEntry = savedProgress.find((item) => item.activity_key === storageKey);
+        const payload = progressEntry?.payload;
+        const storedState = window.localStorage.getItem(`${storageKey}-state`);
+
+        if (payload && typeof payload === 'object') {
+            if (typeof payload.active === 'string') {
+                setActive(payload.active);
+            }
+
+            if (Array.isArray(payload.visited)) {
+                setVisited(payload.visited.filter((value): value is string => typeof value === 'string'));
+            }
+        } else if (storedState) {
+            try {
+                const parsedState = JSON.parse(storedState) as { active?: unknown; visited?: unknown };
+
+                if (typeof parsedState.active === 'string') {
+                    setActive(parsedState.active);
+                }
+
+                if (Array.isArray(parsedState.visited)) {
+                    setVisited(parsedState.visited.filter((value): value is string => typeof value === 'string'));
+                }
+            } catch {
+                window.localStorage.removeItem(`${storageKey}-state`);
+            }
+        }
+
+        setIsHydrated(true);
+    }, [savedProgress, storageKey]);
+
+    useEffect(() => {
+        if (!isHydrated) {
+            return;
+        }
+
+        const nextState = { active, visited };
+
+        window.localStorage.setItem(`${storageKey}-state`, JSON.stringify(nextState));
+        void saveLearningProgress(storageKey, completed, nextState);
+    }, [active, completed, isHydrated, storageKey, visited]);
+
+    if (!isHydrated && savedProgress.length === 0) {
+        return (
+            <LearningLayout>
+                <div className="relative min-h-screen overflow-x-hidden py-6 md:flex md:items-center md:py-0">
+                    <div className="pointer-events-none absolute inset-0">
+                        <div className="absolute top-14 left-12 h-56 w-56 rounded-full bg-cyan-400/10 blur-3xl" />
+                        <div className="absolute right-12 bottom-10 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
+                    </div>
+
+                    <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-6 sm:px-6">
+                        <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
+                            <Target size={15} />
+                            Slide 4 — Capaian Pembelajaran
+                        </div>
+
+                        <h1 className="mt-5 text-3xl leading-[1.02] font-black tracking-tight sm:text-4xl lg:text-5xl">
+                            Tujuan
+                            <span className="block text-cyan-400">Pembelajaran</span>
+                        </h1>
+
+                        <p className="mt-4 max-w-xl text-base leading-relaxed text-slate-300 lg:text-lg">
+                            Detail kompetensi akan dimuat sesuai progres terakhir.
+                        </p>
+                    </div>
+                </div>
+            </LearningLayout>
+        );
+    }
 
     return (
         <LearningLayout >
@@ -89,7 +181,7 @@ export default function LearningOutcomes() {
                             </h1>
 
                             <p className="mt-4 max-w-xl text-base leading-relaxed text-slate-300 lg:text-lg">
-                                Klik tiap kompetensi untuk melihat capaian pembelajaran yang dipelajari pada media interaktif ini.
+                                Konten di bawah akan langsung menampilkan kompetensi terakhir yang pernah dibuka.
                             </p>
 
                             <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-medium text-slate-300">

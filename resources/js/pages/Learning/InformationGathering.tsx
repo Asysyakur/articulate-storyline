@@ -9,15 +9,6 @@ import { usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 
 export default function InformationGathering() {
-    const { learning } = usePage<SharedData>().props;
-    const savedRoles = learning?.state?.roles;
-    const [selected, setSelected] = useState<string[]>([]);
-
-    const [submitted, setSubmitted] = useState(false);
-    const [vKetua, setVKetua] = useState(savedRoles?.ketua ?? '');
-    const [vPenguji, setVPenguji] = useState(savedRoles?.penguji ?? '');
-    const [vPencatat, setVPencatat] = useState(savedRoles?.pencatat ?? '');
-
     const options = [
         {
             id: 'ip',
@@ -75,6 +66,28 @@ export default function InformationGathering() {
             correct: false,
         },
     ];
+
+    const { learning } = usePage<SharedData>().props;
+    const savedProgress = learning?.progress ?? [];
+    const savedRoles = learning?.state?.roles;
+    const savedProgressEntry = savedProgress.find((item) => item.activity_key === 'information-gathering');
+    const savedSelected = Array.isArray(savedProgressEntry?.payload?.selected)
+        ? savedProgressEntry.payload.selected.filter((value): value is string => typeof value === 'string')
+        : [];
+
+    const readStoredValue = (key: string) => {
+        if (typeof window === 'undefined') {
+            return '';
+        }
+
+        return window.localStorage.getItem(key) ?? '';
+    };
+
+    const [selected, setSelected] = useState<string[]>(savedSelected);
+    const [submitted, setSubmitted] = useState(Boolean(savedProgressEntry?.completed) || readStoredValue('information-gathering-completed') === 'true');
+    const [vKetua, setVKetua] = useState(savedRoles?.ketua ?? readStoredValue('vKetua'));
+    const [vPenguji, setVPenguji] = useState(savedRoles?.penguji ?? readStoredValue('vPenguji'));
+    const [vPencatat, setVPencatat] = useState(savedRoles?.pencatat ?? readStoredValue('vPencatat'));
 
     /*
     |--------------------------------------------------------------------------
@@ -174,7 +187,7 @@ export default function InformationGathering() {
                     <section className="mt-6 rounded-2xl border border-white/10 bg-slate-900/60 p-5">
                         <p className="text-sm font-semibold text-cyan-300">Pembagian Peran Tim</p>
                         <p className="mt-2 text-sm leading-relaxed text-slate-300">
-                            Tentukan pemegang peran agar penyelidikan berjalan terorganisasi.
+                            Peran yang sudah diisi akan tetap tampil saat Anda kembali ke slide ini.
                         </p>
 
                         <div className="mt-5 grid gap-4 md:grid-cols-3">
