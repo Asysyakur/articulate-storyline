@@ -136,11 +136,7 @@ export default function InvestigationSlide({ storageKey, slideNumber, title, des
 
             if (typeof payload.discussionShown === 'boolean') {
                 setDiscussionShown(payload.discussionShown);
-            } else if (progressEntry?.completed) {
-                setDiscussionShown(true);
             }
-        } else if (progressEntry?.completed || localStorage.getItem(storageKey) === 'true') {
-            setDiscussionShown(true);
         }
 
         setIsHydrated(true);

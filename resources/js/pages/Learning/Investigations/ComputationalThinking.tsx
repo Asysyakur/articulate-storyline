@@ -95,11 +95,7 @@ export default function ComputationalThinking() {
 
             if (typeof payload.discussionShown === 'boolean') {
                 setDiscussionShown(payload.discussionShown);
-            } else if (progressEntry?.completed) {
-                setDiscussionShown(true);
             }
-        } else if (progressEntry?.completed || localStorage.getItem('computational-thinking-completed') === 'true') {
-            setDiscussionShown(true);
         }
 
         setIsHydrated(true);
