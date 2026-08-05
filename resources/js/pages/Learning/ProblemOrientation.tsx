@@ -1,3 +1,4 @@
+import LkpdBadge from '@/components/LkpdBadge';
 import LearningLayout from '@/layouts/LearningLayout';
 import { type SharedData } from '@/types';
 import { saveLearningProgress } from '@/utils/learningState';
@@ -158,11 +159,14 @@ export default function ProblemOrientation() {
 
                 {/* CONTENT */}
                 <div className="relative z-10 mx-auto w-full max-w-[1400px] px-4 pb-28 sm:px-6 sm:pb-32 lg:px-8">
-                    {/* LABEL */}
-                    <div className="inline-flex items-center gap-2 rounded-full border border-red-400/20 bg-red-500/10 px-4 py-2 text-[0px]">
-                        <AlertTriangle size={15} />
-                        <span className="text-sm text-red-300">Sintaks PBL: orientasi pada masalah</span>
-                        Slide 5 — Orientasi Masalah (Fase 1)
+                    {/* LABEL & LKPD BADGE */}
+                    <div className="flex flex-wrap items-center gap-3">
+                        <div className="inline-flex items-center gap-2 rounded-full border border-red-400/20 bg-red-500/10 px-4 py-2 text-[0px]">
+                            <AlertTriangle size={15} />
+                            <span className="text-sm text-red-300">Sintaks PBL: orientasi pada masalah</span>
+                            Slide 5 — Orientasi Masalah (Fase 1)
+                        </div>
+                        <LkpdBadge tahap="Tahap 1" />
                     </div>
 
                     {/* TITLE */}

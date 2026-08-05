@@ -1,3 +1,4 @@
+import LkpdBadge from '@/components/LkpdBadge';
 import LearningLayout from '@/layouts/LearningLayout';
 import { saveLearningProgress } from '@/utils/learningState';
 
@@ -201,10 +202,13 @@ export default function SolutionDevelopment() {
                 </div>
 
                 <div className="mx-auto max-w-6xl px-4 py-6 pb-24 sm:px-6 sm:py-8">
-                    <div className="text-center">
-                        <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-[0px]">
-                            <span className="text-sm text-cyan-300">Sintaks PBL: mengembangkan dan menyajikan hasil</span>
-                            Slide 16 — Penyusunan Solusi
+                    <div className="flex flex-col items-center">
+                        <div className="flex flex-wrap items-center justify-center gap-3">
+                            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-[0px]">
+                                <span className="text-sm text-cyan-300">Sintaks PBL: mengembangkan dan menyajikan hasil</span>
+                                Slide 16 — Penyusunan Solusi
+                            </div>
+                            <LkpdBadge tahap="Tahap 4" />
                         </div>
 
                         <h1 className="mt-4 text-3xl leading-[0.95] font-black tracking-tight sm:text-4xl lg:text-5xl">

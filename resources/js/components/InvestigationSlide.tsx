@@ -1,3 +1,4 @@
+import LkpdBadge from '@/components/LkpdBadge';
 import LearningLayout from '@/layouts/LearningLayout';
 import { saveLearningProgress } from '@/utils/learningState';
 import { type SharedData } from '@/types';
@@ -42,9 +43,11 @@ interface Props {
     hotspots: Hotspot[];
 
     compactWorkflow?: boolean;
+
+    lkpdTahap?: string;
 }
 
-export default function InvestigationSlide({ storageKey, slideNumber, title, description, image, visual, note, hotspots, compactWorkflow = false }: Props) {
+export default function InvestigationSlide({ storageKey, slideNumber, title, description, image, visual, note, hotspots, compactWorkflow = false, lkpdTahap = 'Tahap 3' }: Props) {
     const { props } = usePage<SharedData>();
     const savedProgress = props.learning?.progress ?? [];
     const [activeHotspot, setActiveHotspot] = useState<Hotspot | null>(null);
@@ -164,9 +167,12 @@ export default function InvestigationSlide({ storageKey, slideNumber, title, des
         <LearningLayout>
             <div className="min-h-screen pb-24">
                 <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
-                    {/* LABEL */}
-                    <div className="inline-flex rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
-                        Slide {slideNumber} — Investigasi
+                    {/* LABEL & LKPD BADGE */}
+                    <div className="flex flex-wrap items-center gap-3">
+                        <div className="inline-flex rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
+                            Slide {slideNumber} — Investigasi
+                        </div>
+                        <LkpdBadge tahap={lkpdTahap} />
                     </div>
 
                     {/* TITLE */}

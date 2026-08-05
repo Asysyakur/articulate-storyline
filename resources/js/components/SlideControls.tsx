@@ -3,9 +3,10 @@ import { type SharedData } from '@/types';
 import { NARRATION_STORAGE_KEY, stopSpeak } from '@/utils/speech';
 import { SFX_STORAGE_KEY, stopSfx } from '@/utils/sound';
 import { saveLearningState } from '@/utils/learningState';
+import HelpModal from '@/components/HelpModal';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { BookOpen, ChevronLeft, ChevronRight, Home, LogOut, Volume2, VolumeX } from 'lucide-react';
+import { BookOpen, ChevronLeft, ChevronRight, HelpCircle, Home, LogOut, Volume2, VolumeX } from 'lucide-react';
 
 import { useEffect, useMemo, useState } from 'react';
 
@@ -14,6 +15,7 @@ export default function SlideControls() {
     const preferences = props.learning?.state?.preferences;
     const savedProgress = props.learning?.progress ?? [];
     const [showExitModal, setShowExitModal] = useState(false);
+    const [showHelpModal, setShowHelpModal] = useState(false);
     const [showMaterialMenu, setShowMaterialMenu] = useState(false);
     const [showAudioMenu, setShowAudioMenu] = useState(false);
 
@@ -40,6 +42,7 @@ export default function SlideControls() {
     const [dataRepresentationCompleted, setDataRepresentationCompleted] = useState(false);
     const [dataProcessingCompleted, setDataProcessingCompleted] = useState(false);
     const [diagnosticPracticeCompleted, setDiagnosticPracticeCompleted] = useState(false);
+    const [reflectionCompleted, setReflectionCompleted] = useState(false);
     const materialSlides = [
         { title: 'Mengenal Jaringan Komputer', path: '/materi/mengenal-jaringan-komputer' },
         { title: 'Topologi Jaringan', path: '/materi/topologi-jaringan' },
@@ -185,6 +188,7 @@ export default function SlideControls() {
             setDataRepresentationCompleted(isSavedAny(['data-representation', 'data-representation-completed']) || localStorage.getItem('data-representation-completed') === 'true');
             setDataProcessingCompleted(isSaved('data-processing') || localStorage.getItem('data-processing-completed') === 'true');
             setDiagnosticPracticeCompleted(isSaved('diagnostic-practice') || localStorage.getItem('diagnostic-practice-completed') === 'true');
+            setReflectionCompleted(isSaved('reflection') || localStorage.getItem('reflection-completed') === 'true');
 
             const savedEvaluation = savedProgress.find((item) => item.activity_key === 'evaluation');
             const completed = Boolean(savedEvaluation?.completed) || window.sessionStorage.getItem('evaluationCompleted') === 'true';
@@ -207,6 +211,7 @@ export default function SlideControls() {
         window.addEventListener('data-representation-completed-change', readCheckedState);
         window.addEventListener('data-processing-completed-change', readCheckedState);
         window.addEventListener('diagnostic-practice-completed-change', readCheckedState);
+        window.addEventListener('reflection-completed-change', readCheckedState);
         return () => {
             window.removeEventListener('solution-development-checked-change', readCheckedState);
             window.removeEventListener('evaluation-completed-change', readCheckedState);
@@ -217,6 +222,7 @@ export default function SlideControls() {
             window.removeEventListener('data-representation-completed-change', readCheckedState);
             window.removeEventListener('data-processing-completed-change', readCheckedState);
             window.removeEventListener('diagnostic-practice-completed-change', readCheckedState);
+            window.removeEventListener('reflection-completed-change', readCheckedState);
         };
     }, [url, savedProgress]);
 
@@ -280,16 +286,28 @@ export default function SlideControls() {
         (url !== '/investigation/summary' || diagnosticPracticeCompleted) &&
         (url !== '/solution-development' || solutionDevelopmentChecked) &&
         (url !== '/evaluation' || evaluationCompleted) &&
-        (url !== '/result' || evaluationScore >= 75);
+        (url !== '/result' || evaluationScore >= 75) &&
+        (url !== '/reflection' || reflectionCompleted);
 
     return (
         <>
             <div className="fixed right-2 bottom-2 left-2 z-50 flex justify-center sm:bottom-6 sm:left-1/2 sm:right-auto sm:-translate-x-1/2">
-                <div className="flex w-full max-w-max items-center justify-center gap-1 rounded-2xl border border-slate-800 bg-slate-900/90 px-2 py-2 shadow-2xl backdrop-blur-xl sm:gap-3 sm:px-4 sm:py-3">
+                <div className="relative flex w-full max-w-max items-center justify-center gap-1 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/90 px-2 py-2 shadow-2xl backdrop-blur-xl sm:gap-3 sm:px-4 sm:py-3">
+                    {/* INDIKATOR PROGRES — PROGRESS BAR TIPIS */}
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-slate-800/80">
+                        <div
+                            className="h-full bg-cyan-400 transition-all duration-300"
+                            style={{
+                                width: `${((activeIndex + 1) / activeSlides.length) * 100}%`,
+                            }}
+                        />
+                    </div>
+
                     {/* HOME */}
                     <Link
                         href="/"
                         className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-800 transition hover:bg-cyan-400 hover:text-slate-950 sm:h-12 sm:w-12"
+                        title="Halaman Login / Beranda"
                     >
                         <Home size={20} />
                     </Link>
@@ -302,6 +320,7 @@ export default function SlideControls() {
                                 navigate(prevSlide.path);
                             }
                         }}
+                        title="Slide Sebelumnya"
                         className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all sm:h-12 sm:w-12 ${
                             prevSlide ? 'bg-slate-800 hover:bg-cyan-400 hover:text-slate-950' : 'cursor-not-allowed bg-slate-900 text-slate-600'
                         } `}
@@ -340,15 +359,26 @@ export default function SlideControls() {
                     </div>
                     )}
 
-                    {/* SLIDE INFO */}
-                    <div className="hidden min-w-[240px] items-center gap-3 overflow-hidden rounded-xl border border-white/10 bg-slate-800/80 px-4 md:flex md:h-12">
-                        <div className="min-w-0 flex-1">
-                            <h3 className="truncate text-sm font-semibold text-white">{activeSlides[activeIndex]?.title}</h3>
+                    {/* PETUNJUK (PERSISTEN) */}
+                    <button
+                        type="button"
+                        onClick={() => setShowHelpModal(true)}
+                        aria-label="Petunjuk Belajar Mandiri"
+                        title="Petunjuk Belajar Mandiri (?)"
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-800 text-cyan-400 transition hover:bg-cyan-400 hover:text-slate-950 sm:h-12 sm:w-12"
+                    >
+                        <HelpCircle size={20} />
+                    </button>
 
-                            <p className="truncate text-xs text-slate-500">Slide Saat Ini</p>
+                    {/* SLIDE INFO & INDIKATOR PROGRES */}
+                    <div className="hidden min-w-[180px] items-center gap-3 overflow-hidden rounded-xl border border-white/10 bg-slate-800/80 px-3 md:flex md:h-12 lg:min-w-[240px] lg:px-4">
+                        <div className="min-w-0 flex-1">
+                            <h3 className="truncate text-xs font-semibold text-white sm:text-sm">{activeSlides[activeIndex]?.title}</h3>
+
+                            <p className="truncate text-[10px] text-slate-400 sm:text-xs">Slide {activeIndex + 1} dari {activeSlides.length}</p>
                         </div>
 
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-400/10 text-xs font-bold text-cyan-400">
+                        <div className="flex h-8 px-2 shrink-0 items-center justify-center rounded-lg bg-cyan-400/10 text-xs font-bold text-cyan-400 sm:w-8 sm:px-0">
                             {activeIndex + 1}/{activeSlides.length}
                         </div>
                     </div>
@@ -371,6 +401,7 @@ export default function SlideControls() {
                                 navigate(nextSlide.path);
                             }
                         }}
+                        title="Slide Berikutnya"
                         className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all sm:h-12 sm:w-12 ${
                             nextEnabled ? 'bg-cyan-400 text-slate-950 hover:scale-105' : 'cursor-not-allowed bg-slate-900 text-slate-600'
                         } `}
@@ -454,11 +485,15 @@ export default function SlideControls() {
                     <button
                         onClick={() => setShowExitModal(true)}
                         className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-500/20 text-red-400 transition-all hover:bg-red-500 hover:text-white sm:h-12 sm:w-12"
+                        title="Keluar"
                     >
                         <LogOut size={20} />
                     </button>
                 </div>
             </div>
+
+            {/* HELP PETUNJUK OVERLAY */}
+            <HelpModal isOpen={showHelpModal} onClose={() => setShowHelpModal(false)} />
 
             <AnimatePresence>
                 {showExitModal && (
@@ -524,3 +559,4 @@ export default function SlideControls() {
         </>
     );
 }
+

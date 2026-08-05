@@ -1,3 +1,4 @@
+import LkpdBadge from '@/components/LkpdBadge';
 import LearningLayout from '@/layouts/LearningLayout';
 import { type SharedData } from '@/types';
 import { saveLearningProgress } from '@/utils/learningState';
@@ -100,7 +101,9 @@ export default function Reflection() {
     }, []);
 
     useEffect(() => {
+        localStorage.setItem('reflection-completed', completed ? 'true' : 'false');
         void saveLearningProgress('reflection', completed, { answers });
+        window.dispatchEvent(new Event('reflection-completed-change'));
     }, [answers, completed]);
 
     return (
@@ -116,11 +119,13 @@ export default function Reflection() {
                 {/* CONTENT */}
                 <div className="mx-auto max-w-6xl px-4 py-6 pb-24 sm:px-6 sm:py-8">
                     {/* HEADER */}
-                    <div className="text-center">
-                        {/* LABEL */}
-                        <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-[0px]">
-                            <span className="text-sm text-cyan-300">Sintaks PBL: menganalisis dan mengevaluasi proses</span>
-                            Slide 19 — Refleksi
+                    <div className="flex flex-col items-center">
+                        <div className="flex flex-wrap items-center justify-center gap-3">
+                            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-[0px]">
+                                <span className="text-sm text-cyan-300">Sintaks PBL: menganalisis dan mengevaluasi proses</span>
+                                Slide 19 — Refleksi
+                            </div>
+                            <LkpdBadge tahap="Tahap 5" />
                         </div>
 
                         {/* TITLE */}
