@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use App\Http\Controllers\AdminLearnerController;
 use App\Http\Controllers\AdminLearningDataController;
 use App\Http\Controllers\LearningSessionController;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 // Route::get('/', function () {
 //     return Inertia::render('welcome');
@@ -17,6 +18,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/data-pembelajaran', [AdminLearningDataController::class, 'index'])
         ->middleware('admin')
         ->name('admin.learning-data');
+
+    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('siswa', [AdminLearnerController::class, 'index'])->name('learners.index');
+        Route::post('siswa', [AdminLearnerController::class, 'store'])->name('learners.store');
+        Route::get('siswa/template', [AdminLearnerController::class, 'downloadTemplate'])->name('learners.template');
+        Route::post('siswa/import', [AdminLearnerController::class, 'import'])->name('learners.import');
+        Route::get('siswa/{learner}', [AdminLearnerController::class, 'show'])->name('learners.show');
+        Route::post('siswa/{learner}/sessions', [AdminLearnerController::class, 'createSession'])->name('learners.sessions.store');
+        Route::put('siswa/{learner}', [AdminLearnerController::class, 'update'])->name('learners.update');
+        Route::delete('siswa/{learner}', [AdminLearnerController::class, 'destroy'])->name('learners.destroy');
+        Route::put('sessions/{session}/progress/{activity}', [AdminLearnerController::class, 'updateProgress'])->name('sessions.progress.update');
+        Route::put('sessions/{session}/roles', [AdminLearnerController::class, 'updateRoles'])->name('sessions.roles.update');
+        Route::delete('sessions/{session}', [AdminLearnerController::class, 'destroySession'])->name('sessions.destroy');
+    });
 });
 
 Route::get('/', function () {

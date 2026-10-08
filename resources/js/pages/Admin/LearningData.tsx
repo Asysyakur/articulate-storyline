@@ -1,14 +1,9 @@
+import ActivityProgressGrid, { type ProgressItem } from '@/components/Admin/ActivityProgressGrid';
+import EditRolesModal from '@/components/Admin/EditRolesModal';
 import AdminLayout from '@/layouts/AdminLayout';
-import { Head, Link } from '@inertiajs/react';
-import { CheckCircle2, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, Users, X } from 'lucide-react';
+import { Head, Link, router } from '@inertiajs/react';
+import { CheckCircle2, ChevronLeft, ChevronRight, ClipboardList, GraduationCap, Pencil, Trash2, Users, X } from 'lucide-react';
 import { useState } from 'react';
-
-type Progress = {
-    activity_key: string;
-    completed: boolean;
-    payload: Record<string, unknown> | null;
-    updated_at: string;
-};
 
 type LearningSession = {
     id: number;
@@ -17,7 +12,7 @@ type LearningSession = {
     preferences: { music?: boolean; narration?: boolean; sfx?: boolean };
     last_active_at: string | null;
     created_at: string;
-    progress: Progress[];
+    progress: ProgressItem[];
 };
 
 type PaginatedSessions = {
@@ -28,51 +23,91 @@ type PaginatedSessions = {
     next_page_url: string | null;
 };
 
-type InvestigationModal = {
-    learnerName: string;
-    activity: string;
-    answers: { problem_identification?: string; analysis_and_solution?: string };
-};
-
-const investigationActivityKeys = [
-    'computational-thinking',
-    'algorithm',
-    'algorithm-completed',
-    'data-representation',
-    'data-representation-completed',
-] as const;
-
-const interactiveActivityKeys = ['reflection', ...investigationActivityKeys] as const;
-
-const activityLabels: Record<string, string> = {
-    'problem-orientation': 'Interpretation (Fase 1)',
-    'information-gathering': 'Analysis (Fase 2)',
-    'computational-thinking': 'Membimbing Penyelidikan: Topologi',
-    'algorithm-completed': 'Membimbing Penyelidikan: IP Address',
-    algorithm: 'Membimbing Penyelidikan: IP Address',
-    'data-representation-completed': 'Membimbing Penyelidikan: Gateway & DNS',
-    'data-representation': 'Membimbing Penyelidikan: Gateway & DNS',
-    'data-processing-completed': 'Inference: Pengolahan Data',
-    'data-processing': 'Inference: Pengolahan Data',
-    'diagnostic-practice': 'Praktik Diagnosis',
-    'solution-development': 'Explanation (Fase 4)',
-    evaluation: 'Kuis',
-    reflection: 'Self Regulation (Fase 5)',
-};
-
-const reflectionLabels: Record<string, string> = {
-    '1': 'Strategi paling membantu',
-    '2': 'Bukti kesimpulan',
-    '3': 'Memutuskan solusi',
-    '4': 'Efisiensi penyelidikan',
-    '5': 'Dugaan dan bukti',
-    '6': 'Informasi penentu',
-};
-
 const formatDate = (value: string | null) =>
     value
         ? new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value))
         : 'Belum ada aktivitas';
+
+function DeleteSessionModal({
+    session,
+    onClose,
+}: {
+    session: LearningSession;
+    onClose: () => void;
+}) {
+    const [processing, setProcessing] = useState(false);
+
+    const handleDelete = () => {
+        setProcessing(true);
+        router.delete(route('admin.sessions.destroy', session.id), {
+            preserveScroll: true,
+            onFinish: () => {
+                setProcessing(false);
+                onClose();
+            },
+        });
+    };
+
+    return (
+        <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-5 backdrop-blur-sm"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Konfirmasi hapus sesi"
+        >
+            <div className="w-full max-w-md rounded-3xl border border-red-500/20 bg-slate-900 p-6 shadow-2xl shadow-red-950/40">
+                <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-red-500/30 bg-red-500/10 text-red-400">
+                            <Trash2 size={22} />
+                        </div>
+                        <div>
+                            <p className="text-xs font-bold uppercase tracking-wider text-red-400">
+                                HAPUS SESI BELAJAR
+                            </p>
+                            <h2 className="mt-0.5 text-xl font-black text-white">
+                                Sesi #{session.id}
+                            </h2>
+                        </div>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="rounded-xl bg-white/5 p-2 text-slate-400 transition hover:bg-white/10 hover:text-white"
+                        aria-label="Tutup modal"
+                    >
+                        <X size={18} />
+                    </button>
+                </div>
+
+                <p className="mt-4 text-sm leading-relaxed text-slate-300">
+                    Apakah Anda yakin ingin menghapus <strong className="text-white">Sesi #{session.id}</strong> milik siswa{' '}
+                    <strong className="text-cyan-300">{session.learner.name}</strong>? Semua riwayat progres dan jawaban aktivitas di sesi ini akan dihapus permanen.
+                </p>
+
+                <div className="mt-6 flex justify-end gap-3">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        disabled={processing}
+                        className="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold transition hover:bg-white/10"
+                    >
+                        Batal
+                    </button>
+                    <button
+                        type="button"
+                        onClick={handleDelete}
+                        disabled={processing}
+                        className="inline-flex items-center gap-2 rounded-xl bg-red-500 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-red-400 disabled:opacity-60"
+                    >
+                        <Trash2 size={16} />
+                        {processing ? 'Menghapus...' : 'Hapus Sesi'}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
 
 export default function LearningData({
     summary,
@@ -81,8 +116,8 @@ export default function LearningData({
     summary: { learners: number; sessions: number; completed_sessions: number };
     sessions: PaginatedSessions;
 }) {
-    const [reflectionModal, setReflectionModal] = useState<{ learnerName: string; answers: Record<string, unknown> } | null>(null);
-    const [investigationModal, setInvestigationModal] = useState<InvestigationModal | null>(null);
+    const [editingRolesSession, setEditingRolesSession] = useState<LearningSession | null>(null);
+    const [deletingSession, setDeletingSession] = useState<LearningSession | null>(null);
 
     return (
         <AdminLayout>
@@ -126,9 +161,6 @@ export default function LearningData({
                         <div className="divide-y divide-white/10">
                             {sessions.data.map((session) => {
                                 const completed = session.progress.filter((item) => item.completed).length;
-                                const reflection = session.progress.find((item) => item.activity_key === 'reflection');
-                                const reflectionAnswers = reflection?.payload?.answers;
-                                const hasReflectionAnswers = reflectionAnswers && typeof reflectionAnswers === 'object';
                                 return (
                                     <details key={session.id} className="group">
                                         <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 transition hover:bg-cyan-400/5">
@@ -147,87 +179,82 @@ export default function LearningData({
                                             </div>
                                         </summary>
 
-                                        <div className="grid gap-5 border-t border-white/10 bg-slate-950/40 px-5 py-5 lg:grid-cols-[0.8fr_1.2fr]">
-                                            <div className="space-y-4 text-sm">
-                                                <div>
-                                                    <p className="font-medium">Peran tim</p>
-                                                    <dl className="mt-2 space-y-1 text-slate-400">
-                                                        <div className="flex justify-between gap-3"><dt>Ketua</dt><dd>{session.roles.ketua || '—'}</dd></div>
-                                                        <div className="flex justify-between gap-3"><dt>Penguji</dt><dd>{session.roles.penguji || '—'}</dd></div>
-                                                        <div className="flex justify-between gap-3"><dt>Pencatat</dt><dd>{session.roles.pencatat || '—'}</dd></div>
-                                                    </dl>
-                                                </div>
-                                                <div className="hidden">
-                                                    <p className="font-medium">Audio</p>
-                                                    <p className="mt-2 text-slate-400">
-                                                        Musik {session.preferences.music ? 'aktif' : 'nonaktif'} · Narasi {session.preferences.narration ? 'aktif' : 'nonaktif'} · SFX {session.preferences.sfx ? 'aktif' : 'nonaktif'}
-                                                    </p>
-                                                </div>
+                                        <div className="border-t border-white/10 bg-slate-950/40 px-5 py-5">
+                                            <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-3">
+                                                <p className="text-xs text-slate-400">
+                                                    Sesi #{session.id} · Dibuat: {formatDate(session.created_at)}
+                                                </p>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setDeletingSession(session)}
+                                                    className="inline-flex items-center gap-1.5 rounded-lg border border-red-500/20 bg-red-500/10 px-2.5 py-1 text-xs font-semibold text-red-400 transition hover:bg-red-500 hover:text-white"
+                                                    title="Hapus sesi ini"
+                                                >
+                                                    <Trash2 size={12} />
+                                                    Hapus Sesi
+                                                </button>
                                             </div>
 
-                                            <div>
-                                                <p className="font-medium">Progres aktivitas</p>
-                                                <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                                                    {session.progress.map((item) => (
-                                                        <button
-                                                            key={item.activity_key}
-                                                            type="button"
-                                                            onClick={() => {
-                                                                const answers = item.payload?.answers;
-                                                                if (item.activity_key === 'reflection' && answers && typeof answers === 'object') {
-                                                                    setReflectionModal({ learnerName: session.learner.name, answers: answers as Record<string, unknown> });
-                                                                }
-
-                                                                const studentAnswers = item.payload?.student_answers;
-                                                                if (investigationActivityKeys.includes(item.activity_key as (typeof investigationActivityKeys)[number]) && studentAnswers && typeof studentAnswers === 'object') {
-                                                                    setInvestigationModal({
-                                                                        learnerName: session.learner.name,
-                                                                        activity: activityLabels[item.activity_key] ?? item.activity_key,
-                                                                        answers: studentAnswers as InvestigationModal['answers'],
-                                                                    });
-                                                                }
-                                                            }}
-                                                            className={`w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-left ${
-                                                                interactiveActivityKeys.includes(item.activity_key as (typeof interactiveActivityKeys)[number])
-                                                                    ? 'cursor-pointer transition hover:border-cyan-400/60 hover:bg-cyan-400/10'
-                                                                    : 'cursor-default'
-                                                            }`}
-                                                        >
-                                                            <div className="flex items-start justify-between gap-3">
-                                                                <p className="text-sm font-medium">{activityLabels[item.activity_key] ?? item.activity_key}</p>
-                                                                <span className={item.completed ? 'text-xs font-medium text-emerald-600' : 'text-xs font-medium text-amber-600'}>
-                                                                    {item.completed ? 'Selesai' : 'Belum selesai'}
-                                                                </span>
-                                                            </div>
-                                                            {item.activity_key === 'evaluation' && typeof item.payload?.score === 'number' && (
-                                                                <p className="mt-1 text-xs text-muted-foreground">Nilai: {item.payload.score}</p>
-                                                            )}
-                                                            <p className="mt-1 text-xs text-muted-foreground">Diperbarui {formatDate(item.updated_at)}</p>
-                                                        </button>
-                                                    ))}
+                                            <div className="grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
+                                                <div className="space-y-4 text-sm">
+                                                    <div>
+                                                        <div className="flex items-center justify-between">
+                                                            <p className="font-medium">Peran tim</p>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => setEditingRolesSession(session)}
+                                                                className="inline-flex items-center gap-1 text-xs font-semibold text-cyan-400 hover:text-cyan-300"
+                                                            >
+                                                                <Pencil size={12} />
+                                                                Edit Peran
+                                                            </button>
+                                                        </div>
+                                                        <dl className="mt-2 space-y-1 text-slate-400">
+                                                            <div className="flex justify-between gap-3"><dt>Ketua</dt><dd>{session.roles.ketua || '—'}</dd></div>
+                                                            <div className="flex justify-between gap-3"><dt>Penguji</dt><dd>{session.roles.penguji || '—'}</dd></div>
+                                                            <div className="flex justify-between gap-3"><dt>Pencatat</dt><dd>{session.roles.pencatat || '—'}</dd></div>
+                                                        </dl>
+                                                    </div>
+                                                    <div className="hidden">
+                                                        <p className="font-medium">Audio</p>
+                                                        <p className="mt-2 text-slate-400">
+                                                            Musik {session.preferences.music ? 'aktif' : 'nonaktif'} · Narasi {session.preferences.narration ? 'aktif' : 'nonaktif'} · SFX {session.preferences.sfx ? 'aktif' : 'nonaktif'}
+                                                        </p>
+                                                    </div>
                                                 </div>
 
-                                                {hasReflectionAnswers && (
-                                                    <div className="hidden">
-                                                        <p className="font-semibold text-cyan-200">Jawaban Evaluasi Proses & Refleksi</p>
-                                                        <div className="mt-3 space-y-3">
-                                                            {Object.entries(reflectionAnswers).map(([id, answer]) => (
-                                                                typeof answer === 'string' && answer.trim() && (
-                                                                    <div key={id} className="rounded-xl border border-white/10 bg-slate-950/50 p-3">
-                                                                        <p className="text-sm font-medium text-white">{reflectionLabels[id] ?? `Refleksi ${id}`}</p>
-                                                                        <p className="mt-1 text-sm leading-relaxed text-slate-300">{answer}</p>
-                                                                    </div>
-                                                                )
-                                                            ))}
-                                                        </div>
+                                                <div>
+                                                    <p className="font-medium">Progres aktivitas</p>
+                                                    <div className="mt-3">
+                                                        <ActivityProgressGrid
+                                                            sessionId={session.id}
+                                                            progress={session.progress}
+                                                            learnerName={session.learner.name}
+                                                        />
                                                     </div>
-                                                )}
+                                                </div>
                                             </div>
                                         </div>
                                     </details>
                                 );
                             })}
                         </div>
+                    )}
+
+                    {editingRolesSession && (
+                        <EditRolesModal
+                            sessionId={editingRolesSession.id}
+                            initialRoles={editingRolesSession.roles}
+                            learnerName={editingRolesSession.learner.name}
+                            onClose={() => setEditingRolesSession(null)}
+                        />
+                    )}
+
+                    {deletingSession && (
+                        <DeleteSessionModal
+                            session={deletingSession}
+                            onClose={() => setDeletingSession(null)}
+                        />
                     )}
 
                     {sessions.last_page > 1 && (
@@ -241,61 +268,6 @@ export default function LearningData({
                     )}
                 </div>
             </div>
-
-            {reflectionModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-5 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Jawaban refleksi peserta">
-                    <div className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-cyan-400/20 bg-slate-900 p-6 shadow-2xl shadow-cyan-950/50">
-                        <div className="flex items-start justify-between gap-4">
-                            <div>
-                                <p className="text-sm font-semibold text-cyan-300">EVALUASI PROSES & REFLEKSI</p>
-                                <h2 className="mt-1 text-2xl font-black">Jawaban {reflectionModal.learnerName}</h2>
-                            </div>
-                            <button type="button" onClick={() => setReflectionModal(null)} className="rounded-xl bg-white/5 p-2 text-slate-300 transition hover:bg-white/10 hover:text-white" aria-label="Tutup modal">
-                                <X size={20} />
-                            </button>
-                        </div>
-
-                        <div className="mt-6 space-y-4">
-                            {Object.entries(reflectionModal.answers).map(([id, answer]) => (
-                                typeof answer === 'string' && answer.trim() && (
-                                    <div key={id} className="rounded-2xl border border-white/10 bg-slate-950/50 p-4">
-                                        <p className="text-sm font-semibold text-cyan-200">{reflectionLabels[id] ?? `Refleksi ${id}`}</p>
-                                        <p className="mt-2 text-sm leading-relaxed text-slate-300">{answer}</p>
-                                    </div>
-                                )
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {investigationModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-5 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Jawaban penyelidikan peserta">
-                    <div className="w-full max-w-2xl rounded-3xl border border-cyan-400/20 bg-slate-900 p-6 shadow-2xl shadow-cyan-950/50">
-                        <div className="flex items-start justify-between gap-4">
-                            <div>
-                                <p className="text-sm font-semibold text-cyan-300">DATA PENYELIDIKAN</p>
-                                <h2 className="mt-1 text-2xl font-black">{investigationModal.activity}</h2>
-                                <p className="mt-1 text-sm text-slate-400">Jawaban {investigationModal.learnerName}</p>
-                            </div>
-                            <button type="button" onClick={() => setInvestigationModal(null)} className="rounded-xl bg-white/5 p-2 text-slate-300 transition hover:bg-white/10 hover:text-white" aria-label="Tutup modal">
-                                <X size={20} />
-                            </button>
-                        </div>
-
-                        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                            <div className="rounded-2xl border border-white/10 bg-slate-950/50 p-4">
-                                <p className="text-sm font-semibold text-cyan-200">Identifikasi Masalah</p>
-                                <p className="mt-2 text-sm leading-relaxed text-slate-300">{investigationModal.answers.problem_identification || 'Belum diisi'}</p>
-                            </div>
-                            <div className="rounded-2xl border border-white/10 bg-slate-950/50 p-4">
-                                <p className="text-sm font-semibold text-cyan-200">Analisis &amp; Solusi</p>
-                                <p className="mt-2 text-sm leading-relaxed text-slate-300">{investigationModal.answers.analysis_and_solution || 'Belum diisi'}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
         </AdminLayout>
     );
 }

@@ -14,6 +14,16 @@ import { RotateCcw, Trophy } from 'lucide-react';
 
 import { playFinishSound } from '@/utils/sound';
 
+type AnswerRecord = {
+    questionId: number;
+    question: string;
+    selectedAnswer: string;
+    correctAnswer: string;
+    isCorrect: boolean;
+    explanation: string;
+    points: number;
+};
+
 export default function Evaluation() {
     const { learning } = usePage<SharedData>().props;
     const savedEvaluation = learning?.progress.find((item) => item.activity_key === 'evaluation');
@@ -21,6 +31,9 @@ export default function Evaluation() {
     const [currentIndex, setCurrentIndex] = useState(() => (savedEvaluation?.completed ? evaluationQuestions.length : 0));
 
     const [score, setScore] = useState(savedScore);
+    const [answers, setAnswers] = useState<AnswerRecord[]>(
+        () => (Array.isArray(savedEvaluation?.payload?.answers) ? (savedEvaluation!.payload!.answers as AnswerRecord[]) : []),
+    );
 
     const finished = currentIndex >= evaluationQuestions.length;
 
@@ -34,10 +47,24 @@ export default function Evaluation() {
     |--------------------------------------------------------------------------
     */
 
-    const handleNext = (correct: boolean, points: number) => {
+    const handleNext = (correct: boolean, points: number, selectedAnswer: string) => {
         if (correct) {
             setScore((prev) => prev + points);
         }
+
+        const question = evaluationQuestions[currentIndex];
+        setAnswers((prev) => [
+            ...prev,
+            {
+                questionId: question.id,
+                question: question.question,
+                selectedAnswer,
+                correctAnswer: question.answer,
+                isCorrect: correct,
+                explanation: question.explanation,
+                points: question.points,
+            },
+        ]);
 
         setCurrentIndex((prev) => prev + 1);
     };
@@ -56,15 +83,15 @@ export default function Evaluation() {
         if (finished) {
             sessionStorage.setItem('evaluationScore', String(score));
             sessionStorage.setItem('evaluationCompleted', 'true');
-            void saveLearningProgress('evaluation', true, { score, totalScore });
+            void saveLearningProgress('evaluation', true, { score, totalScore, answers });
             window.dispatchEvent(new Event('evaluation-completed-change'));
             return;
         }
 
         sessionStorage.removeItem('evaluationCompleted');
-        void saveLearningProgress('evaluation', false, { score, totalScore });
+        void saveLearningProgress('evaluation', false, { score, totalScore, answers });
         window.dispatchEvent(new Event('evaluation-completed-change'));
-    }, [finished, score]);
+    }, [finished, score, answers]);
 
     /*
     |--------------------------------------------------------------------------
@@ -77,13 +104,15 @@ export default function Evaluation() {
 
         setScore(0);
 
+        setAnswers([]);
+
         if (typeof window !== 'undefined') {
             sessionStorage.removeItem('evaluationScore');
             sessionStorage.removeItem('evaluationCompleted');
             window.dispatchEvent(new Event('evaluation-completed-change'));
         }
 
-        void saveLearningProgress('evaluation', false, { score: 0, totalScore });
+        void saveLearningProgress('evaluation', false, { score: 0, totalScore, answers: [] });
     };
 
     return (

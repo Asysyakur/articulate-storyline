@@ -1,6 +1,6 @@
 import { type SharedData } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
-import { Database, LogOut, MonitorCog } from 'lucide-react';
+import { Database, GraduationCap, LogOut, MonitorCog } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const { auth } = usePage<SharedData>().props;
@@ -10,13 +10,30 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,_rgba(8,145,178,0.18),_transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(14,116,144,0.15),_transparent_28%)]" />
             <header className="sticky top-0 z-20 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
                 <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 md:px-8">
-                    <Link href="/admin/data-pembelajaran" className="flex items-center gap-3">
-                        <div className="flex size-10 items-center justify-center rounded-xl bg-cyan-400 text-slate-950"><MonitorCog size={21} /></div>
-                        <div>
-                            <p className="text-sm font-black tracking-tight">Network Lab</p>
-                            <p className="text-xs text-cyan-300">Panel Admin Pembelajaran</p>
-                        </div>
-                    </Link>
+                    <div className="flex items-center gap-6">
+                        <Link href="/admin/data-pembelajaran" className="flex items-center gap-3">
+                            <div className="flex size-10 items-center justify-center rounded-xl bg-cyan-400 text-slate-950"><MonitorCog size={21} /></div>
+                            <div>
+                                <p className="text-sm font-black tracking-tight">Network Lab</p>
+                                <p className="text-xs text-cyan-300">Panel Admin Pembelajaran</p>
+                            </div>
+                        </Link>
+                        <nav className="hidden items-center gap-1 sm:flex">
+                            <Link
+                                href="/admin/data-pembelajaran"
+                                className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white"
+                            >
+                                Data Pembelajaran
+                            </Link>
+                            <Link
+                                href={route('admin.learners.index')}
+                                className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white"
+                            >
+                                <GraduationCap size={15} />
+                                Data Siswa
+                            </Link>
+                        </nav>
+                    </div>
 
                     <div className="flex items-center gap-3">
                         <div className="hidden text-right sm:block">
@@ -40,3 +57,4 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
     );
 }
+

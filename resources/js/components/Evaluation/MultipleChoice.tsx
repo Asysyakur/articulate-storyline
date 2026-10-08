@@ -24,7 +24,7 @@ interface Props {
 
     totalQuestions: number;
 
-    onNext: (correct: boolean, points: number) => void;
+    onNext: (correct: boolean, points: number, selectedAnswer: string) => void;
 }
 
 export default function MultipleChoice({ question, questionNumber, totalQuestions, onNext }: Props) {
@@ -167,7 +167,7 @@ export default function MultipleChoice({ question, questionNumber, totalQuestion
                     {/* NEXT */}
                     <div className="mt-6 flex justify-end">
                         <button
-                            onClick={() => onNext(isCorrect, question.points)}
+                            onClick={() => onNext(isCorrect, question.points, selected ?? '')}
                             className="inline-flex items-center gap-3 rounded-2xl bg-cyan-400 px-5 py-3 font-bold text-slate-950 transition hover:scale-105"
                         >
                             {questionNumber === totalQuestions ? 'Lihat Hasil' : 'Soal Berikutnya'}
