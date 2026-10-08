@@ -11,8 +11,6 @@ import {
     Save,
     Search,
     Sparkles,
-    ToggleLeft,
-    ToggleRight,
     X,
     XCircle,
 } from 'lucide-react';

@@ -200,7 +200,7 @@ function DeleteModal({ learner, onClose }: { learner: Learner; onClose: () => vo
 
 function ImportModal({ onClose }: { onClose: () => void }) {
     const fileRef = useRef<HTMLInputElement>(null);
-    const { post, processing } = useForm<{ file: File | null }>({ file: null });
+    const { processing } = useForm<{ file: File | null }>({ file: null });
     const [fileName, setFileName] = useState<string | null>(null);
     const [fileError, setFileError] = useState<string | null>(null);
 
