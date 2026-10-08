@@ -25,9 +25,6 @@ type PageProps = {
     flash: { success?: string; import_errors?: string[] };
 };
 
-const formatDate = (value: string) =>
-    new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value));
-
 // ─── ADD / EDIT MODAL ────────────────────────────────────────────────────────
 
 function LearnerFormModal({
@@ -437,7 +434,6 @@ export default function Learners() {
                                         <th className="px-5 py-3">Nama Siswa</th>
                                         <th className="px-5 py-3">Kelas</th>
                                         <th className="px-5 py-3">Sesi</th>
-                                        <th className="px-5 py-3">Terdaftar</th>
                                         <th className="px-5 py-3 text-right">Aksi</th>
                                     </tr>
                                 </thead>
@@ -458,7 +454,6 @@ export default function Learners() {
                                             </td>
                                             <td className="px-5 py-4 text-slate-300">{learner.class_name}</td>
                                             <td className="px-5 py-4 text-slate-400">{learner.sessions_count} sesi</td>
-                                            <td className="px-5 py-4 text-slate-400">{formatDate(learner.created_at)}</td>
                                             <td className="px-5 py-4">
                                                 <div className="flex items-center justify-end gap-2">
                                                     <button

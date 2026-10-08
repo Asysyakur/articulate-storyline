@@ -123,14 +123,6 @@ export const reflectionLabels: Record<string, string> = {
     '6': 'Informasi penentu',
 };
 
-const formatDate = (value: string | null) =>
-    value
-        ? new Intl.DateTimeFormat('id-ID', {
-              dateStyle: 'medium',
-              timeStyle: 'short',
-          }).format(new Date(value))
-        : 'Belum ada aktivitas';
-
 // ─── COMPONENT: ACTIVITY PROGRESS GRID ────────────────────────────────────────
 
 interface ActivityProgressGridProps {
@@ -375,20 +367,15 @@ export default function ActivityProgressGrid({
                             </div>
 
                             <div className="mt-3 flex flex-wrap items-center justify-between gap-1 border-t border-white/5 pt-2 text-xs text-slate-400">
-                                <div>
-                                    {isEvaluation && typeof item.payload?.score === 'number' ? (
-                                        <span className="font-semibold text-cyan-300">
-                                            Nilai: {item.payload.score}
-                                            {typeof item.payload.totalScore === 'number' &&
-                                                `/${item.payload.totalScore}`}
-                                        </span>
-                                    ) : (
-                                        <span className="inline-flex items-center gap-1 text-slate-500">
-                                            <Clock3 size={12} />
-                                            {formatDate(item.updated_at)}
-                                        </span>
-                                    )}
-                                </div>
+                                {isEvaluation && typeof item.payload?.score === 'number' ? (
+                                    <span className="font-semibold text-cyan-300">
+                                        Nilai: {item.payload.score}
+                                        {typeof item.payload.totalScore === 'number' &&
+                                            `/${item.payload.totalScore}`}
+                                    </span>
+                                ) : (
+                                    <span />
+                                )}
                                 <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-cyan-400 transition-colors group-hover:text-cyan-300">
                                     {hasDetailedModal ? 'Lihat / Edit →' : 'Ubah Status →'}
                                 </span>

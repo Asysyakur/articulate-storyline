@@ -23,11 +23,6 @@ type PaginatedSessions = {
     next_page_url: string | null;
 };
 
-const formatDate = (value: string | null) =>
-    value
-        ? new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value))
-        : 'Belum ada aktivitas';
-
 function DeleteSessionModal({
     session,
     onClose,
@@ -170,7 +165,7 @@ export default function LearningData({
                                                 </div>
                                                 <div className="min-w-0">
                                                     <p className="truncate font-semibold">{session.learner.name}</p>
-                                                    <p className="text-sm text-muted-foreground">{session.learner.class_name} · Aktif {formatDate(session.last_active_at)}</p>
+                                                    <p className="text-sm text-muted-foreground">{session.learner.class_name}</p>
                                                 </div>
                                             </div>
                                             <div className="shrink-0 text-right">
@@ -181,9 +176,7 @@ export default function LearningData({
 
                                         <div className="border-t border-white/10 bg-slate-950/40 px-5 py-5">
                                             <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-3">
-                                                <p className="text-xs text-slate-400">
-                                                    Sesi #{session.id} · Dibuat: {formatDate(session.created_at)}
-                                                </p>
+                                                <p className="text-xs text-slate-400">Sesi #{session.id}</p>
                                                 <button
                                                     type="button"
                                                     onClick={() => setDeletingSession(session)}

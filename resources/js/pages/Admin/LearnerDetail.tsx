@@ -23,14 +23,6 @@ type LearnerData = {
     created_at: string;
 };
 
-const formatDate = (value: string | null) =>
-    value
-        ? new Intl.DateTimeFormat('id-ID', {
-              dateStyle: 'medium',
-              timeStyle: 'short',
-          }).format(new Date(value))
-        : 'Belum ada aktivitas';
-
 // ─── DELETE SESSION MODAL ─────────────────────────────────────────────────────
 
 function DeleteSessionModal({
@@ -144,10 +136,6 @@ function SessionCard({
                     </div>
                     <div>
                         <p className="font-semibold">Sesi #{session.id}</p>
-                        <p className="text-xs text-slate-400">
-                            Mulai {formatDate(session.created_at)} · Aktif{' '}
-                            {formatDate(session.last_active_at)}
-                        </p>
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -285,9 +273,7 @@ export default function LearnerDetail({
                         <p className="text-sm font-semibold text-cyan-300">DETAIL SISWA</p>
                         <h1 className="mt-0.5 text-3xl font-black">{learner.name}</h1>
                         <p className="mt-1 text-slate-400">{learner.class_name}</p>
-                        <p className="mt-1 text-xs text-slate-500">
-                            ID #{learner.id} · Terdaftar {formatDate(learner.created_at)}
-                        </p>
+                        <p className="mt-1 text-xs text-slate-500">ID #{learner.id}</p>
                     </div>
                 </div>
 
